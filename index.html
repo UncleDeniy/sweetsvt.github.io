@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UncleDenny portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="terminal-loader">
+    <div class="terminal-header">
+      <div class="terminal-title">system@UncleDenny:~</div>
+      <div class="terminal-controls">
+        <span class="control close"></span>
+        <span class="control minimize"></span>
+        <span class="control maximize"></span>
+      </div>
+    </div>
+    <div class="terminal-content">
+      <p class="typing">Initializing system... <span class="cursor">|</span></p>
+    </div>
+  </div>
+
+  <div class="container hidden">
+    <header>
+      <h1 class="retro-text">>_ UncleDenny</h1>
+      <div class="theme-switch">
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider"></span>
+        </label>
+        <span id="theme-label">ТЁМНАЯ ТЕМА</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-text">
+        <h2 class="glitch">ДОБРО ПОЖАЛОВАТЬ В МОЙ МИР</h2>
+        <p class="retro-subtext">>> Full-stack разработчик // Киберпанк-энтузиаст</p>
+        <div class="hero-buttons">
+          <button class="btn-retro" id="projects-btn">ПРОЕКТЫ</button>
+          <button class="btn-retro" id="contact-btn">КОНТАКТЫ</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="crt-effect"></div>
+        <img src="https://i.imgur.com/8Km9tLL.png" alt="Retro Avatar" class="pixel-art">
+      </div>
+    </section>
+
+
+    <section class="about">
+      <h2 class="section-title">> ОБО_МНЕ</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">1990</div>
+          <div class="timeline-content">Родился в цифровой пустоши.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2020</div>
+          <div class="timeline-content">Начал кодить на Matrix.</div>
+        </div>
+      </div>
+    </section>
+
+   
+    <section class="projects">
+      <h2 class="section-title">> МОИ_ПРОЕКТЫ</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-image crt-effect"></div>
+          <h3>Ретро-игра</h3>
+          <p>JavaScript, Canvas</p>
+          <a href="#" class="btn-retro">ДЕМО</a>
+        </div>
+      </div>
+    </section>
+
+   
+    <section class="blog">
+      <h2 class="section-title">> БЛОГ_</h2>
+      <div class="blog-posts">
+        <article class="blog-post">
+          <h3>Как я взломал Gibson</h3>
+          <p>Секреты кибербезопасности из 90-х.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact">
+      <h2 class="section-title">> КОНТАКТЫ_</h2>
+      <div class="contact-links">
+        <a href="https://github.com/UncleDenny" class="retro-link"><i class="fab fa-github"></i> GitHub</a>
+        <a href="#" class="retro-link"><i class="fab fa-telegram"></i> Telegram</a>
+      </div>
+    </section>
+  </div>
+  <div class="crt-overlay"></div>
+  <script src="script.js"></script>
+</body>
+</html>
