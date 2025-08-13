@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UncleDenny portfolio</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Денис (UncleDenny) | портфолио</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+ 
   <div class="terminal-loader">
     <div class="terminal-header">
       <div class="terminal-title">system@UncleDenny:~</div>
@@ -19,13 +19,13 @@
       </div>
     </div>
     <div class="terminal-content">
-      <p class="typing">Initializing system... <span class="cursor">|</span></p>
+      <p class="typing">> Загрузка персонажа: Денис, 20 лет... <span class="cursor">|</span></p>
     </div>
   </div>
-
+ 
   <div class="container hidden">
     <header>
-      <h1 class="retro-text">>_ UncleDenny</h1>
+      <h1 class="retro-text glitch">>_ Денис (UncleDenny)</h1>
       <div class="theme-switch">
         <label class="switch">
           <input type="checkbox" id="theme-toggle">
@@ -35,69 +35,84 @@
       </div>
     </header>
 
+    <!-- Главный экран -->
     <section class="hero">
       <div class="hero-text">
-        <h2 class="glitch">ДОБРО ПОЖАЛОВАТЬ В МОЙ МИР</h2>
-        <p class="retro-subtext">>> Full-stack разработчик // Киберпанк-энтузиаст</p>
+        <h2 class="glitch">ПРИВЕТ, Я ДЕНИС</h2>
+        <p class="retro-subtext">>> Full-stack разработчик | Люблю ретро-технику</p>
         <div class="hero-buttons">
-          <button class="btn-retro" id="projects-btn">ПРОЕКТЫ</button>
-          <button class="btn-retro" id="contact-btn">КОНТАКТЫ</button>
+          <a href="#projects" class="btn-retro">МОИ ПРОЕКТЫ</a>
+          <a href="#contact" class="btn-retro">НАПИСАТЬ МНЕ</a>
         </div>
       </div>
       <div class="hero-image">
         <div class="crt-effect"></div>
-        <img src="https://i.imgur.com/8Km9tLL.png" alt="Retro Avatar" class="pixel-art">
+        <img src="https://i.imgur.com/8Km9tLL.png" alt="Денис" class="pixel-art">
       </div>
     </section>
-
-
-    <section class="about">
+ 
+    <section class="about" id="about">
       <h2 class="section-title">> ОБО_МНЕ</h2>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-year">1990</div>
-          <div class="timeline-content">Родился в цифровой пустоши.</div>
+      <div class="about-content">
+        <p>Мне 20 лет, учусь на программиста. Обожаю ретро-компьютеры и киберпанк.</p>
+        <div class="skills">
+          <h3>Мои навыки:</h3>
+          <div class="skill-tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">Python</span>
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+          </div>
         </div>
-        <div class="timeline-item">
-          <div class="timeline-year">2020</div>
-          <div class="timeline-content">Начал кодить на Matrix.</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2020</div>
+            <div class="timeline-content">Начал изучать программирование.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2023</div>
+            <div class="timeline-content">Первый коммерческий проект.</div>
+          </div>
         </div>
       </div>
     </section>
-
-   
-    <section class="projects">
+ 
+    <section class="projects" id="projects">
       <h2 class="section-title">> МОИ_ПРОЕКТЫ</h2>
       <div class="project-grid">
         <div class="project-card">
-          <div class="project-image crt-effect"></div>
-          <h3>Ретро-игра</h3>
-          <p>JavaScript, Canvas</p>
-          <a href="#" class="btn-retro">ДЕМО</a>
+          <div class="project-image crt-effect" style="background-image: url('https://i.imgur.com/J5qZOg0.png');"></div>
+          <h3>Ретро-игра на JS</h3>
+          <p>Игра в стиле 80-х с пиксельной графикой.</p>
+          <a href="https://github.com/UncleDenny/retro-game" class="btn-retro">ИГРАТЬ</a>
+        </div>
+        <div class="project-card">
+          <div class="project-image crt-effect" style="background-image: url('https://i.imgur.com/3Q2V9Zl.png');"></div>
+          <h3>Погодный API</h3>
+          <p>Приложение для прогноза погоды.</p>
+          <a href="https://github.com/UncleDenny/weather-app" class="btn-retro">ДЕМО</a>
         </div>
       </div>
     </section>
-
-   
-    <section class="blog">
-      <h2 class="section-title">> БЛОГ_</h2>
-      <div class="blog-posts">
-        <article class="blog-post">
-          <h3>Как я взломал Gibson</h3>
-          <p>Секреты кибербезопасности из 90-х.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="contact">
+ 
+    <section class="contact" id="contact">
       <h2 class="section-title">> КОНТАКТЫ_</h2>
       <div class="contact-links">
         <a href="https://github.com/UncleDenny" class="retro-link"><i class="fab fa-github"></i> GitHub</a>
-        <a href="#" class="retro-link"><i class="fab fa-telegram"></i> Telegram</a>
+        <a href="https://t.me/uncledenny" class="retro-link"><i class="fab fa-telegram"></i> Telegram</a>
+        <a href="mailto:dennis@example.com" class="retro-link"><i class="fas fa-envelope"></i> Email</a>
       </div>
+      <form class="contact-form">
+        <input type="text" placeholder="Ваше имя" required>
+        <input type="email" placeholder="Email" required>
+        <textarea placeholder="Сообщение..." required></textarea>
+        <button type="submit" class="btn-retro">ОТПРАВИТЬ</button>
+      </form>
     </section>
   </div>
+ 
   <div class="crt-overlay"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
