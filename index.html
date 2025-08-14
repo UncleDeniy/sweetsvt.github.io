@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Денис Крутько | Портфолио разработчика</title>
+  <title>Денис Петров | Портфолио разработчика</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
-  <base href="/UncleDenny.github.io/">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="language-switcher">
@@ -23,12 +23,16 @@
 
   <header class="header">
     <div class="header-content">
-      <h1 class="title noise-text" data-text="Denis Petrov">Denis Petrov</h1>
+      <h1 class="title noise-text" data-text="Денис Петров">Денис Петров</h1>
       <p class="subtitle" data-key="subtitle">Frontend разработчик</p>
+    </div>
+    <div class="scroll-hint">
+      <div class="mouse"></div>
     </div>
   </header>
 
   <main class="main-content">
+    
     <section class="about-section">
       <h2 class="section-title" data-key="about">Обо мне</h2>
       <div class="about-content">
@@ -63,46 +67,79 @@
     <section class="projects-section">
       <h2 class="section-title" data-key="projects">Мои проекты</h2>
       <div class="projects-carousel">
+        <button class="carousel-btn prev">
+          <i class="fas fa-chevron-left"></i>
+          <span class="btn-circle"></span>
+        </button>
         <div class="carousel-container">
           <!-- Проекты будут добавлены через JS -->
         </div>
-        <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
-        <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+        <button class="carousel-btn next">
+          <i class="fas fa-chevron-right"></i>
+          <span class="btn-circle"></span>
+        </button>
       </div>
     </section>
 
-    <section class="contact-section">
+    <section class="contact-section" id="contact">
       <h2 class="section-title" data-key="contact">Контакты</h2>
-      <div class="contact-content">
-        <div class="messengers">
-          <a href="https://web.wechat.com/" class="messenger-link" target="_blank">
-            <i class="fab fa-weixin"></i>
-            <span>WeChat</span>
-          </a>
-          <a href="https://t.me/" class="messenger-link" target="_blank">
+      <div class="contact-grid">
+        <!-- Элемент 1 - Телефон -->
+        <div class="contact-card phone">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="contact-info">
+            <h3 data-key="phone-title">Телефон</h3>
+            <a href="tel:+1234567890">+7 (123) 456-78-90</a>
+          </div>
+        </div>
+        
+        <!-- Элемент 2 - Email -->
+        <div class="contact-card email">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="contact-info">
+            <h3 data-key="email-title">Email</h3>
+            <a href="mailto:denis@example.com">denis@example.com</a>
+          </div>
+        </div>
+        
+        <!-- Элемент 3 - Telegram -->
+        <div class="contact-card telegram">
+          <div class="contact-icon">
             <i class="fab fa-telegram"></i>
-            <span>Telegram</span>
-          </a>
-          <a href="https://vk.com/" class="messenger-link" target="_blank">
-            <i class="fab fa-vk"></i>
-            <span>VKontakte</span>
-          </a>
-          <a href="https://github.com/UncleDeniy" class="messenger-link" target="_blank">
+          </div>
+          <div class="contact-info">
+            <h3 data-key="telegram-title">Telegram</h3>
+            <a href="https://t.me/denis_petrov" target="_blank">@denis_petrov</a>
+          </div>
+        </div>
+        
+        <!-- Элемент 4 - GitHub -->
+        <div class="contact-card github">
+          <div class="contact-icon">
             <i class="fab fa-github"></i>
-            <span>GitHub</span>
-          </a>
+          </div>
+          <div class="contact-info">
+            <h3 data-key="github-title">GitHub</h3>
+            <a href="https://github.com/UncleDenny" target="_blank">UncleDenny</a>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>&copy; 2025 Денис Крутько</p>
+    <p>&copy; <span class="year"></span> Денис Петров</p>
   </footer>
 
   <div class="project-modal">
     <div class="modal-content">
-      <button class="close-modal"><i class="fas fa-times"></i></button>
+      <button class="close-modal">
+        <i class="fas fa-times"></i>
+      </button>
       <div class="modal-body"></div>
     </div>
   </div>
@@ -110,6 +147,5 @@
   <script src="js/language.js"></script>
   <script src="js/carousel.js"></script>
   <script src="js/main.js"></script>
-
 </body>
 </html>
