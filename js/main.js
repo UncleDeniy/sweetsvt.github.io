@@ -48,7 +48,32 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'auto';
       }
     });
-    
+      
+    function checkImagesLoaded() {
+  const images = document.querySelectorAll('img');
+  let loadedCount = 0;
+  
+  images.forEach(img => {
+    if (img.complete) {
+      loadedCount++;
+    } else {
+      img.addEventListener('load', () => {
+        loadedCount++;
+        if (loadedCount === images.length) {
+          document.querySelector('.loading-screen').style.display = 'none';
+        }
+      });
+      img.addEventListener('error', () => {
+        console.error('Error loading image:', img.src);
+        loadedCount++;
+      });
+    }
+  });
+  
+  if (loadedCount === images.length) {
+    document.querySelector('.loading-screen').style.display = 'none';
+  }
+} 
     function loadProjectDetails(id) {
       // Здесь будет загрузка данных проекта
       const project = projectsData.find(p => p.id === id);
