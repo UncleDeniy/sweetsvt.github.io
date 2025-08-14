@@ -1,2 +1,0 @@
-# sweetsvt
-My resume
