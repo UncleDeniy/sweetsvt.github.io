@@ -1,21 +1,30 @@
 // Данные проектов
 const projectsData = [
     {
-      id: 'weather-app',
-      title: 'WeatherVision Pro',
-      description: 'Умное приложение для прогноза погоды с красивым интерфейсом',
-      image: '../images/projects/WeatherVision.png',
-      demoUrl: 'https://uncledeniy.github.io/weather-app.github.io/',
-      codeUrl: 'https://github.com/UncleDeniy/weather-app.github.io',
+      id: 'project1',
+      title: 'Интернет-магазин',
+      description: 'Полнофункциональный интернет-магазин с корзиной и системой оплаты, разработанный на React и Node.js',
+      image: 'project1.jpg',
+      demoUrl: '#',
+      codeUrl: '#',
+      tags: ['React', 'Node.js', 'MongoDB']
+    },
+    {
+      id: 'project2',
+      title: 'Погодное приложение',
+      description: 'Приложение для просмотра погоды с использованием API OpenWeatherMap',
+      image: 'project2.jpg',
+      demoUrl: '#',
+      codeUrl: '#',
       tags: ['JavaScript', 'API', 'CSS3']
     },
     {
-      id: 'retro-game',
-      title: 'Galaxy Defender',
-      description: 'Ретро-аркада в стиле классических космических шутеров',
-      image: '../images/projects/galaxy_defender.png',
-      demoUrl: 'https://uncledeniy.github.io/retro-game.github.io/',
-      codeUrl: 'https://github.com/UncleDeniy/retro-game.github.io',
+      id: 'project3',
+      title: 'Игра на JavaScript',
+      description: 'Классическая аркада с использованием Canvas API',
+      image: 'https://github.com/UncleDeniy/sweetsvt.github.io/blob/main/images/projects/galaxy_defender.png',
+      demoUrl: '#',
+      codeUrl: '#',
       tags: ['JavaScript', 'Canvas', 'HTML5']
     }
   ];
@@ -31,10 +40,10 @@ const projectsData = [
       projectCard.className = 'project-card';
       projectCard.dataset.projectId = project.id;
       projectCard.innerHTML = `
-        <div class="project-image" style="background-image: url('${project.image}')"></div>
+        <div class="project-image" style="background-image: url('assets/projects/${project.image}')"></div>
         <div class="project-info">
           <h3>${project.title}</h3>
-          <p>${project.description}</p>
+          <p>${project.description.substring(0, 100)}...</p>
           <div class="project-tags">
             ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
           </div>
@@ -74,6 +83,7 @@ const projectsData = [
         const angleX = (centerY - y) / 20;
         
         card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.05)`;
+        card.style.boxShadow = `0 20px 30px rgba(0,0,0,0.4)`;
       });
     });
     
@@ -81,6 +91,7 @@ const projectsData = [
       const cards = document.querySelectorAll('.project-card');
       cards.forEach(card => {
         card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+        card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.3)';
       });
     });
   }
