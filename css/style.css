@@ -1,0 +1,187 @@
+:root {
+    --primary: #6c5ce7;
+    --primary-dark: #5649c0;
+    --secondary: #00cec9;
+    --dark: #2d3436;
+    --darker: #1e272e;
+    --light: #f5f6fa;
+    --gray: #636e72;
+    --success: #00b894;
+    --danger: #d63031;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--darker);
+    color: var(--light);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  
+  .header {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+  }
+  
+  .title {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    position: relative;
+    color: var(--primary);
+  }
+  
+  .subtitle {
+    font-size: 1.5rem;
+    color: var(--secondary);
+    margin-bottom: 2rem;
+  }
+  
+  /* Анимации и карусель проектов */
+  .projects-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 50px;
+  }
+  
+  .carousel-container {
+    display: flex;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+  }
+  
+  .project-card {
+    min-width: 300px;
+    margin: 0 15px;
+    background: var(--dark);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .project-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .project-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .project-info {
+    padding: 20px;
+  }
+  
+  /* Модальное окно проекта */
+  .project-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: var(--dark);
+    border-radius: 10px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 768px) {
+    .title {
+      font-size: 2.5rem;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .projects-carousel {
+      padding: 0 20px;
+    }
+    
+    .project-card {
+      min-width: 250px;
+    }
+  }
+  /* Стили для мессенджеров */
+.messengers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .messenger-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--light);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .messenger-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+  }
+  
+  .messenger-link i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .messenger-link span {
+    font-size: 0.9rem;
+  }
+  
+  /* Адаптивность мессенджеров */
+  @media (max-width: 480px) {
+    .messengers {
+      grid-template-columns: 1fr 1fr;
+    }
+  }

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark" data-lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Денис Крутько | Портфолио разработчика</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <div class="language-switcher">
+    <button class="lang-btn active" data-lang="ru">RU</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+
+  <header class="header">
+    <div class="header-content">
+      <h1 class="title glitch" data-text="Денис Крутько">Денис Крутько</h1>
+      <p class="subtitle" data-key="subtitle">Frontend разработчик</p>
+    </div>
+    <div class="scroll-hint">
+      <div class="mouse"></div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="about-section">
+      <h2 class="section-title" data-key="about">Обо мне</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p data-key="about-text1">Привет! Меня зовут Денис, мне 20 лет. Я занимаюсь веб-разработкой уже 2 года.</p>
+          <p data-key="about-text2">Специализируюсь на создании современных, интерактивных пользовательских интерфейсов.</p>
+        </div>
+        <div class="skills">
+          <h3 data-key="skills">Навыки</h3>
+          <div class="skills-grid">
+            <div class="skill-card" data-skill="html">
+              <i class="fab fa-html5"></i>
+              <span>HTML5</span>
+            </div>
+            <div class="skill-card" data-skill="css">
+              <i class="fab fa-css3-alt"></i>
+              <span>CSS3</span>
+            </div>
+            <div class="skill-card" data-skill="js">
+              <i class="fab fa-js"></i>
+              <span>JavaScript</span>
+            </div>
+            <div class="skill-card" data-skill="react">
+              <i class="fab fa-react"></i>
+              <span>React</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-section">
+      <h2 class="section-title" data-key="projects">Мои проекты</h2>
+      <div class="projects-carousel">
+        <div class="carousel-container">
+          <!-- Проекты будут добавлены через JS -->
+        </div>
+        <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <h2 class="section-title" data-key="contact">Контакты</h2>
+      <div class="contact-content">
+        <div class="messengers">
+          <a href="https://web.wechat.com/" class="messenger-link" target="_blank">
+            <i class="fab fa-weixin"></i>
+            <span>WeChat</span>
+          </a>
+          <a href="https://t.me/" class="messenger-link" target="_blank">
+            <i class="fab fa-telegram"></i>
+            <span>Telegram</span>
+          </a>
+          <a href="https://vk.com/" class="messenger-link" target="_blank">
+            <i class="fab fa-vk"></i>
+            <span>VKontakte</span>
+          </a>
+          <a href="https://github.com/UncleDeniy" class="messenger-link" target="_blank">
+            <i class="fab fa-github"></i>
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Денис Крутько</p>
+  </footer>
+
+  <div class="project-modal">
+    <div class="modal-content">
+      <button class="close-modal"><i class="fas fa-times"></i></button>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="js/language.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
