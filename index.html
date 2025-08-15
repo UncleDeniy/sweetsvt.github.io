@@ -1029,28 +1029,32 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
     
-        const swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1,
-            spaceBetween: 30,
-            loop: true,
-            centeredSlides: true,
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            breakpoints: {
-                768: {
-                    slidesPerView: 2,
-                },
-                1200: {
-                    slidesPerView: 3,
-                }
-            }
-        });
+const swiper = new Swiper(".mySwiper", {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: true,
+    centeredSlides: true,
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    },
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    },
+    breakpoints: {
+        768: {
+            slidesPerView: 2,
+        },
+        1200: {
+            slidesPerView: 3,
+        }
+    },
+    // Добавьте эти параметры для лучшего отображения стрелок
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true
+});
 
         
         const themeToggle = document.querySelector('.theme-toggle');
