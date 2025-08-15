@@ -1,151 +1,1159 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark" data-lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Денис Петров | Портфолио разработчика</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Денис Крутько | Фронтенд разработчик</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <style>
+        :root {
+            --primary-color: #2997ff;
+            --primary-hover: #1a8cff;
+            --bg-color: #0a0a0a;
+            --text-color: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --card-bg: #1a1a1a;
+            --card-border: #2c2c2e;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --section-padding: 120px 0;
+            --border-radius: 24px;
+        }
+
+        [data-theme="light"] {
+            --primary-color: #0071e3;
+            --primary-hover: #0062c4;
+            --bg-color: #fbfbfd;
+            --text-color: #1d1d1f;
+            --text-secondary: #86868b;
+            --card-bg: #ffffff;
+            --card-border: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: var(--transition);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        section {
+            padding: var(--section-padding);
+            position: relative;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 30px 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            background-color: rgba(var(--bg-color), 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .theme-toggle, .lang-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover, .lang-toggle:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+     
+        .hero {
+            height: 100vh;
+            min-height: 800px;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            margin-bottom: 24px;
+            background: linear-gradient(to right, var(--text-color), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-bg {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60%;
+            height: 80%;
+            background: radial-gradient(circle at center, var(--primary-color), transparent 70%);
+            opacity: 0.1;
+            filter: blur(100px);
+            z-index: 1;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(41, 151, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
+      
+        .skills {
+            background-color: var(--card-bg);
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 48px;
+            margin-bottom: 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), transparent);
+            border-radius: 2px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-card {
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            transition: var(--transition);
+            border: 1px solid var(--card-border);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .skill-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .skill-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(41, 151, 255, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .skill-card h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        .skill-card p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .skill-level {
+            height: 4px;
+            background-color: var(--card-border);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .level-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        .projects {
+            position: relative;
+        }
+
+        .swiper {
+            width: 100%;
+            padding: 60px 0;
+        }
+
+        .swiper-slide {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .swiper-slide-active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .project-img {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .project-tags {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .project-tag {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .project-info {
+            padding: 30px;
+        }
+
+        .project-info h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .project-info p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .project-links a {
+            flex: 1;
+        }
+
+        .swiper-pagination-bullet {
+            background-color: var(--text-secondary);
+            opacity: 1;
+            width: 10px;
+            height: 10px;
+            transition: var(--transition);
+        }
+
+        .swiper-pagination-bullet-active {
+            background-color: var(--primary-color);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            color: var(--primary-color);
+            width: 60px;
+            height: 60px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+        }
+
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .swiper-button-next::after, .swiper-button-prev::after {
+            font-size: 20px;
+        }
+
+        
+        .about {
+            background-color: var(--card-bg);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-img {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-text h2 {
+            font-size: 36px;
+            margin-bottom: 24px;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        
+        .contact {
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .contact p {
+            color: var(--text-secondary);
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .social-link {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .email-link {
+            display: inline-block;
+            font-size: 20px;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 60px;
+            transition: var(--transition);
+        }
+
+        .email-link:hover {
+            color: var(--primary-hover);
+        }
+
+        footer {
+            background-color: var(--card-bg);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 60px;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-img {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                padding: 0 30px;
+            }
+            
+            .hero h1 {
+                font-size: 48px;
+            }
+            
+            .hero p {
+                font-size: 20px;
+            }
+            
+            .section-title {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                min-height: 700px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-img {
+                height: 200px;
+            }
+            
+            .contact h2 {
+                font-size: 36px;
+            }
+            
+            .social-links {
+                gap: 15px;
+            }
+            
+            .social-link {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .hero {
+                padding-top: 80px;
+                min-height: 600px;
+            }
+            
+            .hero-bg {
+                width: 100%;
+                height: 50%;
+                top: auto;
+                bottom: 0;
+                transform: none;
+            }
+            
+            .section-title {
+                font-size: 28px;
+                margin-bottom: 50px;
+            }
+            
+            .skill-card {
+                padding: 30px;
+            }
+            
+            .project-info {
+                padding: 20px;
+            }
+            
+            .project-links {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="language-switcher">
-    <button class="lang-btn active" data-lang="ru">
-      <span class="lang-flag">🇷🇺</span>
-      <span class="lang-text">РУС</span>
-    </button>
-    <button class="lang-btn" data-lang="en">
-      <span class="lang-flag">🇬🇧</span>
-      <span class="lang-text">ENG</span>
-    </button>
-  </div>
+    <header id="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="logo">
+                    <div class="logo-icon">Д</div>
+                    <span data-lang="ru">Денис</span>
+                    <span data-lang="en" style="display: none;">Denis</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#about" class="nav-link" data-lang="ru">Обо мне</a>
+                    <a href="#about" class="nav-link" data-lang="en" style="display: none;">About</a>
+                    <a href="#skills" class="nav-link" data-lang="ru">Навыки</a>
+                    <a href="#skills" class="nav-link" data-lang="en" style="display: none;">Skills</a>
+                    <a href="#projects" class="nav-link" data-lang="ru">Проекты</a>
+                    <a href="#projects" class="nav-link" data-lang="en" style="display: none;">Projects</a>
+                    <a href="#contact" class="nav-link" data-lang="ru">Контакты</a>
+                    <a href="#contact" class="nav-link" data-lang="en" style="display: none;">Contact</a>
+                </div>
+                <div class="controls">
+                    <button class="lang-toggle" title="Switch language">
+                        <i class="fas fa-language"></i>
+                    </button>
+                    <button class="theme-toggle" title="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-  <header class="header">
-    <div class="header-content">
-      <h1 class="title noise-text" data-text="Денис Петров">Денис Петров</h1>
-      <p class="subtitle" data-key="subtitle">Frontend разработчик</p>
-    </div>
-    <div class="scroll-hint">
-      <div class="mouse"></div>
-    </div>
-  </header>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 data-lang="ru">Создаю цифровые продукты с душой</h1>
+                <h1 data-lang="en" style="display: none;">Crafting digital products with soul</h1>
+                <p data-lang="ru">Привет, я Денис, 20 лет. Фронтенд-разработчик с фокусом на создание интуитивных и визуально впечатляющих интерфейсов. Учусь на информационную безопасность, а в свободное время воплощаю идеи в код.</p>
+                <p data-lang="en" style="display: none;">Hi, I'm Denis, 20 years old. Frontend developer focused on creating intuitive and visually stunning interfaces. Studying information security, and in my free time turning ideas into code.</p>
+                <div class="btn-group">
+                    <a href="#projects" class="btn" data-lang="ru">
+                        <i class="fas fa-eye"></i> Мои работы
+                    </a>
+                    <a href="#projects" class="btn" data-lang="en" style="display: none;">
+                        <i class="fas fa-eye"></i> View Projects
+                    </a>
+                    <a href="#contact" class="btn btn-outline" data-lang="ru">
+                        <i class="fas fa-paper-plane"></i> Связаться
+                    </a>
+                    <a href="#contact" class="btn btn-outline" data-lang="en" style="display: none;">
+                        <i class="fas fa-paper-plane"></i> Contact Me
+                    </a>
+                </div>
+            </div>
+            <div class="hero-bg"></div>
+        </div>
+    </section>
 
-  <main class="main-content">
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="About me">
+                </div>
+                <div class="about-text">
+                    <h2 data-lang="ru">Обо мне</h2>
+                    <h2 data-lang="en" style="display: none;">About Me</h2>
+                    <p data-lang="ru">Я увлечен созданием цифровых продуктов, которые сочетают в себе элегантный дизайн и безупречную функциональность. Вдохновляюсь философией Apple - минимализм, внимание к деталям и пользовательский опыт на первом месте.</p>
+                    <p data-lang="en" style="display: none;">I'm passionate about creating digital products that combine elegant design and flawless functionality. Inspired by Apple's philosophy - minimalism, attention to detail and user experience first.</p>
+                    <p data-lang="ru">Помимо фронтенд-разработки, я изучаю информационную безопасность, что позволяет мне создавать не только красивые, но и защищенные приложения. Верю, что хороший продукт - это симбиоз формы и содержания.</p>
+                    <p data-lang="en" style="display: none;">In addition to frontend development, I study information security, which allows me to create not only beautiful but also secure applications. I believe that a good product is a symbiosis of form and content.</p>
+                    <p data-lang="ru">В работе использую современный стек технологий и слежу за последними тенденциями в веб-разработке. Люблю сложные задачи и постоянное обучение.</p>
+                    <p data-lang="en" style="display: none;">In my work I use modern technology stack and follow the latest trends in web development. I love challenging tasks and continuous learning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="skills" id="skills">
+        <div class="container">
+            <h2 class="section-title" data-lang="ru">Мои навыки</h2>
+            <h2 class="section-title" data-lang="en" style="display: none;">My Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <h3>HTML5</h3>
+                    <p data-lang="ru">Семантическая верстка, доступность (a11y), SEO-оптимизация, валидный код по стандартам W3C</p>
+                    <p data-lang="en" style="display: none;">Semantic markup, accessibility (a11y), SEO optimization, W3C valid code</p>
+                    <div class="skill-level">
+                        <div class="level-bar" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-css3-alt"></i>
+                    </div>
+                    <h3>CSS3</h3>
+                    <p data-lang="ru">Анимации, Flexbox, Grid, адаптивный дизайн, препроцессоры (Sass), методологии (BEM)</p>
+                    <p data-lang="en" style="display: none;">Animations, Flexbox, Grid, responsive design, preprocessors (Sass), methodologies (BEM)</p>
+                    <div class="skill-level">
+                        <div class="level-bar" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <h3>JavaScript</h3>
+                    <p data-lang="ru">ES6+, асинхронное программирование, работа с DOM, OOP, функциональное программирование</p>
+                    <p data-lang="en" style="display: none;">ES6+, async programming, DOM manipulation, OOP, functional programming</p>
+                    <div class="skill-level">
+                        <div class="level-bar" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 data-lang="ru">Адаптивный дизайн</h3>
+                    <h3 data-lang="en" style="display: none;">Responsive Design</h3>
+                    <p data-lang="ru">Mobile-first подход, кросс-браузерность, адаптация под различные устройства и экраны</p>
+                    <p data-lang="en" style="display: none;">Mobile-first approach, cross-browser compatibility, adaptation for various devices and screens</p>
+                    <div class="skill-level">
+                        <div class="level-bar" style="width: 92%"></div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 data-lang="ru">UI/UX Дизайн</h3>
+                    <h3 data-lang="en" style="display: none;">UI/UX Design</h3>
+                    <p data-lang="ru">Прототипирование в Figma, создание дизайн-систем, пользовательские сценарии, микровзаимодействия</p>
+                    <p data-lang="en" style="display: none;">Prototyping in Figma, design systems creation, user scenarios, microinteractions</p>
+                    <div class="skill-level">
+                        <div class="level-bar" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title" data-lang="ru">Мои проекты</h2>
+            <h2 class="section-title" data-lang="en" style="display: none;">My Projects</h2>
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide">
+                        <div class="project-img">
+                            <img src="./galaxy_defender.png" alt="Galaxy Defender">
+                            <div class="project-tags">
+                                <span class="project-tag">Canvas API</span>
+                                <span class="project-tag">SVG</span>
+                                <span class="project-tag">CSS3</span>
+                                <span class="project-tag">HTML5</span>
+                                <span class="project-tag">JS</span>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 data-lang="ru">Web-игра Galaxy Defender</h3>
+                            <h3 data-lang="en" style="display: none;">Web-game Galaxy Defender</h3>
+                            <p data-lang="ru">Galaxy Defender - это ретро-аркада в стиле космического шутера с пиксельной графикой, вдохновленная классическими играми 80-х и 90-х. Управляйте звездолетом, уничтожайте вражеские НЛО и сражайтесь с боссами!</p>
+                            <p data-lang="en" style="display: none;">Galaxy Defender is a retro space shooter arcade game with pixel graphics inspired by classic games from the 80s and 90s. Control a spaceship, destroy enemy UFOs and fight bosses!</p>
+                            <div class="project-links">
+                                <a href="https://uncledeniy.github.io/retro-game.github.io/" class="btn" target="_blank" data-lang="ru">
+                                    <i class="fas fa-external-link-alt"></i> Демо
+                                </a>
+                                <a href="https://uncledeniy.github.io/retro-game.github.io/" class="btn" target="_blank" data-lang="en" style="display: none;">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </a>
+                                <a href="https://github.com/UncleDeniy/retro-game.github.io/tree/main" class="btn btn-outline" target="_blank">
+                                    <i class="fab fa-github"></i> Код
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="project-img">
+                            <img src="./weather_app.png" alt="Portfolio">
+                            <div class="project-tags">
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">JavaScript</span>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 data-lang="ru">WeatherVision Pro</h3>
+                            <h3 data-lang="en" style="display: none;">WeatherVision Pro</h3>
+                            <p data-lang="ru">WeatherVision Pro - это современное веб-приложение для просмотра погоды с расширенными функциями и красивым интерфейсом. Приложение предоставляет точные прогнозы погоды, информацию о качестве воздуха и удобные инструменты для отслеживания погоды в разных городах.</p>
+                            <p data-lang="en" style="display: none;">WeatherVision Pro is a modern web-based weather viewer with advanced features and a beautiful interface. The app provides accurate weather forecasts, air quality information, and convenient tools for tracking the weather in different cities.</p>
+                            <div class="project-links">
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="ru">
+                                    <i class="fas fa-external-link-alt"></i> Демо
+                                </a>
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="en" style="display: none;">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </a>
+                                <a href="https://github.com/UncleDeniy/weather-app.github.io/tree/main" class="btn btn-outline" target="_blank">
+                                    <i class="fab fa-github"></i> Код
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="project-img">
+                            <img src="./weather_app.png" alt="Portfolio">
+                            <div class="project-tags">
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">JavaScript</span>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 data-lang="ru">WeatherVision Pro</h3>
+                            <h3 data-lang="en" style="display: none;">WeatherVision Pro</h3>
+                            <p data-lang="ru">WeatherVision Pro - это современное веб-приложение для просмотра погоды с расширенными функциями и красивым интерфейсом. Приложение предоставляет точные прогнозы погоды, информацию о качестве воздуха и удобные инструменты для отслеживания погоды в разных городах.</p>
+                            <p data-lang="en" style="display: none;">WeatherVision Pro is a modern web-based weather viewer with advanced features and a beautiful interface. The app provides accurate weather forecasts, air quality information, and convenient tools for tracking the weather in different cities.</p>
+                            <div class="project-links">
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="ru">
+                                    <i class="fas fa-external-link-alt"></i> Демо
+                                </a>
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="en" style="display: none;">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </a>
+                                <a href="https://github.com/UncleDeniy/weather-app.github.io/tree/main" class="btn btn-outline" target="_blank">
+                                    <i class="fab fa-github"></i> Код
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="project-img">
+                            <img src="./weather_app.png" alt="Portfolio">
+                            <div class="project-tags">
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">JavaScript</span>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 data-lang="ru">WeatherVision Pro</h3>
+                            <h3 data-lang="en" style="display: none;">WeatherVision Pro</h3>
+                            <p data-lang="ru">WeatherVision Pro - это современное веб-приложение для просмотра погоды с расширенными функциями и красивым интерфейсом. Приложение предоставляет точные прогнозы погоды, информацию о качестве воздуха и удобные инструменты для отслеживания погоды в разных городах.</p>
+                            <p data-lang="en" style="display: none;">WeatherVision Pro is a modern web-based weather viewer with advanced features and a beautiful interface. The app provides accurate weather forecasts, air quality information, and convenient tools for tracking the weather in different cities.</p>
+                            <div class="project-links">
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="ru">
+                                    <i class="fas fa-external-link-alt"></i> Демо
+                                </a>
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="en" style="display: none;">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </a>
+                                <a href="https://github.com/UncleDeniy/weather-app.github.io/tree/main" class="btn btn-outline" target="_blank">
+                                    <i class="fab fa-github"></i> Код
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="swiper-slide">
+                        <div class="project-img">
+                            <img src="./weather_app.png" alt="Portfolio">
+                            <div class="project-tags">
+                                <span class="project-tag">HTML/CSS</span>
+                                <span class="project-tag">JavaScript</span>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3 data-lang="ru">WeatherVision Pro</h3>
+                            <h3 data-lang="en" style="display: none;">WeatherVision Pro</h3>
+                            <p data-lang="ru">WeatherVision Pro - это современное веб-приложение для просмотра погоды с расширенными функциями и красивым интерфейсом. Приложение предоставляет точные прогнозы погоды, информацию о качестве воздуха и удобные инструменты для отслеживания погоды в разных городах.</p>
+                            <p data-lang="en" style="display: none;">WeatherVision Pro is a modern web-based weather viewer with advanced features and a beautiful interface. The app provides accurate weather forecasts, air quality information, and convenient tools for tracking the weather in different cities.</p>
+                            <div class="project-links">
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="ru">
+                                    <i class="fas fa-external-link-alt"></i> Демо
+                                </a>
+                                <a href="https://uncledeniy.github.io/weather-app.github.io/" class="btn" target="_blank" data-lang="en" style="display: none;">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </a>
+                                <a href="https://github.com/UncleDeniy/weather-app.github.io/tree/main" class="btn btn-outline" target="_blank">
+                                    <i class="fab fa-github"></i> Код
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 data-lang="ru">Давайте работать вместе</h2>
+            <h2 data-lang="en" style="display: none;">Let's work together</h2>
+            <p data-lang="ru">Если у вас есть проект или вы хотите обсудить возможности сотрудничества, свяжитесь со мной любым удобным способом.</p>
+            <p data-lang="en" style="display: none;">If you have a project or want to discuss collaboration opportunities, contact me in any convenient way.</p>
+            <div class="social-links">
+                <a href="https://github.com/UncleDeniy" class="social-link" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://t.me/sweetsvd" class="social-link" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://linkedin.com/in/username" class="social-link" target="_blank">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://twitter.com/username" class="social-link" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+            <a href="mailto:email@example.com" class="email-link">
+                denniskrutko@ya.ru
+            </a>
+            <p class="copyright" data-lang="ru">© 2025 Денис. Все права защищены.</p>
+            <p class="copyright" data-lang="en" style="display: none;">© 2025 Denis. All rights reserved.</p>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
     
-    <section class="about-section">
-      <h2 class="section-title" data-key="about">Обо мне</h2>
-      <div class="about-content">
-        <div class="about-text">
-          <p data-key="about-text1">Привет! Меня зовут Денис, мне 20 лет. Я занимаюсь веб-разработкой уже 2 года.</p>
-          <p data-key="about-text2">Специализируюсь на создании современных, интерактивных пользовательских интерфейсов.</p>
-        </div>
-        <div class="skills">
-          <h3 data-key="skills">Навыки</h3>
-          <div class="skills-grid">
-            <div class="skill-card" data-skill="html">
-              <i class="fab fa-html5"></i>
-              <span>HTML5</span>
-            </div>
-            <div class="skill-card" data-skill="css">
-              <i class="fab fa-css3-alt"></i>
-              <span>CSS3</span>
-            </div>
-            <div class="skill-card" data-skill="js">
-              <i class="fab fa-js"></i>
-              <span>JavaScript</span>
-            </div>
-            <div class="skill-card" data-skill="react">
-              <i class="fab fa-react"></i>
-              <span>React</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        const swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            centeredSlides: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                1200: {
+                    slidesPerView: 3,
+                }
+            }
+        });
 
-    <section class="projects-section">
-      <h2 class="section-title" data-key="projects">Мои проекты</h2>
-      <div class="projects-carousel">
-        <button class="carousel-btn prev">
-          <i class="fas fa-chevron-left"></i>
-          <span class="btn-circle"></span>
-        </button>
-        <div class="carousel-container">
-          <!-- Проекты будут добавлены через JS -->
-        </div>
-        <button class="carousel-btn next">
-          <i class="fas fa-chevron-right"></i>
-          <span class="btn-circle"></span>
-        </button>
-      </div>
-    </section>
-
-    <section class="contact-section" id="contact">
-      <h2 class="section-title" data-key="contact">Контакты</h2>
-      <div class="contact-grid">
-        <!-- Элемент 1 - Телефон -->
-        <div class="contact-card phone">
-          <div class="contact-icon">
-            <i class="fas fa-phone"></i>
-          </div>
-          <div class="contact-info">
-            <h3 data-key="phone-title">Телефон</h3>
-            <a href="tel:+1234567890">+7 (123) 456-78-90</a>
-          </div>
-        </div>
         
-        <!-- Элемент 2 - Email -->
-        <div class="contact-card email">
-          <div class="contact-icon">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <div class="contact-info">
-            <h3 data-key="email-title">Email</h3>
-            <a href="mailto:denis@example.com">denis@example.com</a>
-          </div>
-        </div>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const html = document.documentElement;
+        const themeIcon = themeToggle.querySelector('i');
+
         
-        <!-- Элемент 3 - Telegram -->
-        <div class="contact-card telegram">
-          <div class="contact-icon">
-            <i class="fab fa-telegram"></i>
-          </div>
-          <div class="contact-info">
-            <h3 data-key="telegram-title">Telegram</h3>
-            <a href="https://t.me/denis_petrov" target="_blank">@denis_petrov</a>
-          </div>
-        </div>
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            html.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'light') {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'light') {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+        });
+
+       
+        const langToggle = document.querySelector('.lang-toggle');
+        const langElements = document.querySelectorAll('[data-lang]');
+
         
-        <!-- Элемент 4 - GitHub -->
-        <div class="contact-card github">
-          <div class="contact-icon">
-            <i class="fab fa-github"></i>
-          </div>
-          <div class="contact-info">
-            <h3 data-key="github-title">GitHub</h3>
-            <a href="https://github.com/UncleDenny" target="_blank">UncleDenny</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+        const savedLang = localStorage.getItem('lang') || 'ru';
+        if (savedLang === 'en') {
+            toggleLanguage();
+        }
 
-  <footer class="footer">
-    <p>&copy; <span class="year"></span> Денис Петров</p>
-  </footer>
+        langToggle.addEventListener('click', toggleLanguage);
 
-  <div class="project-modal">
-    <div class="modal-content">
-      <button class="close-modal">
-        <i class="fas fa-times"></i>
-      </button>
-      <div class="modal-body"></div>
-    </div>
-  </div>
+        function toggleLanguage() {
+            langElements.forEach(el => {
+                if (el.style.display === 'none') {
+                    el.style.display = '';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+            
+            const currentLang = document.querySelector('[data-lang]:not([style*="display: none"])').getAttribute('data-lang');
+            localStorage.setItem('lang', currentLang);
+        }
 
-  <script src="js/language.js"></script>
-  <script src="js/carousel.js"></script>
-  <script src="js/main.js"></script>
+      
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+       
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.skill-card');
+            
+            elements.forEach(el => {
+                const elementPosition = el.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    el.classList.add('visible');
+                }
+            });
+        };
+
+        
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            animateOnScroll();
+        });
+
+       
+        window.addEventListener('load', () => {
+            header.classList.toggle('scrolled', window.scrollY > 100);
+            animateOnScroll();
+        });
+    </script>
 </body>
-</html>
+</html> 
