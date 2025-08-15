@@ -446,25 +446,65 @@
             border-radius: 5px;
         }
 
-        .swiper-button-next, .swiper-button-prev {
-            color: var(--primary-color);
-            width: 60px;
-            height: 60px;
-            background-color: var(--card-bg);
-            border-radius: 50%;
-            border: 1px solid var(--card-border);
-            transition: var(--transition);
-        }
+        /* Добавьте этот CSS в раздел стилей */
+.swiper-button-next, 
+.swiper-button-prev {
+    color: var(--primary-color);
+    width: 60px;
+    height: 60px;
+    background-color: var(--card-bg);
+    border-radius: 50%;
+    border: 1px solid var(--card-border);
+    transition: var(--transition);
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-        .swiper-button-next:hover, .swiper-button-prev:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
+.swiper-button-next {
+    right: -30px;
+}
 
-        .swiper-button-next::after, .swiper-button-prev::after {
-            font-size: 20px;
-        }
+.swiper-button-prev {
+    left: -30px;
+}
 
+.swiper-button-next:hover, 
+.swiper-button-prev:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(41, 151, 255, 0.2);
+}
+
+.swiper-button-next::after, 
+.swiper-button-prev::after {
+    font-size: 24px;
+    font-weight: bold;
+}
+ 
+@media (max-width: 768px) {
+    .swiper-button-next, 
+    .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .swiper-button-next {
+        right: -20px;
+    }
+    
+    .swiper-button-prev {
+        left: -20px;
+    }
+    
+    .swiper-button-next::after, 
+    .swiper-button-prev::after {
+        font-size: 18px;
+    }
+}
         
         .about {
             background-color: var(--card-bg);
