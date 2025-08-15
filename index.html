@@ -173,7 +173,6 @@
             transform: translateY(-2px);
         }
 
-     
         .hero {
             height: 100vh;
             min-height: 800px;
@@ -260,7 +259,6 @@
             gap: 20px;
         }
 
-      
         .skills {
             background-color: var(--card-bg);
             position: relative;
@@ -358,6 +356,7 @@
         .swiper {
             width: 100%;
             padding: 60px 0;
+            position: relative;
         }
 
         .swiper-slide {
@@ -446,66 +445,45 @@
             border-radius: 5px;
         }
 
-        /* Добавьте этот CSS в раздел стилей */
-.swiper-button-next, 
-.swiper-button-prev {
-    color: var(--primary-color);
-    width: 60px;
-    height: 60px;
-    background-color: var(--card-bg);
-    border-radius: 50%;
-    border: 1px solid var(--card-border);
-    transition: var(--transition);
-    top: 50%;
-    transform: translateY(-50%);
-    margin-top: 0;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+        /* Исправленные стили для стрелок карусели */
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--primary-color);
+            width: 60px;
+            height: 60px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+            top: 50%;
+            transform: translateY(-50%);
+            margin-top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-.swiper-button-next {
-    right: -30px;
-}
+        .swiper-button-next {
+            right: -30px;
+        }
 
-.swiper-button-prev {
-    left: -30px;
-}
+        .swiper-button-prev {
+            left: -30px;
+        }
 
-.swiper-button-next:hover, 
-.swiper-button-prev:hover {
-    background-color: var(--primary-color);
-    color: white;
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 6px 16px rgba(41, 151, 255, 0.2);
-}
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 16px rgba(41, 151, 255, 0.2);
+        }
 
-.swiper-button-next::after, 
-.swiper-button-prev::after {
-    font-size: 24px;
-    font-weight: bold;
-}
- 
-@media (max-width: 768px) {
-    .swiper-button-next, 
-    .swiper-button-prev {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .swiper-button-next {
-        right: -20px;
-    }
-    
-    .swiper-button-prev {
-        left: -20px;
-    }
-    
-    .swiper-button-next::after, 
-    .swiper-button-prev::after {
-        font-size: 18px;
-    }
-}
-        
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
         .about {
             background-color: var(--card-bg);
         }
@@ -540,7 +518,6 @@
             margin-bottom: 20px;
         }
 
-        
         .contact {
             text-align: center;
         }
@@ -607,7 +584,6 @@
             font-size: 14px;
         }
 
-       
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -619,16 +595,6 @@
             }
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        
         @media (max-width: 1200px) {
             .hero h1 {
                 font-size: 60px;
@@ -641,6 +607,15 @@
             .about-img {
                 max-width: 500px;
                 margin: 0 auto;
+            }
+
+            /* Адаптация стрелок для средних экранов */
+            .swiper-button-next {
+                right: -15px;
+            }
+
+            .swiper-button-prev {
+                left: -15px;
             }
         }
 
@@ -704,6 +679,26 @@
                 height: 50px;
                 font-size: 20px;
             }
+
+            /* Адаптация стрелок для мобильных */
+            .swiper-button-next,
+            .swiper-button-prev {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .swiper-button-next {
+                right: -10px;
+            }
+            
+            .swiper-button-prev {
+                left: -10px;
+            }
+            
+            .swiper-button-next::after,
+            .swiper-button-prev::after {
+                font-size: 18px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -739,6 +734,12 @@
             
             .project-links {
                 flex-direction: column;
+            }
+
+            /* Скрываем стрелки на очень маленьких экранах */
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none;
             }
         }
     </style>
@@ -1028,7 +1029,7 @@
                                     <i class="fab fa-github"></i> Код
                                 </a>
                             </div>
-                        </div>
+                        </div>  
                     </div>
 
                 <div class="swiper-pagination"></div>
@@ -1068,35 +1069,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-    
-const swiper = new Swiper(".mySwiper", {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    loop: true,
-    centeredSlides: true,
-    pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-    },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-    breakpoints: {
-        768: {
-            slidesPerView: 2,
-        },
-        1200: {
-            slidesPerView: 3,
-        }
-    },
-    // Добавьте эти параметры для лучшего отображения стрелок
-    observer: true,
-    observeParents: true,
-    observeSlideChildren: true
-});
-
+     
+        const swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            centeredSlides: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                1200: {
+                    slidesPerView: 3,
+                }
+            },
         
+            observer: true,
+            observeParents: true,
+            observeSlideChildren: true
+        });
+
         const themeToggle = document.querySelector('.theme-toggle');
         const html = document.documentElement;
         const themeIcon = themeToggle.querySelector('i');
@@ -1200,4 +1200,4 @@ const swiper = new Swiper(".mySwiper", {
         });
     </script>
 </body>
-</html> 
+</html>
