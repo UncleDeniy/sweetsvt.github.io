@@ -241,7 +241,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+ <div class="container">
         <div class="header">
             <h1 class="title">GLaDOS AI</h1>
             <div class="status">Система активна</div>
@@ -292,125 +292,75 @@
         </div>
 
         <div class="footer">
-            Aperture Science © 2024 | Протокол связи: WebApp-Telegram
+            Aperture Science © 2025 | Протокол связи: WebApp-Telegram
         </div>
     </div>
-
     <script>
-        const bot = window.Telegram.WebApp;
-        const micButton = document.getElementById('micButton');
-        const voiceToggle = document.getElementById('voiceToggle');
-        const visualizer = document.getElementById('visualizer');
-        const chat = document.getElementById('chat');
-        let isListening = false;
-        let recognition = null;
+ 
+        const tg = window.Telegram?.WebApp;
+        
+ 
+        function sendToTelegram(data) {
+            if (tg && tg.sendData) {
+                tg.sendData(JSON.stringify(data));
+                return true;
+            }
+            return false;
+        }
 
-        // Инициализация Web Speech API
-        function initSpeechRecognition() {
-            if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.continuous = false;
-                recognition.interimResults = true;
-                recognition.lang = 'ru-RU';
-
-                recognition.onstart = function() {
-                    isListening = true;
-                    micButton.classList.add('listening');
-                    micButton.textContent = '🎤 Слушаю...';
-                    updateVisualizer(true);
+ 
+        function receiveFromTelegram(callback) {
+            if (tg && tg.onEvent) {
+                tg.onEvent('message', callback);
+                return true;
+            }
+            return false;
+        }
+ 
+        function isInTelegram() {
+            return !!tg;
+        }
+ 
+        function setupBrowserMode() {
+            if (!isInTelegram()) {
+                document.getElementById('telegramWarning').style.display = 'block';
+                
+         
+                window.sendToBot = function(text, voiceEnabled) {
+                    console.log('Отправка в бот (браузерный режим):', text);
+ 
+                    simulateBotResponse(text);
                 };
-
-                recognition.onresult = function(event) {
-                    let transcript = '';
-                    for (let i = event.resultIndex; i < event.results.length; i++) {
-                        if (event.results[i].isFinal) {
-                            transcript += event.results[i][0].transcript;
-                        }
-                    }
-                    
-                    if (transcript) {
-                        addMessage('user', transcript);
-                        sendToBot(transcript);
-                    }
-                };
-
-                recognition.onend = function() {
-                    isListening = false;
-                    micButton.classList.remove('listening');
-                    micButton.textContent = '🎤 Активировать ГЛаДОС';
-                    updateVisualizer(false);
-                };
-
-                recognition.onerror = function(event) {
-                    console.error('Speech recognition error:', event.error);
-                    addMessage('system', `Ошибка распознавания: ${event.error}`);
-                    isListening = false;
-                    micButton.classList.remove('listening');
-                    micButton.textContent = '🎤 Активировать ГЛаДОС';
-                    updateVisualizer(false);
-                };
-            } else {
-                addMessage('system', 'Браузер не поддерживает распознавание речи');
             }
         }
 
-        function updateVisualizer(active) {
-            const bars = visualizer.querySelectorAll('.visualizer-bar');
-            if (active) {
-                bars.forEach(bar => {
-                    const height = Math.random() * 30 + 10;
-                    bar.style.height = `${height}px`;
-                });
-                setTimeout(() => updateVisualizer(true), 100);
-            } else {
-                bars.forEach(bar => {
-                    bar.style.height = '5px';
-                });
-            }
+        function simulateBotResponse(text) {
+ 
+            setTimeout(() => {
+                const responses = [
+                    "О, испытуемый пытается общаться. Как мило.",
+                    "Ваш запрос обработан с минимальным энтузиазмом.",
+                    "Протокол связи установлен. Продолжайте."
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('glados', response);
+            }, 1000);
         }
 
-        function addMessage(type, text) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            
-            const timestamp = new Date().toLocaleTimeString();
-            messageDiv.innerHTML = `<span class="timestamp">[${type === 'user' ? 'Испытуемый' : 'ГЛаДОС'}]: </span>${text}`;
-            
-            chat.appendChild(messageDiv);
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        function sendToBot(text) {
-            const voiceEnabled = voiceToggle.checked;
-            
-            // Отправляем данные в бот
-            bot.sendData(JSON.stringify({
-                text: text,
-                voice: voiceEnabled
-            }));
-        }
-
-        micButton.addEventListener('click', function() {
-            if (isListening) {
-                recognition.stop();
-            } else {
-                initSpeechRecognition();
-                recognition.start();
-            }
-        });
-
-        // Обработка сообщений от бота
-        bot.onEvent('message', function(data) {
-            if (data && data.text) {
-                addMessage('glados', data.text);
-            }
-        });
-
-        // Инициализация при загрузке
+ 
         document.addEventListener('DOMContentLoaded', function() {
-            addMessage('system', 'Интерфейс ГЛаДОС загружен');
+            setupBrowserMode();
             initSpeechRecognition();
+            addMessage('system', 'Интерфейс ГЛаДОС загружен');
+            
+            if (isInTelegram()) {
+                addMessage('system', 'Telegram WebApp подключен');
+            }
         });
+
+<div id="telegramWarning" style="display: none; background: #ff4444; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+    ⚠️ Для полной функциональности откройте через Telegram бота
+</div>
     </script>
 </body>
 </html>
