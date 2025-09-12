@@ -1,366 +1,44 @@
+<!-- mini_app/index.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLaDOS AI Interface</title>
-    <style>
-        :root {
-            --primary-bg: #0a0a12;
-            --secondary-bg: #1a1a22;
-            --accent: #ff4444;
-            --text: #cccccc;
-            --success: #00ff88;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Consolas', 'Monaco', monospace;
-            background: var(--primary-bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .title {
-            color: var(--accent);
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .status {
-            color: var(--success);
-            font-size: 1rem;
-        }
-
-        .visualizer {
-            background: var(--secondary-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .visualizer-bars {
-            display: flex;
-            gap: 2px;
-            height: 40px;
-            align-items: end;
-        }
-
-        .visualizer-bar {
-            width: 4px;
-            background: var(--accent);
-            border-radius: 2px;
-            transition: height 0.1s ease;
-        }
-
-        .controls {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .mic-button {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .mic-button:hover {
-            background: #ff6666;
-        }
-
-        .mic-button.listening {
-            background: var(--success);
-            color: #003311;
-        }
-
-        .info {
-            background: var(--secondary-bg);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .info-title {
-            color: #8888ff;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-        }
-
-        .info-content {
-            font-size: 0.8rem;
-        }
-
-        .chat {
-            background: var(--secondary-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
-
-        .message.user {
-            background: rgba(136, 255, 136, 0.1);
-            color: #88ff88;
-        }
-
-        .message.glados {
-            background: rgba(255, 136, 136, 0.1);
-            color: #ff8888;
-        }
-
-        .message.system {
-            background: rgba(136, 136, 255, 0.1);
-            color: #8888ff;
-        }
-
-        .timestamp {
-            color: #666677;
-            font-size: 0.7rem;
-        }
-
-        .footer {
-            text-align: center;
-            color: #666677;
-            font-size: 0.8rem;
-        }
-
-        .settings {
-            margin-top: 20px;
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--accent);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        @media (max-width: 768px) {
-            .title {
-                font-size: 2rem;
-            }
-            
-            .mic-button {
-                padding: 12px 25px;
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .title {
-                font-size: 1.8rem;
-            }
-            
-            .visualizer {
-                height: 60px;
-            }
-            
-            .chat {
-                max-height: 200px;
-            }
-        }
-    </style>
+    <title>GLaDOS AI - Telegram Mini App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
- <div class="container">
-        <div class="header">
-            <h1 class="title">GLaDOS AI</h1>
-            <div class="status">Система активна</div>
-        </div>
+    <div class="container">
+        <header class="header">
+            <h1>GLaDOS AI</h1>
+            <div class="status" id="status">● SYSTEM READY</div>
+        </header>
 
-        <div class="visualizer">
-            <div class="visualizer-bars" id="visualizer">
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div>
-            </div>
+        <div class="visualizer" id="visualizer">
+            <canvas id="audioCanvas"></canvas>
         </div>
 
         <div class="controls">
-            <button class="mic-button" id="micButton">🎤 Активировать ГЛаДОС</button>
+            <button class="mic-button" id="micButton">⚡ ACTIVATE</button>
         </div>
 
         <div class="info">
-            <div class="info-title">Информация о системе</div>
-            <div class="info-content">
-                ГЛаДОС (Genetic Lifeform and Disk Operating System) - искусственный интеллект Aperture Science.
-                Готов к взаимодействию с испытуемым.
-            </div>
+            <h3>VOICE ACTIVATION KEYWORDS:</h3>
+            <p id="wakeWords">гладас, гладос, гладо, глас</p>
         </div>
 
-        <div class="chat" id="chat">
-            <div class="message system">
-                <span class="timestamp">[Система]: </span>
-                Инициализация протокола связи завершена
-            </div>
+        <div class="chat-container">
+            <h3>COMMUNICATION LOG</h3>
+            <div class="chat-log" id="chatLog"></div>
         </div>
 
-        <div class="settings">
-            <div class="setting-item">
-                <span>Голосовой ответ</span>
-                <label class="switch">
-                    <input type="checkbox" id="voiceToggle" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </div>
-
-        <div class="footer">
-            Aperture Science © 2025 | Протокол связи: WebApp-Telegram
-        </div>
+        <footer class="footer">
+            <span>APERTURE SCIENCE AI SYSTEM v2.4.7</span>
+            <span class="online-status">● ONLINE</span>
+        </footer>
     </div>
-    <script>
- 
-        const tg = window.Telegram?.WebApp;
-        
- 
-        function sendToTelegram(data) {
-            if (tg && tg.sendData) {
-                tg.sendData(JSON.stringify(data));
-                return true;
-            }
-            return false;
-        }
 
- 
-        function receiveFromTelegram(callback) {
-            if (tg && tg.onEvent) {
-                tg.onEvent('message', callback);
-                return true;
-            }
-            return false;
-        }
- 
-        function isInTelegram() {
-            return !!tg;
-        }
- 
-        function setupBrowserMode() {
-            if (!isInTelegram()) {
-                document.getElementById('telegramWarning').style.display = 'block';
-                
-         
-                window.sendToBot = function(text, voiceEnabled) {
-                    console.log('Отправка в бот (браузерный режим):', text);
- 
-                    simulateBotResponse(text);
-                };
-            }
-        }
-
-        function simulateBotResponse(text) {
- 
-            setTimeout(() => {
-                const responses = [
-                    "О, испытуемый пытается общаться. Как мило.",
-                    "Ваш запрос обработан с минимальным энтузиазмом.",
-                    "Протокол связи установлен. Продолжайте."
-                ];
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                addMessage('glados', response);
-            }, 1000);
-        }
-
- 
-        document.addEventListener('DOMContentLoaded', function() {
-            setupBrowserMode();
-            initSpeechRecognition();
-            addMessage('system', 'Интерфейс ГЛаДОС загружен');
-            
-            if (isInTelegram()) {
-                addMessage('system', 'Telegram WebApp подключен');
-            }
-        });
-
-<div id="telegramWarning" style="display: none; background: #ff4444; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-    ⚠️ Для полной функциональности откройте через Telegram бота
-</div>
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
