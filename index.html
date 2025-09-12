@@ -1,44 +1,71 @@
-<!-- mini_app/index.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLaDOS AI - Telegram Mini App</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>GLaDOS AI</title>
+    <style>
+        body {
+            background-color: #0a0a12;
+            color: #ccc;
+            font-family: 'Consolas', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #status { color: #00ff88; margin-bottom: 20px; }
+        #visualizer {
+            width: 80%;
+            height: 60px;
+            margin: 20px 0;
+            display: flex;
+            align-items: end;
+            gap: 2px;
+        }
+        .bar {
+            background-color: #ff4444;
+            flex-grow: 1;
+            border-radius: 2px 2px 0 0;
+        }
+        #activateBtn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px;
+        }
+        #activateBtn.listening { background-color: #00ff88; color: #003311; }
+        #log {
+            background-color: #1a1a22;
+            width: 90%;
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .user { color: #88ff88; }
+        .glados { color: #ff8888; }
+        .system { color: #8888ff; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>GLaDOS AI</h1>
-            <div class="status" id="status">● SYSTEM READY</div>
-        </header>
+    <h1>GLaDOS AI</h1>
+    <p id="status">● SYSTEM READY</p>
 
-        <div class="visualizer" id="visualizer">
-            <canvas id="audioCanvas"></canvas>
-        </div>
+    <div id="visualizer"></div>
 
-        <div class="controls">
-            <button class="mic-button" id="micButton">⚡ ACTIVATE</button>
-        </div>
+    <button id="activateBtn">⚡ ACTIVATE</button>
 
-        <div class="info">
-            <h3>VOICE ACTIVATION KEYWORDS:</h3>
-            <p id="wakeWords">гладас, гладос, гладо, глас</p>
-        </div>
+    <div id="log"></div>
 
-        <div class="chat-container">
-            <h3>COMMUNICATION LOG</h3>
-            <div class="chat-log" id="chatLog"></div>
-        </div>
-
-        <footer class="footer">
-            <span>APERTURE SCIENCE AI SYSTEM v2.4.7</span>
-            <span class="online-status">● ONLINE</span>
-        </footer>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
