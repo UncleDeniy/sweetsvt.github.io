@@ -1759,5 +1759,3 @@ window.itResources = [
         dateAdded: new Date().toISOString()
     }
 ];
-
-];
