@@ -85,7 +85,7 @@ window.itResources = [
         tags: ["bash", "скрипты", "linux", "руководство", "документация", "shell", "автоматизация"],
         type: "article",
         category: "linux",
-        subcategory: "bash",
+        subcategory: "book",
         dateAdded: new Date().toISOString()
     },
     {
@@ -1566,7 +1566,7 @@ window.itResources = [
         link: "https://overapi.com/",
         tags: ["шпаргалки", "документация", "справочник", "программирование", "cheatsheet"],
         type: "reference",
-        category: "programming",
+        category: "cheatsheet",
         dateAdded: new Date().toISOString()
     },
     {
@@ -1755,6 +1755,241 @@ window.itResources = [
         link: "https://habr.com/p/843728/",
         tags: ["исключения", "ошибки", "программирование", "паттерны", "статья", "habr"],
         type: "article",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+        {
+        id: 241,
+        title: "Awesome Arch Linux",
+        description: "Коллекция потрясающих ресурсов, инструментов и приложений для Arch Linux и основанных на нём дистрибутивов.",
+        link: "https://github.com/SofianeHamlaoui/Awesome-Arch",
+        tags: ["arch linux", "awesome", "коллекция", "инструменты", "github", "opensource"],
+        type: "list",
+        category: "linux",
+        subcategory: "arch",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 242,
+        title: "Linux Commands Handbook",
+        description: "Справочник по Linux командам с примерами и пояснениями. Полезен как новичкам, так и опытным администраторам.",
+        link: "https://github.com/sergeevdm/Linux-Commands",
+        tags: ["linux", "команды", "справочник", "шпаргалки", "администрирование", "github", "opensource"],
+        type: "reference",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 243,
+        title: "Arch Linux Wiki (Русский)",
+        description: "Официальная вики Arch Linux на русском языке. Исчерпывающий источник информации по установке, настройке и использованию Arch Linux.",
+        link: "https://wiki.archlinux.org/title/Main_page_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)",
+        tags: ["arch linux", "wiki", "документация", "руководство", "русский", "установка", "настройка"],
+        type: "reference",
+        category: "linux",
+        subcategory: "arch",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 244,
+        title: "Debian Wiki (.deb packages)",
+        description: "Раздел вики Debian, посвященный управлению пакетами .deb — основам системы управления пакетами в Debian и Ubuntu.",
+        link: "https://wiki.debian.org/deb",
+        tags: ["debian", "ubuntu", "пакеты", "deb", "администрирование", "wiki", "документация"],
+        type: "reference",
+        category: "linux",
+        subcategory: "debian",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 245,
+        title: "Ubuntu Wiki (.deb packages)",
+        description: "Руководство по пакетам .deb в русскоязычной вики Ubuntu. Полезно для понимания системы пакетов в Ubuntu/Debian.",
+        link: "https://help.ubuntu.ru/wiki/deb",
+        tags: ["ubuntu", "debian", "пакеты", "deb", "администрирование", "wiki", "документация", "русский"],
+        type: "reference",
+        category: "linux",
+        subcategory: "ubuntu",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Career & Writing
+    {
+        id: 246,
+        title: "Community Writer Programs",
+        description: "Список программ для технических писателей, где платят за статьи. Средний гонорар ~200$ за статью. Для разработчиков, желающих писать.",
+        link: "https://github.com/malgamves/CommunityWriterPrograms",
+        tags: ["писательство", "карьера", "фриланс", "гонорары", "техническое письмо", "github", "opensource"],
+        type: "list",
+        category: "career",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 247,
+        title: "Tech Interview Handbook",
+        description: "Исчерпывающее руководство по подготовке к техническим собеседованиям: от составления резюме до переговоров о предложении.",
+        link: "https://github.com/yangshun/tech-interview-handbook",
+        tags: ["собеседование", "карьера", "поиск работы", "резюме", "алгоритмы", "github", "opensource"],
+        type: "reference",
+        category: "career",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 248,
+        title: "Coding Interview University",
+        description: "Многомесячный учебный план для самостоятельной подготовки к собеседованию в крупные tech-компании (Google, Amazon, FB, Netflix).",
+        link: "https://github.com/jwasham/coding-interview-university",
+        tags: ["собеседование", "алгоритмы", "структуры данных", "карьера", "учебный план", "github", "opensource"],
+        type: "program",
+        category: "career",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Learning & Projects
+    {
+        id: 249,
+        title: "Build your own X",
+        description: "Рай для практиков: руководства по созданию собственных аналогов популярных проектов (БД, ОС, эмуляторы, игры, компиляторы и многое другое).",
+        link: "https://github.com/danistefanovic/build-your-own-x",
+        tags: ["проекты", "обучение", "практика", "программирование", "github", "opensource", "учебник"],
+        type: "list",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 250,
+        title: "OSSU Computer Science",
+        description: "Полноценная программа обучения компьютерным наукам с использованием онлайн-материалов (курсы Гарварда, MIT, Принстона и др.). Эквивалент бакалавриата.",
+        link: "https://github.com/ossu/computer-science",
+        tags: ["компьютерные науки", "обучение", "курсы", "учебный план", "cs", "github", "opensource"],
+        type: "program",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 251,
+        title: "Become A Full-Stack Web Developer",
+        description: "Подборка лучших ресурсов для становления фулл-стек веб-разработчиком: JavaScript, React, Node, Python и многое другое.",
+        link: "https://github.com/bmorelli25/Become-A-Full-Stack-Web-Developer",
+        tags: ["fullstack", "веб-разработка", "обучение", "ресурсы", "javascript", "github", "opensource"],
+        type: "list",
+        category: "profession",
+        subcategory: "fullstack",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Code Snippets & APIs
+    {
+        id: 252,
+        title: "Awesome Python",
+        description: "Коллекция потрясающих фреймворков, библиотек, программного обеспечения и ресурсов на Python.",
+        link: "https://github.com/vinta/awesome-python",
+        tags: ["python", "awesome", "коллекция", "библиотеки", "фреймворки", "github", "opensource"],
+        type: "list",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 253,
+        title: "Public APIs",
+        description: "Внушительный список бесплатных API для использования в разработке: искусство, музыка, новости, погода, социальные сети и многое другое.",
+        link: "https://github.com/public-apis/public-apis",
+        tags: ["api", "бесплатно", "разработка", "инструменты", "github", "opensource"],
+        type: "list",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 254,
+        title: "30 seconds of code",
+        description: "Коллекция коротких JavaScript и Python сниппетов, которые решают распространенные задачи программирования.",
+        link: "https://github.com/30-seconds/30-seconds-of-code",
+        tags: ["javascript", "python", "сниппеты", "код", "шпаргалки", "github", "opensource"],
+        type: "cheatsheet",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 255,
+        title: "JavaScript Algorithms",
+        description: "Примеры многих популярных алгоритмов и структур данных, реализованные на JavaScript с пояснениями.",
+        link: "https://github.com/trekhleb/javascript-algorithms",
+        tags: ["javascript", "алгоритмы", "структуры данных", "обучение", "github", "opensource"],
+        type: "reference",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Frontend & Design
+    {
+        id: 256,
+        title: "Developer Roadmap",
+        description: "Дорожные карты для веб-разработчиков: что учить дальше? Карты для фронтенда, бэкенда и DevOps.",
+        link: "https://github.com/kamranahmedse/developer-roadmap",
+        tags: ["roadmap", "frontend", "backend", "devops", "карьера", "обучение", "github", "opensource"],
+        type: "program",
+        category: "career",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 257,
+        title: "Design Resources for Developers",
+        description: "Тщательно подобранный список бесплатных ресурсов дизайна: стоковые фото, иконки, UI-библиотеки, шаблоны, инструменты и многое другое.",
+        link: "https://github.com/bradtraversy/design-resources-for-developers",
+        tags: ["дизайн", "ui", "ux", "ресурсы", "бесплатно", "инструменты", "github", "opensource"],
+        type: "list",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 258,
+        title: "Front-end Developer Interview Questions",
+        description: "Список вопросов для самопроверки на знание фронтенд-разработки (HTML, CSS, JS и др.).",
+        link: "https://github.com/h5bp/Front-end-Developer-Interview-Questions",
+        tags: ["frontend", "собеседование", "вопросы", "html", "css", "javascript", "github", "opensource"],
+        type: "reference",
+        category: "career",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 259,
+        title: "Front-End Performance Checklist",
+        description: "Исчерпывающий чеклист для обеспечения высокой производительности вашего веб-приложения.",
+        link: "https://github.com/thedaviddias/Front-End-Performance-Checklist",
+        tags: ["frontend", "производительность", "оптимизация", "чеклист", "github", "opensource"],
+        type: "reference",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 260,
+        title: "Awesome Design Tools",
+        description: "Коллекция лучших инструментов для дизайнеров, а также сайтов с ресурсами (UI-киты, стоковые фото, видео).",
+        link: "https://github.com/goabstract/Awesome-Design-Tools",
+        tags: ["дизайн", "инструменты", "ui", "ux", "ресурсы", "awesome", "github", "opensource"],
+        type: "list",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Tools & Presentation
+    {
+        id: 261,
+        title: "reveal.js",
+        description: "Фреймворк для создания красивых и элегантных HTML-презентаций с помощью веб-технологий. Открытый исходный код.",
+        link: "https://github.com/hakimel/reveal.js",
+        tags: ["презентации", "html", "css", "javascript", "инструменты", "github", "opensource"],
+        type: "tool",
+        category: "productivity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 262,
+        title: "Free Programming Books",
+        description: "Один из самых популярных репозиториев на GitHub. Бесплатные книги, курсы, подкасты и интерактивные ресурсы по программированию на многих языках.",
+        link: "https://github.com/EbookFoundation/free-programming-books",
+        tags: ["книги", "бесплатно", "курсы", "обучение", "ресурсы", "github", "opensource"],
+        type: "list",
         category: "programming",
         dateAdded: new Date().toISOString()
     }
