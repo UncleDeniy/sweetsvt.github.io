@@ -1,4 +1,5 @@
-
+[file name]: style.css
+[file content begin]
 * {
     margin: 0;
     padding: 0;
@@ -19,6 +20,7 @@
     --info: #4299e1;
     --linux: #fcc624;
     --windows: #0078d7;
+    --profession: #9f7aea;
 }
 
 body {
@@ -134,14 +136,14 @@ header {
 
 .filters {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: end;
     flex-wrap: wrap;
 }
 
 .filter-group {
     flex: 1;
-    min-width: 180px;
+    min-width: 150px;
 }
 
 .filter-group label {
@@ -306,7 +308,7 @@ header {
     white-space: nowrap;
 }
 
-/* Специальные цвета для Linux и Windows */
+/* Специальные цвета для категорий */
 .resource-card .category[data-category="linux"] {
     background: var(--linux);
     color: #000;
@@ -314,6 +316,11 @@ header {
 
 .resource-card .category[data-category="windows"] {
     background: var(--windows);
+    color: white;
+}
+
+.resource-card .category[data-category="profession"] {
+    background: var(--profession);
     color: white;
 }
 
@@ -476,3 +483,4 @@ footer {
 .no-results p {
     opacity: 0.8;
 }
+[file content end]
