@@ -1,13 +1,17 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     const resourcesList = document.getElementById('resourcesList');
     const searchInput = document.getElementById('searchInput');
     const typeFilter = document.getElementById('typeFilter');
     const categoryFilter = document.getElementById('categoryFilter');
+    const subcategoryFilter = document.getElementById('subcategoryFilter');
     const clearFilters = document.getElementById('clearFilters');
     const totalResources = document.getElementById('totalResources');
     const uniqueCategories = document.getElementById('uniqueCategories');
+    const uniqueSubcategories = document.getElementById('uniqueSubcategories');
 
     let resources = JSON.parse(localStorage.getItem('it-huishniki-resources')) || [];
+
 
     // Инициализация с демо-данными
     if (resources.length === 0) {
@@ -911,128 +915,418 @@ document.addEventListener('DOMContentLoaded', function() {
         type: "article",
         category: "design",
         dateAdded: new Date().toISOString()
-    }
-        ];
-        saveResources();
-    }
+    },
+    {
+        id: 91,
+        title: "Ubuntu Server: полное руководство по настройке",
+        description: "Подробное руководство по установке и настройке Ubuntu Server для начинающих системных администраторов.",
+        link: "https://help.ubuntu.com/community/ServerGuide",
+        tags: ["ubuntu", "сервер", "настройка", "администрирование", "linux"],
+        type: "article",
+        category: "linux",
+        subcategory: "ubuntu",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 92,
+        title: "Bash-скрипты для автоматизации задач",
+        description: "Коллекция полезных bash-скриптов для автоматизации рутинных задач в Linux.",
+        link: "https://github.com/awesome-scripts/awesome-bash",
+        tags: ["bash", "скрипты", "автоматизация", "linux", "github"],
+        type: "script",
+        category: "linux",
+        subcategory: "bash",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 93,
+        title: "Arch Linux установка с нуля",
+        description: "Видеоруководство по установке Arch Linux с подробными объяснениями каждого шага.",
+        link: "https://youtu.be/PQgyW10xD8s",
+        tags: ["arch linux", "установка", "руководство", "видео", "linux"],
+        type: "video",
+        category: "linux",
+        subcategory: "arch",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 94,
+        title: "CentOS 8 настройка сервера",
+        description: "Статья по настройке веб-сервера на CentOS 8 с Apache, MySQL и PHP.",
+        link: "https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-centos-8",
+        tags: ["centos", "сервер", "lamp", "настройка", "linux"],
+        type: "article",
+        category: "linux",
+        subcategory: "centos",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 95,
+        title: "Debian скрипты для системного администрирования",
+        description: "Полезные скрипты для управления пакетами, мониторинга и резервного копирования в Debian.",
+        link: "https://github.com/debian/debian-admin-scripts",
+        tags: ["debian", "скрипты", "администрирование", "linux", "github"],
+        type: "script",
+        category: "linux",
+        subcategory: "debian",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 96,
+        title: "Fedora Workstation обзор и настройка",
+        description: "Подробный обзор Fedora Workstation и руководство по настройке для разработчиков.",
+        link: "https://fedoramagazine.org/tag/getting-started/",
+        tags: ["fedora", "рабочая станция", "настройка", "обзор", "linux"],
+        type: "article",
+        category: "linux",
+        subcategory: "fedora",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 97,
+        title: "Kali Linux для пентестинга",
+        description: "Курс по использованию Kali Linux для тестирования на проникновение и кибербезопасности.",
+        link: "https://www.kali.org/training/",
+        tags: ["kali linux", "пентестинг", "безопасность", "курс", "linux"],
+        type: "course",
+        category: "linux",
+        subcategory: "kali",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 98,
+        title: "Linux Mint для начинающих",
+        description: "Полное руководство по Linux Mint для пользователей, переходящих с Windows.",
+        link: "https://linuxmint.com/documentation.php",
+        tags: ["linux mint", "для начинающих", "руководство", "linux"],
+        type: "article",
+        category: "linux",
+        subcategory: "mint",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 99,
+        title: "OpenSUSE настройка сервера",
+        description: "Руководство по настройке сервера на OpenSUSE Leap с YaST.",
+        link: "https://en.opensuse.org/SDB:Setting_up_a_server",
+        tags: ["opensuse", "сервер", "yast", "настройка", "linux"],
+        type: "article",
+        category: "linux",
+        subcategory: "opensuse",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 100,
+        title: "Red Hat Enterprise Linux документация",
+        description: "Официальная документация по Red Hat Enterprise Linux для системных администраторов.",
+        link: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/",
+        tags: ["red hat", "rhel", "документация", "администрирование", "linux"],
+        type: "reference",
+        category: "linux",
+        subcategory: "redhat",
+        dateAdded: new Date().toISOString()
+    },
 
-    init();
-    
-    function init() {
-        displayResources(resources);
-        updateStats();
-        
-        searchInput.addEventListener('input', filterResources);
-        typeFilter.addEventListener('change', filterResources);
-        categoryFilter.addEventListener('change', filterResources);
-        
-        clearFilters.addEventListener('click', function() {
-            searchInput.value = '';
-            typeFilter.value = '';
-            categoryFilter.value = '';
-            filterResources();
-        });
+    // Новые ресурсы для Windows
+    {
+        id: 101,
+        title: "Windows 10 оптимизация для разработчиков",
+        description: "Руководство по оптимизации Windows 10 для повышения производительности при разработке.",
+        link: "https://devblogs.microsoft.com/visualstudio/optimizing-visual-studio-performance-on-windows-10/",
+        tags: ["windows 10", "оптимизация", "разработка", "производительность"],
+        type: "article",
+        category: "windows",
+        subcategory: "windows10",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 102,
+        title: "Windows 11 настройка для программистов",
+        description: "Подробная настройка Windows 11 для комфортной работы программиста.",
+        link: "https://www.xda-developers.com/how-to-set-up-windows-11-for-developers/",
+        tags: ["windows 11", "настройка", "программирование", "разработка"],
+        type: "article",
+        category: "windows",
+        subcategory: "windows11",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 103,
+        title: "PowerShell скрипты для автоматизации",
+        description: "Коллекция полезных PowerShell скриптов для автоматизации задач в Windows.",
+        link: "https://github.com/PowerShellMafia/PowerSploit",
+        tags: ["powershell", "скрипты", "автоматизация", "windows", "github"],
+        type: "script",
+        category: "windows",
+        subcategory: "powershell",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 104,
+        title: "Windows Server 2019 настройка",
+        description: "Руководство по установке и настройке Windows Server 2019 для начинающих.",
+        link: "https://docs.microsoft.com/en-us/windows-server/get-started-19/get-started-19",
+        tags: ["windows server", "сервер", "настройка", "администрирование"],
+        type: "article",
+        category: "windows",
+        subcategory: "windowsserver",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 105,
+        title: "Batch скрипты для Windows",
+        description: "Полезные batch-скрипты для автоматизации рутинных задач в Windows.",
+        link: "https://github.com/npocmaka/batch.scripts",
+        tags: ["batch", "скрипты", "автоматизация", "windows", "github"],
+        type: "script",
+        category: "windows",
+        subcategory: "batch",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 106,
+        title: "Windows Terminal настройка",
+        description: "Руководство по настройке Windows Terminal для продуктивной работы.",
+        link: "https://docs.microsoft.com/en-us/windows/terminal/",
+        tags: ["windows terminal", "терминал", "настройка", "продуктивность"],
+        type: "article",
+        category: "windows",
+        subcategory: "terminal",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 107,
+        title: "Windows Subsystem for Linux (WSL)",
+        description: "Полное руководство по установке и использованию WSL в Windows 10/11.",
+        link: "https://docs.microsoft.com/en-us/windows/wsl/",
+        tags: ["wsl", "linux", "windows", "разработка", "руководство"],
+        type: "article",
+        category: "windows",
+        subcategory: "wsl",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 108,
+        title: "Реестр Windows: полезные твики",
+        description: "Коллекция полезных настроек реестра Windows для оптимизации системы.",
+        link: "https://www.tenforums.com/tutorials/",
+        tags: ["реестр", "windows", "оптимизация", "твики", "настройка"],
+        type: "article",
+        category: "windows",
+        subcategory: "registry",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 109,
+        title: "Windows задачи по планировщику",
+        description: "Полезные задачи для планировщика заданий Windows для автоматизации.",
+        link: "https://www.windowscentral.com/how-create-automated-tasks-using-task-scheduler-windows-10",
+        tags: ["планировщик", "задачи", "автоматизация", "windows"],
+        type: "article",
+        category: "windows",
+        subcategory: "taskscheduler",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 110,
+        title: "Windows безопасность и защита",
+        description: "Руководство по настройке безопасности в Windows 10/11.",
+        link: "https://www.microsoft.com/security/blog/",
+        tags: ["безопасность", "windows", "защита", "настройка"],
+        type: "article",
+        category: "windows",
+        subcategory: "security",
+        dateAdded: new Date().toISOString()
     }
-    
-    function filterResources() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const typeValue = typeFilter.value;
-        const categoryValue = categoryFilter.value;
-        
-        const filtered = resources.filter(resource => {
-            const matchesSearch = resource.title.toLowerCase().includes(searchTerm) ||
-                                resource.description.toLowerCase().includes(searchTerm) ||
-                                resource.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-            
-            const matchesType = typeValue ? resource.type === typeValue : true;
-            const matchesCategory = categoryValue ? resource.category === categoryValue : true;
-            
-            return matchesSearch && matchesType && matchesCategory;
-        });
-        
-        displayResources(filtered);
+];
+saveResources();
+}
+
+init();
+
+function init() {
+displayResources(resources);
+updateStats();
+populateSubcategories();
+
+searchInput.addEventListener('input', filterResources);
+typeFilter.addEventListener('change', filterResources);
+categoryFilter.addEventListener('change', function() {
+    populateSubcategories();
+    filterResources();
+});
+subcategoryFilter.addEventListener('change', filterResources);
+
+clearFilters.addEventListener('click', function() {
+    searchInput.value = '';
+    typeFilter.value = '';
+    categoryFilter.value = '';
+    subcategoryFilter.value = '';
+    populateSubcategories();
+    filterResources();
+});
+}
+
+function populateSubcategories() {
+const category = categoryFilter.value;
+subcategoryFilter.innerHTML = '<option value="">Все подкатегории</option>';
+
+if (!category) return;
+
+const subcategories = new Set();
+resources.forEach(resource => {
+    if (resource.category === category && resource.subcategory) {
+        subcategories.add(resource.subcategory);
     }
+});
+
+subcategories.forEach(subcategory => {
+    const option = document.createElement('option');
+    option.value = subcategory;
+    option.textContent = getSubcategoryLabel(subcategory);
+    subcategoryFilter.appendChild(option);
+});
+}
+
+function filterResources() {
+const searchTerm = searchInput.value.toLowerCase();
+const typeValue = typeFilter.value;
+const categoryValue = categoryFilter.value;
+const subcategoryValue = subcategoryFilter.value;
+
+const filtered = resources.filter(resource => {
+    const matchesSearch = resource.title.toLowerCase().includes(searchTerm) ||
+                        resource.description.toLowerCase().includes(searchTerm) ||
+                        resource.tags.some(tag => tag.toLowerCase().includes(searchTerm));
     
-    function displayResources(resourcesToDisplay) {
-        resourcesList.innerHTML = '';
-        
-        if (resourcesToDisplay.length === 0) {
-            resourcesList.innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                    <h3>Ничего не найдено</h3>
-                    <p>Попробуйте изменить параметры поиска или фильтры</p>
-                </div>
-            `;
-            return;
-        }
-        
-        resourcesToDisplay.forEach(resource => {
-            const resourceCard = document.createElement('div');
-            resourceCard.className = 'resource-card';
-            
-            // Форматируем теги - обрезаем слишком длинные и добавляем классы
-            const formattedTags = resource.tags.map(tag => {
-                const isLongTag = tag.length > 15;
-                return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
-            }).join('');
-            
-            resourceCard.innerHTML = `
-                <h3>${resource.title}</h3>
-                <p class="description">${resource.description}</p>
-                <a href="${resource.link}" target="_blank" class="link">
-                    <i class="fas fa-external-link-alt"></i> Перейти к материалу
-                </a>
-                <div class="meta">
-                    <span class="type">${getTypeLabel(resource.type)}</span>
-                    ${resource.category ? `<span class="category">${getCategoryLabel(resource.category)}</span>` : ''}
-                </div>
-                <div class="tags">
-                    ${formattedTags}
-                </div>
-            `;
-            
-            resourcesList.appendChild(resourceCard);
-        });
-    }
+    const matchesType = typeValue ? resource.type === typeValue : true;
+    const matchesCategory = categoryValue ? resource.category === categoryValue : true;
+    const matchesSubcategory = subcategoryValue ? resource.subcategory === subcategoryValue : true;
     
+    return matchesSearch && matchesType && matchesCategory && matchesSubcategory;
+});
+
+displayResources(filtered);
+}
+
+function displayResources(resourcesToDisplay) {
+resourcesList.innerHTML = '';
+
+if (resourcesToDisplay.length === 0) {
+    resourcesList.innerHTML = `
+        <div class="no-results">
+            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+            <h3>Ничего не найдено</h3>
+            <p>Попробуйте изменить параметры поиска или фильтры</p>
+        </div>
+    `;
+    return;
+}
+
+resourcesToDisplay.forEach(resource => {
+    const resourceCard = document.createElement('div');
+    resourceCard.className = 'resource-card';
     
-    function updateStats() {
-        totalResources.textContent = resources.length;
-        
-        const categories = new Set(resources.map(r => r.category).filter(Boolean));
-        uniqueCategories.textContent = categories.size;
-    }
+    const formattedTags = resource.tags.map(tag => {
+        const isLongTag = tag.length > 15;
+        return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
+    }).join('');
     
-    function getTypeLabel(type) {
-        const types = {
-            'course': '📚 Курс',
-            'program': '🎯 Программа',
-            'book': '📖 Книга',
-            'article': '📄 Статья',
-            'video': '🎥 Видео',
-            'tool': '🛠️ Инструмент',
-            'library': '📦 Библиотека',
-            'list': '📋 Список'
-        };
-        return types[type] || type;
-    }
+    resourceCard.innerHTML = `
+        <h3>${resource.title}</h3>
+        <p class="description">${resource.description}</p>
+        <a href="${resource.link}" target="_blank" class="link">
+            <i class="fas fa-external-link-alt"></i> Перейти к материалу
+        </a>
+        <div class="meta">
+            <span class="type">${getTypeLabel(resource.type)}</span>
+            ${resource.category ? `<span class="category">${getCategoryLabel(resource.category)}</span>` : ''}
+            ${resource.subcategory ? `<span class="subcategory">${getSubcategoryLabel(resource.subcategory)}</span>` : ''}
+        </div>
+        <div class="tags">
+            ${formattedTags}
+        </div>
+    `;
     
-    function getCategoryLabel(category) {
-        const categories = {
-            'programming': '💻 Программирование',
-            'design': '🎨 Дизайн',
-            'devops': '⚙️ DevOps',
-            'data-science': '📊 Data Science',
-            'cybersecurity': '🔐 Кибербезопасность',
-            'career': '🚀 Карьера',
-            'other': '🔍 Другое'
-        };
-        return categories[category] || category;
-    }
+    resourcesList.appendChild(resourceCard);
+});
+}
+
+function updateStats() {
+totalResources.textContent = resources.length;
+
+const categories = new Set(resources.map(r => r.category).filter(Boolean));
+uniqueCategories.textContent = categories.size;
+
+const subcategories = new Set(resources.map(r => r.subcategory).filter(Boolean));
+uniqueSubcategories.textContent = subcategories.size;
+}
+
+function getTypeLabel(type) {
+const types = {
+    'course': '📚 Курс',
+    'program': '🎯 Программа',
+    'book': '📖 Книга',
+    'article': '📄 Статья',
+    'video': '🎥 Видео',
+    'tool': '🛠️ Инструмент',
+    'library': '📦 Библиотека',
+    'list': '📋 Список',
+    'script': '📜 Скрипт',
+    'reference': '📘 Справочник',
+    'interactive': '🎮 Интерактив'
+};
+return types[type] || type;
+}
+
+function getCategoryLabel(category) {
+const categories = {
+    'programming': '💻 Программирование',
+    'design': '🎨 Дизайн',
+    'devops': '⚙️ DevOps',
+    'data-science': '📊 Data Science',
+    'cybersecurity': '🔐 Кибербезопасность',
+    'career': '🚀 Карьера',
+    'ai': '🤖 ИИ',
+    'productivity': '⚡ Продуктивность',
+    'linux': '🐧 Linux',
+    'windows': '🪟 Windows',
+    'other': '🔍 Другое'
+};
+return categories[category] || category;
+}
+
+function getSubcategoryLabel(subcategory) {
+const subcategories = {
+    // Linux подкатегории
+    'ubuntu': '📦 Ubuntu',
+    'debian': '🎯 Debian',
+    'arch': '⚡ Arch',
+    'fedora': '🎩 Fedora',
+    'centos': '🔴 CentOS',
+    'redhat': '🔺 Red Hat',
+    'opensuse': '🦎 OpenSUSE',
+    'mint': '🍃 Mint',
+    'kali': '🔓 Kali',
+    'bash': '🐚 Bash',
     
-    function saveResources() {
-        localStorage.setItem('it-huishniki-resources', JSON.stringify(resources));
-        updateStats();
-    }
+    // Windows подкатегории
+    'windows10': '🪟 Windows 10',
+    'windows11': '🪟 Windows 11',
+    'windowsserver': '🗄️ Windows Server',
+    'powershell': '💻 PowerShell',
+    'batch': '📜 Batch',
+    'terminal': '⌨️ Terminal',
+    'wsl': '🐧 WSL',
+    'registry': '🔧 Реестр',
+    'taskscheduler': '⏰ Планировщик',
+    'security': '🔒 Безопасность'
+};
+return subcategories[subcategory] || subcategory;
+}
+
+function saveResources() {
+localStorage.setItem('it-huishniki-resources', JSON.stringify(resources));
+updateStats();
+}
 });

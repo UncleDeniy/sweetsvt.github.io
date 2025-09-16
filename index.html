@@ -47,6 +47,9 @@
                         <option value="article">Статьи</option>
                         <option value="video">Видео</option>
                         <option value="tool">Инструменты</option>
+                        <option value="library">Библиотеки</option>
+                        <option value="script">Скрипты</option>
+                        <option value="reference">Справочники</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -59,6 +62,18 @@
                         <option value="data-science">Data Science</option>
                         <option value="cybersecurity">Кибербезопасность</option>
                         <option value="career">Карьера</option>
+                        <option value="ai">Искусственный интеллект</option>
+                        <option value="productivity">Продуктивность</option>
+                        <option value="linux">Linux</option>
+                        <option value="windows">Windows</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Подкатегория:</label>
+                    <select id="subcategoryFilter">
+                        <option value="">Все подкатегории</option>
+                        <!-- Подкатегории будут заполняться динамически -->
                     </select>
                 </div>
                 <button id="clearFilters" class="clear-btn">
@@ -75,6 +90,10 @@
             <div class="stat-item">
                 <span class="stat-number" id="uniqueCategories">0</span>
                 <span class="stat-label">категорий</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="uniqueSubcategories">0</span>
+                <span class="stat-label">подкатегорий</span>
             </div>
         </div>
 
