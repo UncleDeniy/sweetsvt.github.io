@@ -1320,5 +1320,248 @@ window.itResources = [
         category: "profession",
         subcategory: "cto",
         dateAdded: new Date().toISOString()
+    },
+    {
+        id: 218,
+        title: "14 лучших книг по хакингу и информационной безопасности",
+        description: "Подборка книг для новичков и профессионалов в области хакерства и кибербезопасности. Включает описание и характеристики каждой книги.",
+        link: "https://translated.turbopages.org/proxy_u/en-ru.ru.c326722a-68c9265e-452a052d-74722d776562/https/hackr.io/blog/best-hacking-books",
+        tags: ["книги", "хакинг", "кибербезопасность", "безопасность", "обучение", "шпаргалки"],
+        type: "list",
+        category: "security",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 219,
+        title: "33 лучших бесплатных курса по хакингу и информационной безопасности",
+        description: "Большая подборка курсов, книг и репозиториев для становления белым хакером. Перспективы в области ИБ.",
+        link: "https://vc.ru/dev/1090613-33-luchshih-besplatnyh-kursa-po-hakingu-i-informacionnoi-bezopasnosti",
+        tags: ["курсы", "хакинг", "кибербезопасность", "белый хакер", "обучение", "ресурсы"],
+        type: "list",
+        category: "security",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 220,
+        title: "Easy InfoSec | Ресурсы и Курсы",
+        description: "Телеграм-канал с ресурсами и курсами по информационной безопасности.",
+        link: "https://t.me/+hjEZ0ZP8KZRmNDNi",
+        tags: ["телеграм", "кибербезопасность", "курсы", "ресурсы", "канал"],
+        type: "list",
+        category: "security",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 221,
+        title: "Pwn College",
+        description: "Образовательная платформа для практического изучения кибербезопасности через задания на основе реальных сценариев.",
+        link: "https://pwn.college/",
+        tags: ["кибербезопасность", "обучение", "практика", "задания", "pwn"],
+        type: "course",
+        category: "security",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Шпаргалки и Справочники (дополнение к существующим)
+    {
+        id: 222,
+        title: "OverAPI.com: Шпаргалки по программированию",
+        description: "Коллекция шпаргалок по множеству языков программирования, фреймворков и технологий (Python, JavaScript, Git, MySQL и др.), отсортированных в алфавитном порядке.",
+        link: "https://overapi.com/",
+        tags: ["шпаргалки", "документация", "справочник", "программирование", "cheatsheet"],
+        type: "reference",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 223,
+        title: "HTML/CSS/JS Шпаргалка для новичков",
+        description: "Дока — это лучший справочник для веб-разработчиков. Собраны материалы по HTML, CSS и JavaScript для начинающих.",
+        link: "https://doka.guide/",
+        tags: ["шпаргалки", "html", "css", "javascript", "справочник", "frontend", "для начинающих"],
+        type: "reference",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 224,
+        title: "Bash-скрипты: шпаргалка по синтаксису",
+        description: "Полезные bash-скрипты и справочник по синтаксису для автоматизации рутинных задач в Linux.",
+        link: "https://github.com/awesome-lists/awesome-bash",
+        tags: ["bash", "скрипты", "шпаргалки", "linux", "автоматизация", "синтаксис"],
+        type: "cheatsheet",
+        category: "linux",
+        subcategory: "bash",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 225,
+        title: "Шпаргалка по Git",
+        description: "Основные команды Git для ежедневного использования в разработке.",
+        link: "https://training.github.com/downloads/ru/github-git-cheat-sheet/",
+        tags: ["git", "шпаргалки", "команды", "версионный контроль", "cheatsheet"],
+        type: "cheatsheet",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 226,
+        title: "SQL Шпаргалка",
+        description: "Шпаргалка по основным операторам и функциям SQL для работы с базами данных.",
+        link: "https://www.sqltutorial.org/wp-content/uploads/2016/04/SQL-cheat-sheet.pdf",
+        tags: ["sql", "базы данных", "шпаргалки", "запросы", "cheatsheet"],
+        type: "cheatsheet",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Ресурсы из предоставленного Архива (примеры курсов)
+    {
+        id: 227,
+        title: "Курс 'Специалист по кибербезопасности с нуля' (Архив)",
+        description: "Полный курс: администрирование Windows/Linux, сети, Python, анализ защищенности, реагирование на инциденты. Объем: 124,82 ГБ.",
+        link: "https://disk.yandex.ru/d/Xk6M8T5mR6wMLQ",
+        tags: ["кибербезопасность", "курс", "администрирование", "python", "безопасность", "архив"],
+        type: "course",
+        category: "security",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 228,
+        title: "Курс 'Python-разработчик' (Архив)",
+        description: "Программа курса: основы Python, алгоритмы, ООП, веб, базы данных, тестирование, командная работа. Объем: 2,42 ГБ.",
+        link: "https://disk.yandex.ru/d/cZtCfJa2QXDzQA",
+        tags: ["python", "курс", "разработка", "алгоритмы", "базы данных", "архив"],
+        type: "course",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 229,
+        title: "Курс 'DevOps-инженер. Основы' (Архив)",
+        description: "Изучение CI/CD, IaC, Docker, Ansible, мониторинга. Объем: 3,48 ГБ.",
+        link: "https://disk.yandex.ru/d/KAxMRD4qg0moxA",
+        tags: ["devops", "курс", "ci/cd", "docker", "ansible", "мониторинг", "архив"],
+        type: "course",
+        category: "devops",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 230,
+        title: "Курс 'React Pizza v2' (YouTube)",
+        description: "Создание фронтенда для интернет-магазина пиццы на ReactJS с использованием современных технологий.",
+        link: "https://youtube.com/playlist?list=PL0FGkDGJQjJG9eI85xM1_iLIf6BcEdaNl&si=R3_9E8iPN4hCVoVm",
+        tags: ["react", "javascript", "frontend", "курс", "видео", "youtube"],
+        type: "video",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Дизайн / UX/UI
+    {
+        id: 231,
+        title: "Курсы по UX/UI Design от Артёма Горбунова",
+        description: "Авторский курс по этапам разработки проекта: Research, Interaction Design, UI. Создание UX и UI десктоп и мобильной версии сайта.",
+        link: "https://youtube.com/playlist?list=PL4D4ciWjcTFy59b1tXBAjhnNYP4fLoyVc",
+        tags: ["ux", "ui", "design", "курс", "видео", "youtube", "для начинающих"],
+        type: "video",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 232,
+        title: "Бесплатный подробный курс по Figma",
+        description: "Новый, подробный бесплатный курс по Figma на реальных примерах веб-дизайнера с интересной подачей. Главный инструмент для веб- и UX/UI-дизайнеров.",
+        link: "https://youtube.com/playlist?list=PLM2Q6lcZo4MexclJrYxA0Is42qWBBuHpB",
+        tags: ["figma", "дизайн", "ui/ux", "курс", "видео", "youtube", "бесплатно", "для начинающих"],
+        type: "video",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Инструменты и Библиотеки
+    {
+        id: 233,
+        title: "Universal Redirect",
+        description: "Легкий сервер на Go для перенаправления входящих запросов на другие URL. Идеален для перенаправления в App Store или Play Store.",
+        link: "https://github.com/ftp27/go-universal-redirect",
+        tags: ["go", "golang", "сервер", "редирект", "инструменты", "github", "opensource"],
+        type: "tool",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 234,
+        title: "YouTube Addiction Rehab",
+        description: "Расширение для Chrome, которое фильтрует рекомендации на YouTube, чтобы избавиться от бесполезных видео.",
+        link: "https://github.com/JoeyWangTW/youtube-addiction-rehab-chrome-extension",
+        tags: ["chrome", "расширение", "youtube", "продуктивность", "github", "opensource"],
+        type: "tool",
+        category: "productivity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 235,
+        title: "rewrite",
+        description: "Инструмент для автоматизированного рефакторинга кода. Проверяет и исправляет код в сотнях репозиториев одновременно.",
+        link: "https://github.com/openrewrite/rewrite",
+        tags: ["рефакторинг", "инструменты", "автоматизация", "java", "github", "opensource"],
+        type: "tool",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 236,
+        title: "firecrawl",
+        description: "API-сервис, который берет URL, сканирует его и преобразует в чистый markdown или структурированные данные.",
+        link: "https://github.com/mendableai/firecrawl",
+        tags: ["api", "scraping", "markdown", "инструменты", "github", "opensource"],
+        type: "tool",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 237,
+        title: "ezy",
+        description: "Полнофункциональный gRPC/gRPC-Web клиент с открытым исходным кодом. Unary calls, streaming, TLS, Persisted collections.",
+        link: "https://github.com/getezy/ezy",
+        tags: ["grpc", "api", "клиент", "инструменты", "github", "opensource"],
+        type: "tool",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Статьи
+    {
+        id: 238,
+        title: "Шаблоны для эффективной работы с DOM на JavaScript",
+        description: "Современные подходы к работе с DOM на чистом JavaScript: шаблоны, оптимизация производительности, улучшение кода.",
+        link: "https://habr.com/ru/companies/timeweb/articles/843080/",
+        tags: ["javascript", "dom", "оптимизация", "шаблоны", "статья", "habr"],
+        type: "article",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 239,
+        title: "10 возможностей современного Tarantool",
+        description: "О десяти малоизвестных возможностях Tarantool: кластерные настройки, персистентность, синхронная репликация, SQL.",
+        link: "https://habr.com/ru/companies/vk/articles/843068/",
+        tags: ["tarantool", "базы данных", "nosql", "sql", "статья", "habr"],
+        type: "article",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 240,
+        title: "Почему я предпочитаю исключения, а не значения ошибок",
+        description: "Обсуждение преимуществ исключений с точки зрения производительности, удобства работы и упрощения кода.",
+        link: "https://habr.com/p/843728/",
+        tags: ["исключения", "ошибки", "программирование", "паттерны", "статья", "habr"],
+        type: "article",
+        category: "programming",
+        dateAdded: new Date().toISOString()
     }
+];
+
 ];
