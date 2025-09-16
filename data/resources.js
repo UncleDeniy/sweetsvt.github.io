@@ -1,394 +1,590 @@
 window.itResources = [
-            {
-                id: 1,
-                title: "FreeCodeCamp",
-                description: "Бесплатные курсы по программированию с сертификатами. Идеально для начинающих.",
-                link: "https://www.freecodecamp.org/",
-                tags: ["программирование", "бесплатно", "курсы", "сертификаты"],
-                type: "course",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 2,
-                title: "Roadmap.sh",
-                description: "Пошаговые руководства для различных IT-специальностей с дорожными картами.",
-                link: "https://roadmap.sh/",
-                tags: ["обучение", "карьера", "roadmap", "guidelines"],
-                type: "program",
-                category: "career",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 3,
-                title: "CSS-Tricks",
-                description: "Лучшие практики и руководства по CSS и веб-разработке.",
-                link: "https://css-tricks.com/",
-                tags: ["css", "веб-разработка", "дизайн", "frontend"],
-                type: "article",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 4,
-                title: "Visual Studio Code",
-                description: "Бесплатный редактор кода с огромным количеством расширений.",
-                link: "https://code.visualstudio.com/",
-                tags: ["инструменты", "редактор", "программирование", "ide"],
-                type: "tool",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 5,
-                title: "The Odin Project",
-                description: "Бесплатный учебный план для веб-разработчиков с реальными проектами.",
-                link: "https://www.theodinproject.com/",
-                tags: ["веб-разработка", "курсы", "проекты", "fullstack"],
-                type: "course",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 6,
-                title: "Kubernetes Docs",
-                description: "Официальная документация по Kubernetes для DevOps инженеров.",
-                link: "https://kubernetes.io/docs/",
-                tags: ["devops", "kubernetes", "документация", "контейнеры"],
-                type: "article",
-                category: "devops",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 7,
-                title: "Frontend Roadmap 2025: Что и зачем учить?",
-                description: "Актуальная карта изучения Frontend с полного нуля. Рассмотрены только самые необходимые технологии для успешного старта карьеры.",
-                link: "https://www.youtube.com/watch?v=c5zUbDDIKcE",
-                tags: ["frontend", "roadmap", "карьера", "обучение", "видео"],
-                type: "video",
-                category: "career",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 8,
-                title: "Yotako.io",
-                description: "Инструмент для конвертации дизайна из Sketch и Adobe XD в код на различных языках и фреймворках с помощью ИИ. Обеспечивает синхронизацию между дизайном и кодом. Бесплатный с платными тарифами.",
-                link: "https://yotako.io/",
-                tags: ["инструменты", "дизайн", "ии", "конвертер", "frontend"],
-                type: "tool",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 9,
-                title: "Полный курс по CSS Flexbox за 1 час",
-                description: "Изучите технологию Flexbox с нуля и научитесь использовать её в своих проектах для удобного размещения элементов.",
-                link: "https://www.youtube.com/watch?v=XXlw7TUxRVY",
-                tags: ["css", "flexbox", "верстка", "обучение", "видео"],
-                type: "video",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 10,
-                title: "TypeScript в деталях: настраиваем tsconfig.json правильно",
-                description: "Полное руководство по tsconfig.json: разбор каждого параметра и его влияния на разработку, сборку и поддержку TypeScript-проектов.",
-                link: "https://proglib.io/p/typescript-v-detalyah-nastraivaem-tsconfig-json-pravilno-2024-11-21",
-                tags: ["typescript", "настройка", "руководство", "статья"],
-                type: "article",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 11,
-                title: "Фреймворк Tailwind CSS: полный курс с нуля",
-                description: "Научитесь работать с Tailwind CSS — фреймворком, который предоставляет готовые классы для быстрого создания пользовательских интерфейсов. В конце создадите веб-страницу новостного сайта.",
-                link: "https://www.youtube.com/watch?v=rW38WPa4ekA",
-                tags: ["tailwind", "css", "фреймворк", "курс", "видео", "frontend"],
-                type: "video",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 12,
-                title: "Как добавить программируемый поиск от Google на свой сайт?",
-                description: "Пошаговое руководство: создание, настройка поисковой системы от Google и встраивание кода на сайт.",
-                link: "https://itchief.ru/javascript/programmable-gse",
-                tags: ["поиск", "google", "веб-разработка", "интеграция", "статья"],
-                type: "article",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 13,
-                title: "Million Lint",
-                description: "Расширение для VSCode для React, которое автоматически исправляет «медленный» код.",
-                link: "https://marketplace.visualstudio.com/items?itemName=million.million-lint",
-                tags: ["инструменты", "vscode", "react", "плагин", "оптимизация"],
-                type: "tool",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 14,
-                title: "Angular за 5 часов",
-                description: "Обучение по созданию социальной сети на Angular: компоненты, API, роутинг, авторизация, RxJS и интерсепторы.",
-                link: "https://www.youtube.com/watch?v=BVIffUyYlUk",
-                tags: ["angular", "фреймворк", "курс", "видео", "frontend"],
-                type: "video",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 15,
-                title: "Siteliner",
-                description: "Инструмент для SEO-анализа сайта. Поиск дублирующегося контента, неработающих ссылок и многое другое.",
-                link: "https://www.siteliner.com/",
-                tags: ["инструменты", "seo", "анализ", "оптимизация"],
-                type: "tool",
-                category: "other",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 16,
-                title: "10 лучших CSS-библиотек и фреймворков для быстрой разработки фронтенда",
-                description: "Подборка 10 инструментов, которые экономят время на фронтенде: от Bootstrap до Milligram.",
-                link: "https://proglib.io/p/10-luchshih-css-bibliotek-i-freymvorkov-dlya-bystroy-razrabotki-frontenda-2024-10-30",
-                tags: ["css", "фреймворки", "библиотеки", "frontend", "статья"],
-                type: "article",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 17,
-                title: "CSS-генератор теней в стиле Neumorphism",
-                description: "Онлайн-инструмент для создания красивой тени для элементов с гибкими настройками и возможностью копирования CSS-кода.",
-                link: "https://neumorphism.io/",
-                tags: ["инструменты", "css", "дизайн", "генератор", "neumorphism"],
-                type: "tool",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 18,
-                title: "Топовые Linux инструменты",
-                description: "Обзор инструментов для Linux, которые делают рабочий процесс удобнее и продуктивнее.",
-                link: "https://youtu.be/AIht4qAgL6o?si=zqIHWT-p1IRilQzf",
-                tags: ["linux", "инструменты", "обзор", "видео", "продуктивность"],
-                type: "video",
-                category: "other",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 19,
-                title: "Logoit",
-                description: "Бесплатный конструктор логотипов с готовыми шаблонами. Можно менять цвет, линии, угол наклона или использовать рандомную генерацию.",
-                link: "https://logoit.ghostkode.com/",
-                tags: ["инструменты", "дизайн", "логотипы", "конструктор", "бесплатно"],
-                type: "tool",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 20,
-                title: "Amino Live CSS Editor",
-                description: "Аддон, позволяющий отслеживать внешний вид сайта в реальном времени при написании CSS.",
-                link: "https://aminoeditor.com/",
-                tags: ["инструменты", "css", "плагин", "разработка", "real-time"],
-                type: "tool",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 21,
-                title: "AI Icon Generator",
-                description: "Генератор логотипов, иконок и артов в PNG высокого качества по описанию без фона и вотермарок.",
-                link: "https://ai-icon.top/",
-                tags: ["инструменты", "ии", "дизайн", "иконки", "логотипы", "генератор"],
-                type: "tool",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 22,
-                title: "ReactBits",
-                description: "Огромная библиотека стильных анимаций для сайтов на React: анимации текста, кнопок, фона, кастомные курсоры, меню.",
-                link: "https://www.reactbits.dev/",
-                tags: ["react", "анимации", "библиотека", "ui", "frontend", "бесплатно"],
-                type: "library",
-                category: "design",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 23,
-                title: "Awesome Russian IT",
-                description: "Коллекция лучших IT-ресурсов на русском языке: библиотеки, фреймворки, статьи, книги, курсы, сообщества.",
-                link: "https://github.com/unchase/awesome-russian-it",
-                tags: ["коллекция", "ресурсы", "обучение", "github", "каталог"],
-                type: "list",
-                category: "other",
-                dateAdded: new Date().toISOString()
-            },
-            {
-                id: 24,
-                title: "Advanced Bash-Scripting Guide",
-                description: "Подробное руководство по написанию bash-скриптов на русском языке.",
-                link: "https://www.opennet.ru/docs/RUS/bash_scripting_guide/",
-                tags: ["bash", "скрипты", "linux", "руководство", "документация"],
-                type: "book",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            },
-                {
-                    id: 25,
-                    title: "Dangerzone",
-                    description: "Инструмент для превращения подозрительных PDF, документов и изображений в безопасные версии. Доступен для Windows, MacOS и Linux.",
-                    link: "https://dangerzone.rocks/",
-                    tags: ["безопасность", "инструменты", "конвертер", "windows", "macos", "linux"],
-                    type: "tool",
-                    category: "security",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 26,
-                    title: "OverAPI.com",
-                    description: "Коллекция шпаргалок по множеству языков программирования, фреймворков и технологий (Python, JavaScript, Git, MySQL и др.), отсортированных в алфавитном порядке.",
-                    link: "https://overapi.com/",
-                    tags: ["шпаргалки", "документация", "справочник", "программирование"],
-                    type: "reference",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 27,
-                    title: "roadmap.sh Backend Project Ideas",
-                    description: "Подборка идей для практики backend-разработки с проектами разного уровня сложности: от CLI-приложений до масштабируемых e-commerce платформ.",
-                    link: "https://roadmap.sh/backend/projects",
-                    tags: ["backend", "проекты", "идеи", "обучение", "практика"],
-                    type: "program",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 28,
-                    title: "System Design Course by Karan Pratap Singh",
-                    description: "Курс по системному дизайну от основ (IP-адреса) до сложных тем (кеширование, балансировка нагрузки). Включает реальные примеры для WhatsApp, Uber, Netflix.",
-                    link: "https://github.com/karanpratapsingh/system-design",
-                    tags: ["system design", "архитектура", "курс", "масштабирование", "github"],
-                    type: "course",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 29,
-                    title: "MyIP",
-                    description: "Усовершенствованный инструмент для работы с IP-адресами: проверка DNS-утечек, WebRTC-соединений, скорости интернета. Поддерживает темную тему и минималистичный режим.",
-                    link: "https://github.com/jason5ng32/MyIP",
-                    tags: ["инструменты", "сеть", "ip", "безопасность", "opensource"],
-                    type: "tool",
-                    category: "security",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 30,
-                    title: "Подборка нейросетей для контента",
-                    description: "Коллекция полезных ИИ-инструментов: генерация видео (ZebraCat AI), создание резюме (KickResume), продающие изображения (Pebblely), команды для ChatGPT (PromptStacks) и другие.",
-                    link: "https://t.me/skladprogrammista",
-                    tags: ["ии", "нейросети", "контент", "инструменты", "генерация"],
-                    type: "list",
-                    category: "ai",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 31,
-                    title: "VisuAlgo",
-                    description: "Визуализированное изучение алгоритмов и структур данных с анимациями, возможностью ввода своих данных и прохождения викторин.",
-                    link: "https://visualgo.net/en",
-                    tags: ["алгоритмы", "структуры данных", "обучение", "визуализация"],
-                    type: "interactive",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 32,
-                    title: "Что такое XSS-уязвимость?",
-                    description: "Статья о том, как работает XSS, почему браузеры доверяют вредоносному коду и как защитить сайт от таких атак.",
-                    link: "https://thecode.media/chto-takoe-xss-uyazvimost/",
-                    tags: ["безопасность", "xss", "веб-разработка", "статья"],
-                    type: "article",
-                    category: "security",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 33,
-                    title: "Clone Wars",
-                    description: "Коллекция опенсорсных клонов популярных сервисов (Airbnb, YouTube и др.) с исходным кодом, демками и описанием стека технологий.",
-                    link: "https://github.com/gorvgoyl/clone-wars",
-                    tags: ["проекты", "клоны", "опенсорс", "обучение", "github"],
-                    type: "list",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 34,
-                    title: "Vue JS: полный курс c нуля",
-                    description: "Видеокурс по Vue 3: основы, работа с данными, компоненты, взаимодействие с сервером, оптимизация, развертывание.",
-                    link: "https://www.youtube.com/watch?v=1rRD9uMF92o",
-                    tags: ["vue", "javascript", "фреймворк", "курс", "видео", "frontend"],
-                    type: "video",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 35,
-                    title: "Streamlit",
-                    description: "Фреймворк для создания интерактивных веб-приложений на Python (дашборды, отчеты, чаты). Развертывание на Community Cloud.",
-                    link: "https://streamlit.io/",
-                    tags: ["python", "фреймворк", "веб-приложения", "дашборды"],
-                    type: "library",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 36,
-                    title: "InstaCharts",
-                    description: "Онлайн-сервис для быстрого создания визуализаций данных (графики, диаграммы) в браузере с использованием готовых шаблонов.",
-                    link: "https://instacharts.io/",
-                    tags: ["инструменты", "визуализация", "данные", "графики"],
-                    type: "tool",
-                    category: "data",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 37,
-                    title: "Screenshot-to-Code",
-                    description: "Инструмент для преобразования скриншотов, макетов и дизайнов Figma в чистый код с использованием ИИ (Claude Sonnet 3.5, GPT-4o).",
-                    link: "https://github.com/abi/screenshot-to-code",
-                    tags: ["ии", "инструменты", "конвертер", "figma", "frontend", "opensource"],
-                    type: "tool",
-                    category: "ai",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 38,
-                    title: "Веб-приложение для прогноза погоды на Vue JS",
-                    description: "Статья о создании проекта на Vue JS для получения данных о погоде с помощью API OpenWeatherMap. Прилагается исходный код.",
-                    link: "https://tproger.ru/articles/prilozhenie-dlya-prognoza-pogody-na-vue-js",
-                    tags: ["vue", "javascript", "api", "проект", "статья", "frontend"],
-                    type: "article",
-                    category: "programming",
-                    dateAdded: new Date().toISOString()
-                },
-                {
-                    id: 39,
-                    title: "QuillBot",
-                    description: "Нейросеть для написания и обработки текстов: перефразирование, проверка грамматики, антиплагиат, саммаризация, перевод.",
-                    link: "https://quillbot.com/",
-                    tags: ["ии", "текст", "письмо", "образование", "инструменты"],
-                    type: "tool",
-                    category: "ai",
-                    dateAdded: new Date().toISOString()
-                },
+    // Программирование - Основные ресурсы
+    {
+        id: 1,
+        title: "FreeCodeCamp",
+        description: "Бесплатные курсы по программированию с сертификатами. Идеально для начинающих.",
+        link: "https://www.freecodecamp.org/",
+        tags: ["javascript", "html", "css", "python", "бесплатно", "курсы", "сертификаты", "для начинающих"],
+        type: "course",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 2,
+        title: "Roadmap.sh",
+        description: "Пошаговые руководства для различных IT-специальностей с дорожными картами.",
+        link: "https://roadmap.sh/",
+        tags: ["roadmap", "карьера", "обучение", "frontend", "backend", "devops", "guidelines", "plan"],
+        type: "program",
+        category: "career",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 3,
+        title: "CSS-Tricks",
+        description: "Лучшие практики и руководства по CSS и веб-разработке.",
+        link: "https://css-tricks.com/",
+        tags: ["css", "веб-разработка", "дизайн", "frontend", "flexbox", "grid", "анимации"],
+        type: "article",
+        category: "design",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 4,
+        title: "Visual Studio Code",
+        description: "Бесплатный редактор кода с огромным количеством расширений.",
+        link: "https://code.visualstudio.com/",
+        tags: ["vscode", "редактор", "ide", "программирование", "инструменты", "бесплатно", "расширения"],
+        type: "tool",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 5,
+        title: "The Odin Project",
+        description: "Бесплатный учебный план для веб-разработчиков с реальными проектами.",
+        link: "https://www.theodinproject.com/",
+        tags: ["веб-разработка", "курсы", "проекты", "fullstack", "javascript", "ruby", "бесплатно"],
+        type: "course",
+        category: "programming",
+        subcategory: "fullstack",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Программирование - Статьи и руководства
+    {
+        id: 10,
+        title: "TypeScript в деталях: настраиваем tsconfig.json правильно",
+        description: "Полное руководство по tsconfig.json: разбор каждого параметра и его влияния на разработку.",
+        link: "https://proglib.io/p/typescript-v-detalyah-nastraivaem-tsconfig-json-pravilno-2024-11-21",
+        tags: ["typescript", "настройка", "руководство", "статья", "config", "компилятор"],
+        type: "article",
+        category: "programming",
+        subcategory: "backend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 12,
+        title: "Как добавить программируемый поиск от Google на свой сайт?",
+        description: "Пошаговое руководство: создание, настройка поисковой системы от Google и встраивание кода на сайт.",
+        link: "https://itchief.ru/javascript/programmable-gse",
+        tags: ["поиск", "google", "веб-разработка", "интеграция", "статья", "api", "javascript"],
+        type: "article",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 24,
+        title: "Advanced Bash-Scripting Guide",
+        description: "Подробное руководство по написанию bash-скриптов на русском языке.",
+        link: "https://www.opennet.ru/docs/RUS/bash_scripting_guide/",
+        tags: ["bash", "скрипты", "linux", "руководство", "документация", "shell", "автоматизация"],
+        type: "article",
+        category: "linux",
+        subcategory: "bash",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 32,
+        title: "Что такое XSS-уязвимость?",
+        description: "Статья о том, как работает XSS, почему браузеры доверяют вредоносному коду и как защитить сайт от таких атак.",
+        link: "https://thecode.media/chto-takoe-xss-uyazvimost/",
+        tags: ["безопасность", "xss", "веб-разработка", "статья", "уязвимости", "security", "web"],
+        type: "article",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 38,
+        title: "Веб-приложение для прогноза погоды на Vue JS",
+        description: "Статья о создании проекта на Vue JS для получения данных о погоде с помощью API OpenWeatherMap.",
+        link: "https://tproger.ru/articles/prilozhenie-dlya-prognoza-pogody-na-vue-js",
+        tags: ["vue", "javascript", "api", "проект", "статья", "frontend", "погода", "openweathermap"],
+        type: "article",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 45,
+        title: "OAuth 2.0: фреймворк авторизации",
+        description: "Статья о причинах решений в дизайне протокола OAuth2 и разборе наиболее часто встречаемых грантов авторизации.",
+        link: "https://habr.com/ru/companies/beget/articles/886874/",
+        tags: ["oauth", "безопасность", "авторизация", "статья", "api", "security", "authentication"],
+        type: "article",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 64,
+        title: "Margin и padding в CSS: как сразу сделать грамотно?",
+        description: "Статья о ключевых отличиях между margin и padding в CSS, а также о трюках для улучшения UI/UX вашего сайта.",
+        link: "https://tproger.ru/articles/margin-i-padding-v-css--kak-srazu-sdelat-gramotno",
+        tags: ["css", "верстка", "ui/ux", "статья", "frontend", "layout", "web design"],
+        type: "article",
+        category: "design",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 71,
+        title: "1С-Битрикс: что это такое и как его использовать",
+        description: "Статья о CMS 1С-Битрикс: отличия от WordPress, необходимость программирования, начало работы.",
+        link: "https://blog.skillfactory.ru/1s-bitriks/",
+        tags: ["cms", "битрикс", "веб-разработка", "статья", "php", "wordpress", "comparison"],
+        type: "article",
+        category: "programming",
+        subcategory: "backend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 72,
+        title: "SSH-подключение: что это и как использовать",
+        description: "Материал с примерами о SSH-подключении: получение удаленного доступа к компьютеру.",
+        link: "https://thecode.media/ssh-podklyuchenie/",
+        tags: ["ssh", "сеть", "безопасность", "удаленный доступ", "статья", "linux", "server"],
+        type: "article",
+        category: "devops",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 73,
+        title: "Идентификация, аутентификация, авторизация",
+        description: "Статья о разнице между идентификацией, аутентификацией и авторизацией в системах безопасности.",
+        link: "https://blog.skillfactory.ru/identifikatsiya-autentifikatsiya-avtorizatsiya/",
+        tags: ["безопасность", "аутентификация", "авторизация", "статья", "security", "identity"],
+        type: "article",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 75,
+        title: "Ошибка 503 на сайте: что означает и как исправить",
+        description: "Статья о значении кода состояния 503, причинах его появления и методах решения для пользователей и разработчиков.",
+        link: "https://blog.skillfactory.ru/oshibka-503-na-sayte-chto-eto-oznachaet-i-kak-vse-ispravit/",
+        tags: ["веб-разработка", "ошибки", "http", "статья", "devops", "server", "troubleshooting"],
+        type: "article",
+        category: "programming",
+        subcategory: "backend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 76,
+        title: "HTTP-запросы: структура, методы, строка статуса и коды состояния",
+        description: "Статья о структуре HTTP-запросов, методах, статусной строке и кодах состояния.",
+        link: "https://habr.com/ru/articles/865040/",
+        tags: ["http", "веб-разработка", "сеть", "статья", "api", "rest", "web"],
+        type: "article",
+        category: "programming",
+        subcategory: "backend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 78,
+        title: "От монолита до микросервисов: как устроена архитектура ПО",
+        description: "Статья об архитектуре программного обеспечения: от монолитных приложений до микросервисов.",
+        link: "https://blog.skillfactory.ru/ot-monolita-do-mikroservisov-kak-ustroena-arhitektura-po/",
+        tags: ["архитектура", "микросервисы", "монолит", "статья", "backend", "design patterns", "scalability"],
+        type: "article",
+        category: "programming",
+        subcategory: "backend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 79,
+        title: "12 полезных инструментов для разработчиков",
+        description: "Обзор инструментов для тестирования кода, отладки, хостинга и оптимизации веб-производительности.",
+        link: "https://nuancesprog.ru/p/25528/",
+        tags: ["инструменты", "разработка", "продуктивность", "статья", "обзор", "tools", "productivity"],
+        type: "article",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 80,
+        title: "AI для frontend: модели для генерации интерфейса",
+        description: "Статья о вариантах использования ИИ для генерации интерфейсов, их преимуществах и нюансах.",
+        link: "https://tproger.ru/articles/ai-dlya-frontend--modeli-dlya-generacii-interfejsa",
+        tags: ["ии", "frontend", "генерация интерфейса", "статья", "ai", "ui", "automation"],
+        type: "article",
+        category: "ai",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 81,
+        title: "Большой гайд по JavaScript",
+        description: "Подборка полезных статей для изучения и прокачки навыков в JavaScript для новичков и опытных разработчиков.",
+        link: "https://tproger.ru/articles/javascript--bolwoj-gajd-ot-tproger",
+        tags: ["javascript", "гайд", "статьи", "обучение", "frontend", "ecmascript", "web development"],
+        type: "article",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 82,
+        title: "CSS-селекторы. Шпаргалка для новичков",
+        description: "Статья о типах CSS-селекторов, их использовании и отличиях для привязки стилевых свойств к элементам.",
+        link: "https://htmlacademy.ru/blog/css/selectors",
+        tags: ["css", "селекторы", "верстка", "шпаргалка", "статья", "frontend", "web design"],
+        type: "cheatsheet",
+        category: "design",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 85,
+        title: "Что такое динамическое программирование: методы, примеры, ошибки",
+        description: "Статья о методе динамического программирования для решения сложных задач путем разбиения на подзадачи.",
+        link: "https://blog.skillfactory.ru/chto-takoe-dinamicheskoe-programmirovanie/",
+        tags: ["алгоритмы", "динамическое программирование", "статья", "программирование", "optimization", "dp"],
+        type: "article",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 87,
+        title: "Обзор лучших инструментов для ведения проектов и задач",
+        description: "Подборка из 15 платформ для систематизации профессиональных и личных задач и организации проектного управления.",
+        link: "https://tproger.ru/articles/obzor-luchwih-instrumentov-dlya-vedeniya-proektov-i-zadach",
+        tags: ["инструменты", "управление проектами", "задачи", "продуктивность", "статья", "pm", "task management"],
+        type: "article",
+        category: "productivity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 88,
+        title: "20 команд Linux, которые не стоит запускать",
+        description: "Статья о опасных командах Linux, которые могут уничтожить систему, данные или оставить сервер без защиты.",
+        link: "https://tproger.ru/articles/20-komand-linux--kotorye-ne-stoit-zapuskat--libo-zapuskat-s-osoboj-ostorozhnostyu",
+        tags: ["linux", "безопасность", "команды", "администрирование", "статья", "security", "dangerous"],
+        type: "article",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 90,
+        title: "Топ-12 лучших программ для сжатия фото без потери качества",
+        description: "Обзор программ и онлайн-сервисов для сжатия фотографий без потери качества.",
+        link: "https://tproger.ru/articles/top-12-luchwih-programm-dlya-szhatiya-foto-bez-poteri-kachestva",
+        tags: ["инструменты", "изображения", "сжатие", "оптимизация", "статья", "обзор", "photos", "compression"],
+        type: "article",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Видео курсы и уроки
+    {
+        id: 7,
+        title: "Frontend Roadmap 2025: Что и зачем учить?",
+        description: "Актуальная карта изучения Frontend с полного нуля. Рассмотрены только самые необходимые технологии.",
+        link: "https://www.youtube.com/watch?v=c5zUbDDIKcE",
+        tags: ["frontend", "roadmap", "карьера", "обучение", "видео", "2025", "guide"],
+        type: "video",
+        category: "profession",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 9,
+        title: "Полный курс по CSS Flexbox за 1 час",
+        description: "Изучите технологию Flexbox с нуля и научитесь использовать её в своих проектах для удобного размещения элементов.",
+        link: "https://www.youtube.com/watch?v=XXlw7TUxRVY",
+        tags: ["css", "flexbox", "верстка", "обучение", "видео", "layout", "web design"],
+        type: "video",
+        category: "design",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 11,
+        title: "Фреймворк Tailwind CSS: полный курс с нуля",
+        description: "Научитесь работать с Tailwind CSS — фреймворком, который предоставляет готовые классы для быстрого создания интерфейсов.",
+        link: "https://www.youtube.com/watch?v=rW38WPa4ekA",
+        tags: ["tailwind", "css", "фреймворк", "курс", "видео", "frontend", "utility", "styling"],
+        type: "video",
+        category: "design",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 14,
+        title: "Angular за 5 часов",
+        description: "Обучение по созданию социальной сети на Angular: компоненты, API, роутинг, авторизация, RxJS и интерсепторы.",
+        link: "https://www.youtube.com/watch?v=BVIffUyYlUk",
+        tags: ["angular", "фреймворк", "курс", "видео", "frontend", "typescript", "spa"],
+        type: "video",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 18,
+        title: "Топовые Linux инструменты",
+        description: "Обзор инструментов для Linux, которые делают рабочий процесс удобнее и продуктивнее.",
+        link: "https://youtu.be/AIht4qAgL6o?si=zqIHWT-p1IRilQzf",
+        tags: ["linux", "инструменты", "обзор", "видео", "продуктивность", "tools", "utilities"],
+        type: "video",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 34,
+        title: "Vue JS: полный курс c нуля",
+        description: "Видеокурс по Vue 3: основы, работа с данными, компоненты, взаимодействие с сервером, оптимизация, развертывание.",
+        link: "https://www.youtube.com/watch?v=1rRD9uMF92o",
+        tags: ["vue", "javascript", "фреймворк", "курс", "видео", "frontend", "composition api"],
+        type: "video",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 60,
+        title: "Fullstack-курс: облачное хранилище на NextJS + NestJS",
+        description: "Продвинутый курс по созданию облачного хранилища (Middle/Senior): база данных, авторизация, загрузка файлов, фронтенд.",
+        link: "https://youtu.be/_oR1p79t6gw?si=pcOvu2X22B9wT23h",
+        tags: ["nextjs", "nestjs", "fullstack", "курс", "видео", "cloud", "typescript", "nodejs"],
+        type: "video",
+        category: "programming",
+        subcategory: "fullstack",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 62,
+        title: "Figma с нуля за 1 час",
+        description: "Видеокурс по основам графического дизайна и создания интерфейсов в Figma — популярном инструменте для веб и UX/UI-дизайнеров.",
+        link: "https://youtu.be/sTdmUdsfOkY?si=h5iPmmf0lrBjDPxL",
+        tags: ["figma", "дизайн", "ui/ux", "курс", "видео", "design tools", "prototyping"],
+        type: "video",
+        category: "design",
+        subcategory: "ux-ui",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 63,
+        title: "Уроки Figma для начинающих",
+        description: "Курс по построению веб-дизайна в Figma с нуля. Обучение созданию UI и UX дизайна для веб-сайтов и приложений.",
+        link: "https://youtube.com/playlist?list=PL0lO_mIqDDFXUJfMPcm1ezfcYSOHNNCZ4&si=i89udvzc2o02Gubv",
+        tags: ["figma", "дизайн", "ui/ux", "курс", "видео", "для начинающих", "tutorial"],
+        type: "video",
+        category: "design",
+        subcategory: "ux-ui",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 65,
+        title: "Web Design Playground, 2nd Edition (2024)",
+        description: "Практический курс по созданию современных адаптивных веб-сайтов с использованием HTML5, CSS3, JavaScript и принципов UI/UX дизайна.",
+        link: "https://t.me/+kQ5Nlf4rZ5djZmFi",
+        tags: ["веб-дизайн", "html", "css", "javascript", "ui/ux", "книга", "курс", "responsive"],
+        type: "course",
+        category: "design",
+        subcategory: "ux-ui",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 70,
+        title: "Изучение Rust с нуля",
+        description: "Видеокурс по изучению языка Rust для начинающих: синтаксис, создание проектов.",
+        link: "https://youtube.com/playlist?list=PL0lO_mIqDDFU_3UaxCF6p98ELxXpAyHpW&si=sdUXn7i2Y_F6z8kO",
+        tags: ["rust", "программирование", "курс", "видео", "для начинающих", "systems", "performance"],
+        type: "video",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 74,
+        title: "JWT, keycloak, session, basic auth, OAuth 2.0 – теория и код",
+        description: "Большой видеогайд по всем видам авторизации: Basic auth, сессии, JWT, SSO, OAuth 2.0, Keycloak.",
+        link: "https://youtu.be/QacZVserfIU?si=QaCnXKDDuxfBOC_5",
+        tags: ["авторизация", "jwt", "oauth", "keycloak", "безопасность", "видео", "гайд", "authentication"],
+        type: "video",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 77,
+        title: "Выбор окружения рабочего стола для Linux",
+        description: "Видео о том, что такое среда рабочего стола в Linux и как выбрать подходящую для себя.",
+        link: "https://youtu.be/T30B_yJVPjE?si=WxYGeaNqsWeL4TQp",
+        tags: ["linux", "окружение рабочего стола", "gui", "видео", "для начинающих", "desktop", "de"],
+        type: "video",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 83,
+        title: "Микросервисы на пальцах: API-Gateway, API-composition, BFF",
+        description: "Видеоурок о базовых шаблонах микросервисной архитектуры: API-Gateway, API-Composition и BFF.",
+        link: "https://youtu.be/ygKmmGj1hDY?si=Jj0-hI2d3vvhLB6x",
+        tags: ["микросервисы", "архитектура", "api", "видео", "backend", "microservices", "design patterns"],
+        type: "video",
+        category: "programming",
+        subcategory: "backend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 84,
+        title: "Fedora Linux: Большой обзор и установка",
+        description: "Видеоурок о дистрибутиве Fedora Linux: его особенностях, передовых технологиях и процессе установка.",
+        link: "https://youtu.be/3KSRIBNjvjw?si=ZKojIFBySY8mOQ2B",
+        tags: ["linux", "fedora", "дистрибутивы", "обзор", "видео", "установка", "tutorial"],
+        type: "video",
+        category: "linux",
+        subcategory: "fedora",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 86,
+        title: "Что такое RPC и gRPC за 10 минут",
+        description: "Видеоурок о RPC и gRPC: назначение, преимущества, архитектура, HTTP/2, сжатие заголовков, Protobuf.",
+        link: "https://youtu.be/bfdF4AJELDc?si=CdCK_ulshcXttyiz",
+        tags: ["rpc", "grpc", "сеть", "архитектура", "видео", "backend", "microservices", "api"],
+        type: "video",
+        category: "programming",
+        subcategory: "backend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 89,
+        title: "Что происходит после ввода адреса в браузере?",
+        description: "Видеоурок о процессе загрузки веб-страницы: от DNS-запросов до обработки на сервере и отрисовки в браузере.",
+        link: "https://youtu.be/YPIbtiAuw7A?si=vws1NLyYHSLzg0Fy",
+        tags: ["веб-разработка", "браузер", "dns", "http", "видео", "гайд", "networking", "web"],
+        type: "video",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Инструменты и утилиты
+    {
+        id: 8,
+        title: "Yotako.io",
+        description: "Инструмент для конвертации дизайна из Sketch и Adobe XD в код на различных языках и фреймворках с помощью ИИ.",
+        link: "https://yotako.io/",
+        tags: ["инструменты", "дизайн", "ии", "конвертер", "frontend", "sketch", "xd", "ai"],
+        type: "tool",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 13,
+        title: "Million Lint",
+        description: "Расширение для VSCode для React, которое автоматически исправляет «медленный» код.",
+        link: "https://marketplace.visualstudio.com/items?itemName=million.million-lint",
+        tags: ["инструменты", "vscode", "react", "плагин", "оптимизация", "performance", "linting"],
+        type: "tool",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 15,
+        title: "Siteliner",
+        description: "Инструмент для SEO-анализа сайта. Поиск дублирующегося контента, неработающих ссылок и многое другое.",
+        link: "https://www.siteliner.com/",
+        tags: ["инструменты", "seo", "анализ", "оптимизация", "web", "marketing", "audit"],
+        type: "tool",
+        category: "productivity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 17,
+        title: "CSS-генератор теней в стиле Neumorphism",
+        description: "Онлайн-инструмент для создания красивой тени для элементов с гибкими настройками и возможностью копирования CSS-кода.",
+        link: "https://neumorphism.io/",
+        tags: ["инструменты", "css", "дизайн", "генератор", "neumorphism", "ui", "shadow", "design"],
+        type: "tool",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 19,
+        title: "Logoit",
+        description: "Бесплатный конструктор логотипов с готовыми шаблонами. Можно менять цвет, линии, угол наклона или использовать рандомную генерацию.",
+        link: "https://logoit.ghostkode.com/",
+        tags: ["инструменты", "дизайн", "логотипы", "конструктор", "бесплатно", "branding", "logo"],
+        type: "tool",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 20,
+        title: "Amino Live CSS Editor",
+        description: "Аддон, позволяющий отслеживать внешний вид сайта в реальном времени при написании CSS.",
+        link: "https://aminoeditor.com/",
+        tags: ["инструменты", "css", "плагин", "разработка", "real-time", "live", "editor"],
+        type: "tool",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 21,
+        title: "AI Icon Generator",
+        description: "Генератор логотипов, иконок и артов в PNG высокого качества по описанию без фона и вотермарок.",
+        link: "https://ai-icon.top/",
+        tags: ["инструменты", "ии", "дизайн", "иконки", "логотипы", "генератор", "ai", "icons"],
+        type: "tool",
+        category: "design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 25,
+        title: "Dangerzone",
+        description: "Инструмент для превращения подозрительных PDF, документов и изображений в безопасные версии.",
+        link: "https://dangerzone.rocks/",
+        tags: ["безопасность", "инструменты", "конвертер", "windows", "macos", "linux", "security", "pdf"],
+        type: "tool",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 29,
+        title: "MyIP",
+        description: "Усовершенствованный инструмент для работы с IP-адресами: проверка DNS-утечек, WebRTC-соединений, скорости интернета.",
+        link: "https://github.com/jason5ng32/MyIP",
+        tags: ["инструменты", "сеть", "ip", "безопасность", "opensource", "privacy", "network"],
+        type: "tool",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 36,
+        title: "InstaCharts",
+        description: "Онлайн-сервис для быстрого создания визуализаций данных (графики, диаграммы) в браузере с использованием готовых шаблонов.",
+        link: "https://instacharts.io/",
+        tags: ["инструменты", "визуализация", "данные", "графики", "charts", "data", "analytics"],
+        type: "tool",
+        category: "data-science",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 37,
+        title: "Screenshot-to-Code",
+        description: "Инструмент для преобразования скриншотов, макетов и дизайнов Figma в чистый код с использованием ИИ.",
+        link: "https://github.com/abi/screenshot-to-code",
+        tags: ["ии", "инструменты", "конвертер", "figma", "frontend", "opensource", "ai", "automation"],
+        type: "tool",
+        category: "ai",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 39,
+        title: "QuillBot",
+        description: "Нейросеть для написания и обработки текстов: перефразирование, проверка грамматики, антиплагиат, саммаризация, перевод.",
+        link: "https://quillbot.com/",
+        tags: ["ии", "текст", "письмо", "образование", "инструменты", "ai", "writing", "paraphrase"],
+        type: "tool",
+        category: "ai",
+        dateAdded: new Date().toISOString()
+    },
                 {
                     id: 40,
                     title: "YouLearn",
