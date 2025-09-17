@@ -2597,5 +2597,182 @@ window.itResources = [
     category: "cybersecurity",
     subcategory: "network-security",
     dateAdded: new Date().toISOString()
+},
+{
+    id: 323,
+    title: "Plotly",
+    description: "Библиотека для создания интерактивных визуализаций и дашбордов на Python, R, JavaScript.",
+    link: "https://plotly.com/",
+    tags: ["python", "библиотека", "интерактивные графики", "дашборды", "визуализация"],
+    type: "библиотеки",
+    category: "data-science",
+    subcategory: "data-visualization",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 324,
+    title: "XGBoost",
+    description: "Оптимизированная распределенная библиотека gradient boosting, популярная в соревнованиях по машинному обучению.",
+    link: "https://xgboost.ai/",
+    tags: ["python", "библиотека", "gradient boosting", "машинное обучение", "алгоритмы"],
+    type: "библиотеки",
+    category: "data-science",
+    subcategory: "ml-libraries",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 325,
+    title: "LightGBM",
+    description: "Высокопроизводительная библиотека gradient boosting framework от Microsoft.",
+    link: "https://lightgbm.readthedocs.io/",
+    tags: ["python", "библиотека", "gradient boosting", "microsoft", "высокая производительность"],
+    type: "библиотеки",
+    category: "data-science",
+    subcategory: "ml-libraries",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 326,
+    title: "FastAPI",
+    description: "Современный, быстрый веб-фреймворк для создания API на Python с автоматической документацией.",
+    link: "https://fastapi.tiangolo.com/",
+    tags: ["python", "библиотека", "api", "веб-фреймворк", "async"],
+    type: "библиотеки",
+    category: "data-science",
+    subcategory: "ml-deployment",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 327,
+    title: "Room Persistence Library",
+    description: "Библиотека для работы с базой данных SQLite в Android приложениях с компиляционной проверкой запросов.",
+    link: "https://developer.android.com/training/data-storage/room",
+    tags: ["android", "библиотека", "база данных", "sqlite", "persistence"],
+    type: "библиотеки",
+    category: "mobile-dev",
+    subcategory: "android-libraries",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 328,
+    title: "Coroutine Flow",
+    description: "Библиотека для асинхронного программирования в Kotlin с поддержкой потоков данных.",
+    link: "https://kotlinlang.org/docs/flow.html",
+    tags: ["kotlin", "библиотека", "асинхронность", "coroutines", "android"],
+    type: "библиотеки",
+    category: "mobile-dev",
+    subcategory: "android-libraries",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 329,
+    title: "Kingfisher",
+    description: "Легковесная библиотека для загрузки и кэширования изображений в iOS на Swift.",
+    link: "https://github.com/onevcat/Kingfisher",
+    tags: ["ios", "библиотека", "изображения", "кэширование", "swift"],
+    type: "библиотеки",
+    category: "mobile-dev",
+    subcategory: "ios-libraries",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 330,
+    title: "Combine",
+    description: "Фреймворк от Apple для обработки асинхронных событий с помощью функционального реактивного программирования.",
+    link: "https://developer.apple.com/documentation/combine",
+    tags: ["ios", "библиотека", "reactive", "асинхронность", "apple"],
+    type: "библиотеки",
+    category: "mobile-dev",
+    subcategory: "ios-libraries",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 331,
+    title: "Apache Airflow",
+    description: "Платформа для программирования, планирования и мониторинга рабочих процессов данных.",
+    link: "https://airflow.apache.org/",
+    tags: ["python", "библиотека", "workflow", "orchestration", "etl"],
+    type: "библиотеки",
+    category: "cloud",
+    subcategory: "data-orchestration",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 332,
+    title: "Prefect",
+    description: "Современная платформа для оркестрации рабочих процессов данных с улучшенным UX и производительностью.",
+    link: "https://www.prefect.io/",
+    tags: ["python", "библиотека", "workflow", "orchestration", "data engineering"],
+    type: "библиотеки",
+    category: "cloud",
+    subcategory: "data-orchestration",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 333,
+    title: "Apache Spark",
+    description: "Унифицированный analytics engine для крупномасштабной обработки данных.",
+    link: "https://spark.apache.org/",
+    tags: ["big data", "библиотека", "distributed computing", "analytics", "scala"],
+    type: "библиотеки",
+    category: "cloud",
+    subcategory: "big-data",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 334,
+    title: "Dask",
+    description: "Гибкая библиотека для параллельных вычислений в Python, масштабируемая до кластеров.",
+    link: "https://dask.org/",
+    tags: ["python", "библиотека", "parallel computing", "big data", "distributed"],
+    type: "библиотеки",
+    category: "cloud",
+    subcategory: "big-data",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 335,
+    title: "PyCryptodome",
+    description: "Самостоятельная библиотека низкоуровневых криптографических примитивов для Python.",
+    link: "https://www.pycryptodome.org/",
+    tags: ["python", "библиотека", "криптография", "шифрование", "безопасность"],
+    type: "библиотеки",
+    category: "cybersecurity",
+    subcategory: "cryptography",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 336,
+    title: "Paramiko",
+    description: "Нативная реализация SSHv2 протокола для Python, используется для безопасных подключений.",
+    link: "https://www.paramiko.org/",
+    tags: ["python", "библиотека", "ssh", "безопасность", "remote access"],
+    type: "библиотеки",
+    category: "cybersecurity",
+    subcategory: "network-security",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 337,
+    title: "YARA",
+    description: "Инструмент для идентификации и классификации malware samples по шаблонам.",
+    link: "https://virustotal.github.io/yara/",
+    tags: ["malware", "библиотека", "анализ угроз", "pattern matching", "security"],
+    type: "библиотеки",
+    category: "cybersecurity",
+    subcategory: "malware-analysis",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 338,
+    title: "Suricata",
+    description: "Высокопроизводительная система мониторинга сетевой безопасности с открытым исходным кодом.",
+    link: "https://suricata.io/",
+    tags: ["network security", "библиотека", "ids", "ips", "monitoring"],
+    type: "библиотеки",
+    category: "cybersecurity",
+    subcategory: "network-security",
+    dateAdded: new Date().toISOString()
 }
+
 ];
