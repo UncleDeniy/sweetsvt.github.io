@@ -83,9 +83,8 @@ window.itResources = [
         description: "Подробное руководство по написанию bash-скриптов на русском языке.",
         link: "https://www.opennet.ru/docs/RUS/bash_scripting_guide/",
         tags: ["bash", "скрипты", "linux", "руководство", "документация", "shell", "автоматизация"],
-        type: "article",
+        type: "book",
         category: "linux",
-        subcategory: "book",
         dateAdded: new Date().toISOString()
     },
     {
