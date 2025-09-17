@@ -217,7 +217,18 @@ document.addEventListener('DOMContentLoaded', function() {
             'project-manager': '📊 Project Manager',
             'product-manager': '🚀 Product Manager',
             'tech-lead': '👨‍💻 Tech Lead',
-            'cto': '🏢 CTO'
+            'cto': '🏢 CTO',
+            
+            // Дизайн подкатегории
+            'ui-design': '🎨 UI Design',
+            'ux-design': '🧠 UX Design',
+            'ux-research': '🔍 UX Research',
+            'ui-animation': '✨ Анимация',
+            'design-system': '📐 Дизайн-системы',
+            'typography': '🔤 Типографика',
+            'color-theory': '🎨 Теория цвета',
+            'tools': '🛠️ Инструменты',
+            'accessibility': '♿ Доступность'
         };
         return subcategories[subcategory] || subcategory;
     }
