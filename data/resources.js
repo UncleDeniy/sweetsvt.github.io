@@ -1992,5 +1992,181 @@ window.itResources = [
         type: "list",
         category: "programming",
         dateAdded: new Date().toISOString()
-    }
+    },
+        {
+        id: 263,
+        title: "Дизайн привычных вещей - Дон Норман",
+        description: "Классическая книга о UX-дизайне. Объясняет, почему одни продукты удобные, а другие — нет. Фундаментальные принципы дизайна.",
+        link: "http://трубопровод.рф/static/books/2015/02/13/normandonalddizajnprivyichnyihveschej2006.pdf",
+        tags: ["дизайн", "ux", "книга", "дон норман", "фундамент", "принципы", "pdf"],
+        type: "book",
+        category: "design",
+        subcategory: "ux-design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 264,
+        title: "Не заставляйте меня думать - Стив Круг",
+        description: "Классика о юзабилити веб-сайтов. Практическое руководство по созданию интуитивно понятных интерфейсов.",
+        link: "https://raferalston.github.io/assets/krug.pdf",
+        tags: ["юзабилити", "веб-дизайн", "книга", "стив круг", "интерфейсы", "pdf"],
+        type: "book",
+        category: "design",
+        subcategory: "ux-design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 265,
+        title: "Интерфейс - Алан Купер",
+        description: "Основы проектирования взаимодействия. О том, как проектировать поведение продуктов, основываясь на целях пользователей.",
+        link: "https://vk.com/doc163931991_657263639?hash=3Ls5BI2mFuzWBYPJtmjtFcxzaLxkiUpBVpEaUNMyd9k&api=1&no_preview=1",
+        tags: ["интерфейсы", "ux", "книга", "алан купер", "взаимодействие", "проектирование"],
+        type: "book",
+        category: "design",
+        subcategory: "ux-design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 266,
+        title: "Эмоциональный веб-дизайн - Аарон Уолтер",
+        description: "Как создавать интерфейсы, которые не только работают, но и нравятся пользователям. От функциональности к эмоциям.",
+        link: "https://cloud.mail.ru/public/2Z6o/LUDPubukt",
+        tags: ["эмоциональный дизайн", "ui", "книга", "аарон уолтер", "психология", "эмоции"],
+        type: "book",
+        category: "design",
+        subcategory: "ui-design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 267,
+        title: "Искусство цвета - Иоханнес Иттен",
+        description: "Фундаментальный труд по теории цвета. Незаменимая книга для понимания работы с цветом в дизайне.",
+        link: "https://edu-2.tatar.ru/upload/storage/org5861/files/Иоганес%20Иттен_%20Искусство%20цвета(1).pdf",
+        tags: ["цвет", "теория", "книга", "иттен", "визуальный дизайн", "основы", "pdf"],
+        type: "book",
+        category: "design",
+        subcategory: "color-theory",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 268,
+        title: "A Project Guide to UX Design - Расс Унгер, Кэролин Чендлер",
+        description: "Практическое руководство по процессу UX-дизайна в проектах. От исследований до реализации.",
+        link: "https://cdn.bookey.app/files/pdf/book/en/a-project-guide-to-ux-design.pdf",
+        tags: ["ux design", "процесс", "книга", "руководство", "проекты", "методология", "pdf", "английский"],
+        type: "book",
+        category: "design",
+        subcategory: "ux-design",
+        dateAdded: new Date().toISOString()
+    },
+    {
+    id: 269,
+    title: "Google Material Design Guidelines",
+    description: "Официальные гайдлайны по дизайну от Google. Фундаментальные принципы, паттерны и компоненты для создания интерфейсов.",
+    link: "https://m3.material.io/",
+    tags: ["google", "guidelines", "material design", "компоненты", "паттерны"],
+    type: "reference",
+    category: "design",
+    subcategory: "design-system",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 270,
+    title: "Human Interface Guidelines от Apple",
+    description: "Руководство по проектированию приложений для экосистемы Apple (iOS, macOS, watchOS, tvOS).",
+    link: "https://developer.apple.com/design/",
+    tags: ["apple", "guidelines", "ios", "macos", "higs"],
+    type: "reference",
+    category: "design",
+    subcategory: "design-system",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 271,
+    title: "Refactoring UI",
+    description: "Книга и видеоуроки от создателя Tailwind CSS Адама Восена о практическом дизайне для разработчиков.",
+    link: "https://www.refactoringui.com/",
+    tags: ["книга", "видео", "дизайн для разработчиков", "советы"],
+    type: "book",
+    category: "design",
+    subcategory: "ui-design",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 272,
+    title: "Laws of UX",
+    description: "Коллекция ключевых принципов и законов, которые используют дизайнеры для принятия обоснованных решений.",
+    link: "https://lawsofux.com/",
+    tags: ["законы", "психология", "юзабилити", "принципы", "справочник"],
+    type: "reference",
+    category: "design",
+    subcategory: "ux-design",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 273,
+    title: "UX Design CC | Курс на YouTube",
+    description: "Бесплатный полноценный курс по UX-дизайну на YouTube на русском языке. От основ до продвинутых тем.",
+    link: "https://www.youtube.com/playlist?list=PLg5SS_4L6LYufspdWupVaXjanF_mQvjWS",
+    tags: ["youtube", "бесплатно", "курс", "ux", "русский"],
+    type: "course",
+    category: "design",
+    subcategory: "ux-design",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 274,
+    title: "Figma Academy",
+    description: "Бесплатные и платные курсы по Figma от официальных экспертов. Идеально для начала работы с инструментом.",
+    link: "https://www.figma.com/resources/learn/",
+    tags: ["figma", "курсы", "туториалы", "инструменты"],
+    type: "course",
+    category: "design",
+    subcategory: "tools",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 275,
+    title: "Nielsen Norman Group",
+    description: "Статьи, отчеты и видео от мировых экспертов по юзабилити и UX-исследованиям. Настольная библия UX-исследователя.",
+    link: "https://www.nngroup.com/",
+    tags: ["исследования", "юзабилити", "статьи", "jacob nielsen", "эксперты"],
+    type: "article",
+    category: "design",
+    subcategory: "ux-research",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 276,
+    title: "A11Y Project",
+    description: "Открытый ресурс с простыми и понятными рекомендациями по созданию доступных веб-интерфейсов.",
+    link: "https://www.a11yproject.com/",
+    tags: ["accessibility", "a11y", "доступность", "инклюзивный дизайн", "чеклист"],
+    type: "reference",
+    category: "design",
+    subcategory: "accessibility",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 277,
+    title: "UI Interactions",
+    description: "Коллекция вдохновляющих примеров микро-анимаций и интерактивных элементов из реальных продуктов.",
+    link: "https://uiinteractions.com/",
+    tags: ["анимация", "вдохновение", "микро-анимации", "интерактив"],
+    type: "reference",
+    category: "design",
+    subcategory: "ui-animation",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 278,
+    title: "Practical UI Tips",
+    description: "Шпаргалка с конкретными, применимыми прямо сегодня советами по улучшению UI.",
+    link: "https://www.practicalui.com/",
+    tags: ["советы", "шпаргалка", "ui", "практика"],
+    type: "cheatsheet",
+    category: "design",
+    subcategory: "ui-design",
+    dateAdded: new Date().toISOString()
+}
 ];
