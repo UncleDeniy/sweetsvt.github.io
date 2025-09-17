@@ -845,16 +845,16 @@ window.itResources = [
         category: "design",
         dateAdded: new Date().toISOString()
     },
-    {
-        id: 66,
-        title: "Dotfiles PewDiePie для Arch + Hyprland",
-        description: "Конфигурационные файлы (dotfiles) PewDiePie для Arch Linux и оконного менеджера Hyprland.",
-        link: "https://github.com/pewdiepie-archdaemon/dionysus",
-        tags: ["linux", "arch", "hyprland", "dotfiles", "настройка", "github"],
-        type: "reference",
-        category: "devops",
-        dateAdded: new Date().toISOString()
-    },
+{
+id: 66,
+title: "Dotfiles PewDiePie для Arch + Hyprland",
+description: "Конфигурационные файлы (dotfiles) PewDiePie для Arch Linux и оконного менеджера Hyprland.",
+link: "https://github.com/pewdiepie-archdaemon/dionysus",
+tags: ["linux", "arch", "hyprland", "dotfiles", "настройка", "github", "кастомизация"],
+type: "reference",
+category: "devops",
+dateAdded: new Date().toISOString()
+},
     {
         id: 67,
         title: "3D Визуализация архитектуры LLM",
@@ -955,16 +955,16 @@ window.itResources = [
         category: "programming",
         dateAdded: new Date().toISOString()
     },
-    {
-        id: 77,
-        title: "Выбор окружения рабочего стола для Linux",
-        description: "Видео о том, что такое среда рабочего стола в Linux и как выбрать подходящую для себя.",
-        link: "https://youtu.be/T30B_yJVPjE?si=WxYGeaNqsWeL4TQp",
-        tags: ["linux", "окружение рабочего стола", "gui", "видео", "для начинающих"],
-        type: "video",
-        category: "devops",
-        dateAdded: new Date().toISOString()
-    },
+{
+id: 77,
+title: "Выбор окружения рабочего стола для Linux",
+description: "Видео о том, что такое среда рабочего стола в Linux и как выбрать подходящую для себя.",
+link: "https://youtu.be/T30B_yJVPjE?si=WxYGeaNqsWeL4TQp",
+tags: ["linux", "окружение рабочего стола", "gui", "видео", "для начинающих", "desktop", "de", "кастомизация"],
+type: "video",
+category: "linux",
+dateAdded: new Date().toISOString()
+},
     {
         id: 78,
         title: "От монолита до микросервисов: как устроена архитектура ПО",
@@ -1025,16 +1025,17 @@ window.itResources = [
         category: "programming",
         dateAdded: new Date().toISOString()
     },
-    {
-        id: 84,
-        title: "Fedora Linux: Большой обзор и установка",
-        description: "Видеоурок о дистрибутиве Fedora Linux: его особенностях, передовых технологиях и процессе установки.",
-        link: "https://youtu.be/3KSRIBNjvjw?si=ZKojIFBySY8mOQ2B",
-        tags: ["linux", "fedora", "дистрибутивы", "обзор", "видео", "установка"],
-        type: "video",
-        category: "devops",
-        dateAdded: new Date().toISOString()
-    },
+{
+id: 84,
+title: "Fedora Linux: Большой обзор и установка",
+description: "Видеоурок о дистрибутиве Fedora Linux: его особенностях, передовых технологиях и процессе установка.",
+link: "https://youtu.be/3KSRIBNjvjw?si=ZKojIFBySY8mOQ2B",
+tags: ["linux", "fedora", "дистрибутивы", "обзор", "видео", "установка", "tutorial", "кастомизация"],
+type: "video",
+category: "linux",
+subcategory: "fedora",
+dateAdded: new Date().toISOString()
+},
     {
         id: 85,
         title: "Что такое динамическое программирование: методы, примеры, ошибки",
