@@ -2168,5 +2168,137 @@ window.itResources = [
     category: "design",
     subcategory: "ui-design",
     dateAdded: new Date().toISOString()
+},
+    {
+    id: 279,
+    title: "OWASP Foundation",
+    description: "Открытое сообщество, посвященное безопасности веб-приложений. Известно своим топ-10 уязвимостей веб-приложений.",
+    link: "https://owasp.org/",
+    tags: ["owasp", "веб-безопасность", "топ-10", "уязвимости", "сообщество"],
+    type: "reference",
+    category: "cybersecurity",
+    subcategory: "web-security",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 280,
+    title: "Kali Linux",
+    description: "Дистрибутив Linux для тестирования на проникновение и security-аудита. Содержит сотни инструментов для пентеста.",
+    link: "https://www.kali.org/",
+    tags: ["linux", "пентест", "инструменты", "дистрибутив", "безопасность"],
+    type: "tool",
+    category: "cybersecurity",
+    subcategory: "pentesting",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 281,
+    title: "Metasploit Unleashed",
+    description: "Бесплатное руководство по фреймворку Metasploit для тестирования на проникновение.",
+    link: "https://www.offsec.com/metasploit-unleashed/",
+    tags: ["metasploit", "пентест", "руководство", "взлом", "безопасность"],
+    type: "course",
+    category: "cybersecurity",
+    subcategory: "pentesting",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 282,
+    title: "Hack The Box",
+    description: "Онлайн-платформа для обучения кибербезопасности через практические задания и виртуальные лаборатории.",
+    link: "https://www.hackthebox.com/",
+    tags: ["лаборатория", "практика", "challenges", "обучение", "пентест"],
+    type: "platform",
+    category: "cybersecurity",
+    subcategory: "practice",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 283,
+    title: "Cybrary",
+    description: "Бесплатные курсы по кибербезопасности различных уровней сложности - от начального до продвинутого.",
+    link: "https://www.cybrary.it/",
+    tags: ["курсы", "бесплатно", "обучение", "онлайн", "кибербезопасность"],
+    type: "course",
+    category: "cybersecurity",
+    subcategory: "education",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 284,
+    title: "The Cyber Mentor",
+    description: "YouTube канал с практическими уроками по этичному хакингу и тестированию на проникновение.",
+    link: "https://www.youtube.com/c/TheCyberMentor",
+    tags: ["youtube", "пентест", "этичный хакинг", "практика", "обучение"],
+    type: "course",
+    category: "cybersecurity",
+    subcategory: "pentesting",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 285,
+    title: "SANS Institute",
+    description: "Ведущая организация в области обучения и сертификации в сфере информационной безопасности.",
+    link: "https://www.sans.org/",
+    tags: ["обучение", "сертификация", "курсы", "безопасность", "sans"],
+    type: "education",
+    category: "cybersecurity",
+    subcategory: "certification",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 286,
+    title: "TryHackMe",
+    description: "Онлайн-платформа для обучения кибербезопасности через интерактивные комнаты и задания.",
+    link: "https://tryhackme.com/",
+    tags: ["обучение", "практика", "лаборатория", "challenges", "онлайн"],
+    type: "platform",
+    category: "cybersecurity",
+    subcategory: "practice",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 287,
+    title: "Security+ CompTIA",
+    description: "Официальный ресурс для подготовки к сертификации CompTIA Security+ - базовой сертификации по безопасности.",
+    link: "https://www.comptia.org/certifications/security",
+    tags: ["сертификация", "comptia", "security+", "подготовка", "экзамен"],
+    type: "reference",
+    category: "cybersecurity",
+    subcategory: "certification",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 288,
+    title: "CIS Controls",
+    description: "Набор приоритетных действий по кибербезопасности для защиты организаций от наиболее распространенных атак.",
+    link: "https://www.cisecurity.org/controls/",
+    tags: ["best practices", "контроль", "безопасность", "организации", "защита"],
+    type: "reference",
+    category: "cybersecurity",
+    subcategory: "best-practices",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 289,
+    title: "NIST Cybersecurity Framework",
+    description: "Фреймворк по кибербезопасности от Национального института стандартов и технологий США.",
+    link: "https://www.nist.gov/cyberframework",
+    tags: ["nist", "фреймворк", "стандарты", "безопасность", "руководство"],
+    type: "reference",
+    category: "cybersecurity",
+    subcategory: "frameworks",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 290,
+    title: "Zero Trust Security",
+    description: "Принципы и архитектура Zero Trust - современного подхода к безопасности \"никому не доверяй, проверяй всех\".",
+    link: "https://www.cisa.gov/zero-trust-maturity-model",
+    tags: ["zero trust", "архитектура", "безопасность", "современные подходы", "cisa"],
+    type: "reference",
+    category: "cybersecurity",
+    subcategory: "architecture",
+    dateAdded: new Date().toISOString()
 }
 ];
