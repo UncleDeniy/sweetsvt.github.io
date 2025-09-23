@@ -239,6 +239,49 @@ function getSubcategoryLabel(subcategory) {
         'color-theory': '🎨 Теория цвета',
         'tools': '🛠️ Инструменты',
         'accessibility': '♿ Доступность'
+
+                // Новые подкатегории для SysAdmin
+        'other': '🔍 Другое',
+        'web-security': '🌐 Веб-безопасность',
+        'pentesting': '🔓 Пентестинг',
+        'practice': '🛠️ Практика',
+        'education': '🎓 Обучение',
+        'certification': '📜 Сертификация',
+        'best-practices': '✅ Best Practices',
+        'frameworks': '📐 Фреймворки',
+        'architecture': '🏗️ Архитектура',
+        
+        // Подкатегории для облачных технологий
+        'aws': '☁️ AWS',
+        'azure': '🔷 Azure',
+        'gcp': '🔶 GCP',
+        'devops': '🔄 DevOps',
+        'containerization': '📦 Контейнеризация',
+        'aws-sdk': '⚙️ AWS SDK',
+        'data-orchestration': '🎵 Оркестрация данных',
+        'big-data': '📊 Big Data',
+        'kubernetes-tools': '⚓ Kubernetes Tools',
+        'monitoring': '👀 Мониторинг',
+        'devops-tools': '🛠️ DevOps Tools',
+        
+        // Подкатегории для мобильной разработки
+        'android': '🤖 Android',
+        'ios': '🍎 iOS',
+        'cross-platform': '📱 Кроссплатформенный',
+        'android-libraries': '📚 Android Libraries',
+        'ios-libraries': '📚 iOS Libraries',
+        
+        // Подкатегории для Data Science
+        'data-analysis': '📈 Анализ данных',
+        'data-visualization': '📊 Визуализация',
+        'deep-learning': '🧠 Deep Learning',
+        'ml-libraries': '📚 ML Libraries',
+        'ml-deployment': '🚀 ML Deployment',
+        
+        // Подкатегории для кибербезопасности
+        'network-security': '🌐 Сетевая безопасность',
+        'cryptography': '🔐 Криптография',
+        'malware-analysis': '🦠 Анализ malware'
     };
     return subcategories[subcategory] || subcategory;
 }
