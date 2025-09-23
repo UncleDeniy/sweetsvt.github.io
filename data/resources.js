@@ -1,3 +1,7 @@
+if (!window.itResources) {
+    window.itResources = [];
+}
+
 window.itResources = window.itResources.concat([
     // Программирование - Основные ресурсы
     {
