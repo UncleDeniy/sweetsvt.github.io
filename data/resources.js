@@ -2773,6 +2773,336 @@ dateAdded: new Date().toISOString()
     category: "cybersecurity",
     subcategory: "network-security",
     dateAdded: new Date().toISOString()
-}
+},
+        // SysAdmin ресурсы
+    {
+        id: 339,
+        title: "Топ методов Pandas для анализа данных",
+        description: "Личный топ методов библиотеки Pandas для первичной обработки больших данных на Python.",
+        link: "https://habr.com/ru/articles/940028/",
+        tags: ["pandas", "python", "анализ данных", "обработка данных", "библиотека", "data science"],
+        type: "article",
+        category: "data-science",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 340,
+        title: "Pandas Methods Gist - полезные сниппеты",
+        description: "Коллекция полезных сниппетов и методов Pandas для работы с данными.",
+        link: "https://gist.github.com/DartPower/7ca1eedf36780e22ab5d1ef7b687917e",
+        tags: ["pandas", "python", "сниппеты", "gist", "анализ данных"],
+        type: "cheatsheet",
+        category: "data-science",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 341,
+        title: "Astra Linux ISO - коллекция ссылок",
+        description: "Коллекция ссылок на дистрибутивы Astra Linux с различными версиями и сборками.",
+        link: "https://gist.github.com/DartPower/7ca1eedf36780e22ab5d1ef7b687917e",
+        tags: ["astra linux", "дистрибутивы", "iso", "российский софт", "безопасность"],
+        type: "reference",
+        category: "linux",
+        subcategory: "other",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 342,
+        title: "Best Websites for Programmers",
+        description: "Подборка лучших сайтов для программистов: языки, алгоритмы, инструменты, сообщества.",
+        link: "https://github.com/sdmg15/Best-websites-a-programmer-should-visit",
+        tags: ["сайты", "ресурсы", "программирование", "обучение", "github", "коллекция"],
+        type: "list",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 343,
+        title: "RegexLearn - интерактивное обучение регулярным выражениям",
+        description: "Пошаговое интерактивное обучение регулярным выражениям с практическими заданиями.",
+        link: "https://regexlearn.com/",
+        tags: ["regex", "регулярные выражения", "обучение", "интерактив", "шпаргалка"],
+        type: "interactive",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 344,
+        title: "Основы программирования на Java с нуля",
+        description: "Полный курс по основам Java: синтаксис, условия, циклы, алгоритмы, практические задания.",
+        link: "https://disk.yandex.ru/d/ZpEc7VoVkr_oBA",
+        tags: ["java", "курс", "программирование", "для начинающих", "основы"],
+        type: "course",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 345,
+        title: "JavaScript Advanced - продвинутый курс",
+        description: "Углубленное изучение JavaScript: ООП, асинхронность, модули, создание фреймворка.",
+        link: "https://disk.yandex.ru/d/a7KlXFef1nAnYA",
+        tags: ["javascript", "курс", "продвинутый", "oop", "асинхронность", "фреймворки"],
+        type: "course",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 346,
+        title: "Продвинутая аналитика данных",
+        description: "Курс по аналитике данных: BI-дашборды, DWH, Big Data, пайплайны, машинное обучение.",
+        link: "https://disk.yandex.ru/d/LHI1gZzccJw-hA",
+        tags: ["аналитика", "данные", "bi", "big data", "ml", "курс"],
+        type: "course",
+        category: "data-science",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 347,
+        title: "Frontend-разработчик - полный курс",
+        description: "Комплексный курс по фронтенд-разработке: HTML, CSS, JavaScript, React, Git.",
+        link: "https://disk.yandex.ru/d/LBlZipWccEr07Q",
+        tags: ["frontend", "курс", "html", "css", "javascript", "react"],
+        type: "course",
+        category: "programming",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 348,
+        title: "Кибербезопасность - практический курс",
+        description: "Курс по кибербезопасности: Linux, SSH, анализ трафика, Zabbix, Docker, Kali Linux.",
+        link: "https://disk.yandex.ru/d/MBKLzc7TWgQ_AQ",
+        tags: ["кибербезопасность", "курс", "linux", "ssh", "docker", "kali"],
+        type: "course",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 349,
+        title: "Тестировщик ПО - полный курс",
+        description: "Курс по тестированию: ручное и автоматизированное тестирование, Java, Git, проекты.",
+        link: "https://disk.yandex.ru/d/gRpgcqDUXPjLoQ",
+        tags: ["тестирование", "qa", "курс", "автоматизация", "java"],
+        type: "course",
+        category: "profession",
+        subcategory: "qa",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 350,
+        title: "Вероятностное машинное обучение",
+        description: "Курс по вероятностному ML: генеративные модели, байесовский вывод, причинность.",
+        link: "https://disk.yandex.ru/i/-GVVraZyt0TEug",
+        tags: ["ml", "машинное обучение", "вероятностное", "курс", "байесовские методы"],
+        type: "course",
+        category: "ai",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 351,
+        title: "Хардкорный Machine Learning",
+        description: "Продвинутый курс по ML: подготовка данных, модели, деплой, MLOps, A/B-тестирование.",
+        link: "https://disk.yandex.ru/d/aW4hbM9eZcWJFA",
+        tags: ["ml", "машинное обучение", "продвинутый", "mlops", "курс"],
+        type: "course",
+        category: "ai",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 352,
+        title: "HTML и CSS - полный курс по вёрстке",
+        description: "Курс по вёрстке: HTML, CSS, адаптивность, Flexbox, Grid, анимация, Figma.",
+        link: "https://disk.yandex.ru/d/7V81RxZAqytUhQ",
+        tags: ["html", "css", "вёрстка", "курс", "flexbox", "grid"],
+        type: "course",
+        category: "design",
+        subcategory: "frontend",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 353,
+        title: "Прикладное машинное обучение и ИИ для инженеров",
+        description: "Практический курс по ML и ИИ: алгоритмы, TensorFlow, распознавание, облачные API.",
+        link: "https://disk.yandex.ru/i/5Puvd1L0A7eBbw",
+        tags: ["ml", "ии", "прикладное", "tensorflow", "курс"],
+        type: "course",
+        category: "ai",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 354,
+        title: "Старт в DevOps: системное администрирование",
+        description: "Курс по основам Linux и DevOps: bash, веб-серверы, БД, сети, виртуализация.",
+        link: "https://disk.yandex.ru/d/o0RvLfRXU_91og",
+        tags: ["devops", "linux", "курс", "администрирование", "bash"],
+        type: "course",
+        category: "devops",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 355,
+        title: "Основы Linux - структура и команды",
+        description: "Курс по основам Linux: файловая система, bash, пакеты, сети, cron, утилиты.",
+        link: "https://disk.yandex.ru/d/aRDyT3RKTW5P0w",
+        tags: ["linux", "курс", "основы", "bash", "команды"],
+        type: "course",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 356,
+        title: "10 задач Active Directory с PowerShell",
+        description: "Решение типовых задач администрирования Active Directory с помощью PowerShell.",
+        link: "https://t.me/IT_obrazovach/4509",
+        tags: ["active directory", "powershell", "windows", "администрирование", "automation"],
+        type: "article",
+        category: "windows",
+        subcategory: "powershell",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 357,
+        title: "GNU/Linux - полный курс по операционной системе",
+        description: "Видеокурс по изучению GNU/Linux: установка, настройка, базовые и продвинутые команды.",
+        link: "https://www.youtube.com/playlist?list=PLY7PmJJFH5nT--I1AOR42sUg2xOvwC3c0",
+        tags: ["linux", "gnu", "курс", "видео", "администрирование", "команды"],
+        type: "video",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 358,
+        title: "Копирование файлов по SSH в Windows и Linux",
+        description: "Руководство по безопасному копированию файлов через SSH протокол.",
+        link: "https://t.me/IT_obrazovach/4503",
+        tags: ["ssh", "копирование", "файлы", "безопасность", "windows", "linux"],
+        type: "article",
+        category: "devops",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 359,
+        title: "SQLite - самая простая база данных",
+        description: "Обзор SQLite: отличия от MySQL, возможности, использование в проектах.",
+        link: "https://thecode.media/sqlite/",
+        tags: ["sqlite", "базы данных", "sql", "встроенная", "простая"],
+        type: "article",
+        category: "programming",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 360,
+        title: "Инкрементальные бэкапы в Linux с TAR и GPG",
+        description: "Скрипт для создания простых инкрементальных бэкапов в Linux.",
+        link: "https://t.me/IT_obrazovach/4502",
+        tags: ["бэкапы", "linux", "tar", "gpg", "скрипт", "резервное копирование"],
+        type: "script",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+
+    // Дополнительные ресурсы для SysAdmin
+    {
+        id: 361,
+        title: "Linux Administration Handbook",
+        description: "Полное руководство по администрированию Linux систем от базовых до продвинутых тем.",
+        link: "https://adminhandbook.io/",
+        tags: ["linux", "администрирование", "руководство", "sysadmin", "reference"],
+        type: "reference",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 362,
+        title: "SysAdmin Cheat Sheets",
+        description: "Коллекция шпаргалок для системных администраторов: команды, настройки, troubleshooting.",
+        link: "https://github.com/awesome-lists/awesome-sysadmin",
+        tags: ["sysadmin", "шпаргалки", "команды", "github", "cheatsheet"],
+        type: "cheatsheet",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 363,
+        title: "Docker для системных администраторов",
+        description: "Практическое руководство по использованию Docker в работе системного администратора.",
+        link: "https://docs.docker.com/engine/admin/",
+        tags: ["docker", "контейнеры", "администрирование", "devops", "руководство"],
+        type: "reference",
+        category: "devops",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 364,
+        title: "Мониторинг систем с Zabbix",
+        description: "Полное руководство по настройке и использованию Zabbix для мониторинга инфраструктуры.",
+        link: "https://www.zabbix.com/documentation/current/ru/manual",
+        tags: ["zabbix", "мониторинг", "sysadmin", "инфраструктура", "руководство"],
+        type: "reference",
+        category: "devops",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 365,
+        title: "Ansible для автоматизации инфраструктуры",
+        description: "Руководство по использованию Ansible для автоматизации развертывания и управления серверами.",
+        link: "https://docs.ansible.com/ansible/latest/user_guide/index.html",
+        tags: ["ansible", "автоматизация", "devops", "конфигурация", "руководство"],
+        type: "reference",
+        category: "devops",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 366,
+        title: "Базовая безопасность Linux серверов",
+        description: "Руководство по базовой настройке безопасности для Linux серверов.",
+        link: "https://linuxsecurity.com/guides",
+        tags: ["безопасность", "linux", "серверы", "настройка", "руководство"],
+        type: "reference",
+        category: "cybersecurity",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 367,
+        title: "Troubleshooting Linux Performance",
+        description: "Методики диагностики и решения проблем производительности в Linux системах.",
+        link: "https://www.brendangregg.com/linuxperf.html",
+        tags: ["linux", "производительность", "troubleshooting", "диагностика", "sysadmin"],
+        type: "reference",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 368,
+        title: "Bash Scripting Guide для администраторов",
+        description: "Подробное руководство по написанию bash-скриптов для автоматизации задач администрирования.",
+        link: "https://tldp.org/LDP/abs/html/",
+        tags: ["bash", "скрипты", "автоматизация", "sysadmin", "руководство"],
+        type: "reference",
+        category: "linux",
+        subcategory: "bash",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 369,
+        title: "Сетевая диагностика в Linux",
+        description: "Инструменты и методы диагностики сетевых проблем в Linux системах.",
+        link: "https://netbeez.net/blog/troubleshooting-linux-network-issues/",
+        tags: ["linux", "сети", "диагностика", "troubleshooting", "sysadmin"],
+        type: "reference",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    },
+    {
+        id: 370,
+        title: "Резервное копирование и восстановление",
+        description: "Стратегии и инструменты для резервного копирования и восстановления данных в Linux.",
+        link: "https://www.linux.com/training-tutorials/linux-backup-and-restore/",
+        tags: ["бэкапы", "резервное копирование", "linux", "восстановление", "sysadmin"],
+        type: "reference",
+        category: "linux",
+        dateAdded: new Date().toISOString()
+    }
 
 ];
