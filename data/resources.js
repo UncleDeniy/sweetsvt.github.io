@@ -1,4 +1,4 @@
-window.itResources = [
+window.itResources = window.itResources.concat([
     // Программирование - Основные ресурсы
     {
         id: 1,
@@ -2774,7 +2774,6 @@ dateAdded: new Date().toISOString()
     subcategory: "network-security",
     dateAdded: new Date().toISOString()
 },
-        // SysAdmin ресурсы
     {
         id: 339,
         title: "Топ методов Pandas для анализа данных",
@@ -3104,5 +3103,4 @@ dateAdded: new Date().toISOString()
         category: "linux",
         dateAdded: new Date().toISOString()
     }
-
 ];
