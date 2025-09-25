@@ -3101,7 +3101,117 @@ dateAdded: new Date().toISOString()
         type: "reference",
         category: "linux",
         dateAdded: new Date().toISOString()
-    }
+    },
+{
+    id: 371,
+    title: "Polars — «убийца Pandas» на максималках",
+    description: "Статья о библиотеке Polars как быстрой альтернативе Pandas от инженера данных Александра Андреева.",
+    link: "https://habr.com/ru/articles/946788/",
+    tags: ["polars", "pandas", "python", "rust", "анализ данных", "библиотека", "data engineering", "статья"],
+    type: "article",
+    category: "data-science",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 372,
+    title: "Самый быстрый способ читать Excel в Python",
+    description: "Сравнение инструментов для считывания данных Excel: pandas, openpyxl, Tablib, DuckDB или LibreOffice.",
+    link: "https://habr.com/ru/articles/942320/",
+    tags: ["excel", "python", "pandas", "openpyxl", "duckdb", "статья", "анализ данных"],
+    type: "article",
+    category: "data-science",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 373,
+    title: "PyGWalker - инструмент для визуализации данных в Jupyter",
+    description: "Инструмент для упрощения анализа и визуализации данных в Jupyter Notebook, превращающий pandas DataFrame в интерактивный интерфейс.",
+    link: "https://github.com/Kanaries/pygwalker",
+    tags: ["pygwalker", "python", "визуализация", "jupyter", "pandas", "инструменты", "github"],
+    type: "tool",
+    category: "data-science",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 374,
+    title: "10 библиотек Python, которые меняют карьеру",
+    description: "Подборка из 10 библиотек Python для карьерного роста: от Pandas и FastAPI до Seaborn и LangChain.",
+    link: "https://tproger.ru/articles/10-bibliotek-python--kotorye-menyayut-kareru",
+    tags: ["python", "библиотеки", "карьера", "pandas", "fastapi", "seaborn", "статья"],
+    type: "article",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 375,
+    title: "Pandas в действии - книга Бориса Пасхавера",
+    description: "Книга по работе с библиотекой Pandas для анализа данных (2023 год).",
+    link: "https://t.me/skladitshki/2631",
+    tags: ["pandas", "книга", "анализ данных", "python", "скачать"],
+    type: "book",
+    category: "data-science",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 376,
+    title: "FireDucks - мощная альтернатива Pandas",
+    description: "Улучшенная и оптимизированная замена Pandas, которую можно применять без серьёзных изменений в коде.",
+    link: "https://colab.research.google.com/drive/1UIokuJ4cytoiVSabRDqcziDXOan8bVua?usp=sharing",
+    tags: ["fireducks", "pandas", "альтернатива", "python", "оптимизация", "библиотека"],
+    type: "tool",
+    category: "data-science",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 377,
+    title: "Сравнение Pandas, Polars и PySpark",
+    description: "Сравнительный анализ Pandas, Polars и PySpark: сильные и слабые стороны, выбор инструмента для задач аналитика.",
+    link: "https://tproger.ru/articles/sravnivaem-pandas--polars-i-pyspark--chto-vybrat-analitiku-",
+    tags: ["pandas", "polars", "pyspark", "сравнение", "аналитика", "статья"],
+    type: "article",
+    category: "data-science",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 378,
+    title: "7 малоизвестных, но полезных библиотек Python",
+    description: "Подборка из 7 полезных библиотек Python, не входящих в стандартный набор типа NumPy или Pandas.",
+    link: "https://nuancesprog.ru/p/24821/",
+    tags: ["python", "библиотеки", "полезные", "малоизвестные", "статья"],
+    type: "article",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 379,
+    title: "Бесплатный курс по Python для начинающих",
+    description: "Полный самоучитель по Python для начинающих: от основ до анализа данных с Pandas (25 частей).",
+    link: "https://proglib.io/p/samouchitel-po-python-dlya-nachinayushchih-chast-1-osobennosti-sfery-primeneniya-ustanovka-onlayn-ide-2022-09-26",
+    tags: ["python", "курс", "бесплатно", "для начинающих", "самоучитель", "pandas"],
+    type: "course",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 380,
+    title: "Руководство по стеку протоколов TCP/IP для начинающих",
+    description: "Подробное руководство по модели TCP/IP: характеристики, уровни, протоколы, преимущества и недостатки.",
+    link: "https://procloud.ru/blog/technologies/TCP-IP-protocols-for-beginners/",
+    tags: ["tcp/ip", "сети", "протоколы", "руководство", "для начинающих", "статья"],
+    type: "article",
+    category: "networking",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 381,
+    title: "Алмазный фонд «Хакера» - материалы по реверсингу и malware",
+    description: "Подборка лучших материалов по реверсингу и malware из журнала Хакер: антиотладка, дизассемблирование, малвар-анализ.",
+    link: "https://xakep.ru/2017/10/18/reverse-malware-must-read/",
+    tags: ["реверсинг", "malware", "антиотладка", "безопасность", "хакер", "статья", "подборка"],
+    type: "article",
+    category: "cybersecurity",
+    dateAdded: new Date().toISOString()
+}
 ];
 window.customizationResources = [
 {
