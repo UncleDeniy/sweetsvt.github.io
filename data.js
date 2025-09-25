@@ -3211,6 +3211,146 @@ dateAdded: new Date().toISOString()
     type: "article",
     category: "cybersecurity",
     dateAdded: new Date().toISOString()
+},
+ {
+    id: 382,
+    title: "Screenity - улучшенный скринкастинг без установки софта",
+    description: "Инструмент для записи экрана с возможностью редактирования видео, добавления аннотаций и выделений. Работает в браузере без ограничений.",
+    link: "https://github.com/alyssaxuu/screenity",
+    tags: ["screenity", "скринкастинг", "запись экрана", "видео", "инструменты", "браузер", "github"],
+    type: "tool",
+    category: "productivity",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 383,
+    title: "Readme.so - онлайн-редактор для создания файлов README",
+    description: "Бесплатный редактор README с drag-and-drop интерфейсом и блочной структурой для быстрого создания документации.",
+    link: "https://readme.so/editor",
+    tags: ["readme", "документация", "редактор", "онлайн", "markdown", "инструменты"],
+    type: "tool",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 384,
+    title: "Hugging Face - сборник бесплатных нейросетей для работы с изображениями",
+    description: "Коллекция нейросетей для апскейла фото, удаления фона, редактирования изображений и других задач.",
+    link: "https://huggingface.co/collections/ysharma/edit-your-image-662be093bf97b697957c3c3f",
+    tags: ["huggingface", "нейросети", "ии", "изображения", "дизайн", "ai", "бесплатно"],
+    type: "tool",
+    category: "ai",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 385,
+    title: "Neural Writer - ИИ для SMM и копирайтинга",
+    description: "Нейросеть для рерайта, генерации промптов, перевода и суммирования текстов, особенно эффективна для рекламы.",
+    link: "https://neuralwriter.com/ru/",
+    tags: ["neuralwriter", "ии", "копирайтинг", "smm", "текст", "ai", "рерайт"],
+    type: "tool",
+    category: "ai",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 386,
+    title: "Сборник лучших работ и идей в IT за 2024 год",
+    description: "Коллекция интересных проектов: параллакс-анимации, интерактивные галереи, переключатели и SVG-лайфхаки.",
+    link: "https://codepen.io/2024/popular/pens/1",
+    tags: ["codepen", "проекты", "вдохновение", "frontend", "анимация", "ui", "2024"],
+    type: "list",
+    category: "design",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 387,
+    title: "Подборка лучших расширений для VS Code",
+    description: "Сборник полезных расширений для популярного редактора кода VS Code.",
+    link: "https://habr.com/ru/articles/857458/",
+    tags: ["vscode", "расширения", "плагины", "инструменты", "продуктивность", "статья"],
+    type: "article",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 388,
+    title: "Art - библиотека Python для преобразования текста в графику",
+    description: "Библиотека для стильного оформления текста и создания ASCII логотипов в консоли.",
+    link: "https://github.com/sepandhaghighi/art",
+    tags: ["art", "python", "библиотека", "текст", "графика", "ascii", "консоль"],
+    type: "tool",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 389,
+    title: "Погружение в Linux-дистрибутивы для информационной безопасности",
+    description: "Руководство по началу работы с Linux-дистрибутивами для ИБ специалистов, переходящих с Windows.",
+    link: "https://habr.com/ru/articles/905226/",
+    tags: ["linux", "кибербезопасность", "дистрибутивы", "для начинающих", "статья", "безопасность"],
+    type: "article",
+    category: "cybersecurity",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 390,
+    title: "Интересные статьи за последние дни",
+    description: "Подборка свежих статей: Webpack плагины, Google Sheets как БД, обновление VK Мессенджера, JS объекты.",
+    link: "https://habr.com/ru/articles/846022/",
+    tags: ["статьи", "подборка", "webpack", "google sheets", "javascript", "nodejs"],
+    type: "article",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 391,
+    title: "5 советов по оптимизации производительности NodeJS",
+    description: "Советы по оптимизации NodeJS приложений для улучшения пользовательского опыта.",
+    link: "https://nuancesprog.ru/p/17367/",
+    tags: ["nodejs", "оптимизация", "производительность", "советы", "статья"],
+    type: "article",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 392,
+    title: "File Icons for GitHub - расширение для иконок файлов",
+    description: "Расширение добавляет красивые иконки для разных типов файлов в GitHub, GitLab, Gitea и Gogs.",
+    link: "https://github.com/homerchen19/github-file-icons",
+    tags: ["github", "расширение", "иконки", "браузер", "инструменты", "github"],
+    type: "tool",
+    category: "productivity",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 393,
+    title: "Chrome DevTools MCP-сервер для AI-агентов",
+    description: "Инструмент для подключения AI-ассистентов к Chrome DevTools для отладки сайтов.",
+    link: "https://developer.chrome.com/blog/chrome-devtools-mcp",
+    tags: ["devtools", "chrome", "ai", "отладка", "инструменты", "mcp"],
+    type: "tool",
+    category: "programming",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 394,
+    title: "Semgrep - инструмент для поиска ошибок безопасности в коде",
+    description: "Опенсорсный статический анализатор для поиска уязвимостей, ошибок и проблем производительности.",
+    link: "https://github.com/semgrep/semgrep",
+    tags: ["semgrep", "безопасность", "статический анализ", "код", "уязвимости", "github"],
+    type: "tool",
+    category: "cybersecurity",
+    dateAdded: new Date().toISOString()
+},
+{
+    id: 395,
+    title: "Cheatography - онлайн-библиотека шпаргалок",
+    description: "Библиотека с более чем 5000 шпаргалок по программированию, администрированию и продуктивности.",
+    link: "https://cheatography.com/",
+    tags: ["cheatography", "шпаргалки", "справочник", "программирование", "инструменты"],
+    type: "reference",
+    category: "cheatsheet",
+    dateAdded: new Date().toISOString()
 }
 ];
 window.customizationResources = [
