@@ -16,24 +16,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     loadMarkdownFile(file, title, category, subcategory, author);
     
-    function loadMarkdownFile(file, title, category, subcategory, author) {
-        const filePath = `docs/${file}`;
-        
-        fetch(filePath)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Файл не найден');
-                }
-                return response.text();
-            })
-            .then(markdown => {
-                displayMarkdown(markdown, title, category, subcategory, author);
-            })
-            .catch(error => {
-                console.error('Ошибка загрузки файла:', error);
-                showError('Не удалось загрузить лекцию: ' + error.message);
-            });
-    }
+// В файле markdown-viewer.js замените функцию loadMarkdownFile:
+function loadMarkdownFile(file, title, category, subcategory, author) {
+    // Нормализуем путь к файлу
+    let filePath = `docs/${file}`;
+    
+    // Убираем лишние слеши
+    filePath = filePath.replace(/\/\//g, '/');
+    
+    fetch(filePath)
+        .then(response => {
+            if (!response.ok) {
+                // Пробуем альтернативный путь
+                const altPath = file.startsWith('docs/') ? file : `docs/${file}`;
+                return fetch(altPath);
+            }
+            return response;
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Файл не найден');
+            }
+            return response.text();
+        })
+        .then(markdown => {
+            displayMarkdown(markdown, title, category, subcategory, author);
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки файла:', error);
+            showError('Не удалось загрузить лекцию: ' + error.message);
+        });
+}
     
     function displayMarkdown(markdown, title, category, subcategory, author) {
         // Настраиваем marked для подсветки синтаксиса
@@ -127,8 +140,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Функция для переключения темной темы
 function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    const isDark = document.body.classList.toggle('dark-mode');
+    window.settingsManager.updateSetting('darkTheme', isDark);
 }
 
 // Функция для применения сохраненной темы

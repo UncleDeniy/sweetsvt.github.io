@@ -1,3 +1,12 @@
+function getBookmarks() {
+    try {
+        return JSON.parse(localStorage.getItem('bookmarks') || '[]');
+    } catch (e) {
+        console.warn('Ошибка чтения закладок:', e);
+        return [];
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const bookmarksList = document.getElementById('bookmarksList');
     const exportBtn = document.getElementById('exportBookmarks');
@@ -29,21 +38,44 @@ document.addEventListener('DOMContentLoaded', function() {
         loadResourcesFromData();
     }
 
-    function loadResourcesFromData() {
-        const script = document.createElement('script');
-        script.src = 'data.js';
-        script.onload = function() {
-            if (window.itResources) {
-                allResources = allResources.concat(window.itResources);
-            }
-            if (window.customizationResources) {
-                allResources = allResources.concat(window.customizationResources);
-            }
-            displayBookmarks();
-            populateFilters();
-        };
-        document.head.appendChild(script);
+
+function loadResourcesFromData() {
+    // Пробуем загрузить данные разными способами
+    if (window.itResources && window.itResources.length > 0) {
+        allResources = allResources.concat(window.itResources);
     }
+    if (window.customizationResources && window.customizationResources.length > 0) {
+        allResources = allResources.concat(window.customizationResources);
+    }
+    
+    // Если данные не загрузились, пробуем загрузить через fetch
+    if (allResources.length === 0) {
+        fetch('data.js')
+            .then(response => response.text())
+            .then(scriptText => {
+                // Выполняем скрипт
+                eval(scriptText);
+                
+                if (window.itResources) {
+                    allResources = allResources.concat(window.itResources);
+                }
+                if (window.customizationResources) {
+                    allResources = allResources.concat(window.customizationResources);
+                }
+                
+                displayBookmarks();
+                populateFilters();
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки данных:', error);
+                displayBookmarks(); // Все равно показываем закладки
+                populateFilters();
+            });
+    } else {
+        displayBookmarks();
+        populateFilters();
+    }
+}
 
     function getBookmarks() {
         return JSON.parse(localStorage.getItem('bookmarks') || '[]');
@@ -149,57 +181,69 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function displayBookmarkedResources(bookmarkedResources) {
-        bookmarksList.innerHTML = '';
+// В функции displayBookmarkedResources в bookmarks.js добавьте:
+function displayBookmarkedResources(bookmarkedResources) {
+    bookmarksList.innerHTML = '';
+    
+    bookmarkedResources.forEach(resource => {
+        if (!resource) return;
         
-        bookmarkedResources.forEach(resource => {
-            if (!resource) return;
-            
-            const resourceCard = document.createElement('div');
-            resourceCard.className = 'resource-card';
-            
-            const formattedTags = resource.tags ? resource.tags.map(tag => {
-                const isLongTag = tag.length > 15;
-                return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
-            }).join('') : '';
-            
-            const isBookmarked = getBookmarks().includes(resource.id);
-            const bookmarkIcon = isBookmarked ? 'fas fa-bookmark' : 'far fa-bookmark';
-            const bookmarkColor = isBookmarked ? '#667eea' : '#718096';
-            
-            resourceCard.innerHTML = `
-                <div class="resource-header">
-                    <h3>${resource.title}</h3>
-                    <button class="bookmark-btn" data-resource-id="${resource.id}" 
-                            style="background: none; border: none; cursor: pointer; color: ${bookmarkColor}; font-size: 1.2rem; padding: 0.5rem; margin: -0.5rem;">
-                        <i class="${bookmarkIcon}"></i>
-                    </button>
-                </div>
-                <p class="description">${resource.description}</p>
-                <a href="${resource.link}" target="_blank" class="link">
-                    <i class="fas fa-external-link-alt"></i> Перейти к материалу
-                </a>
-                <div class="meta">
-                    <span class="type">${getTypeLabel(resource.type)}</span>
-                    ${resource.category ? `<span class="category" data-category="${resource.category}">${getCategoryLabel(resource.category)}</span>` : ''}
-                    ${resource.subcategory ? `<span class="subcategory">${getSubcategoryLabel(resource.subcategory)}</span>` : ''}
-                </div>
-                ${resource.tags ? `<div class="tags">${formattedTags}</div>` : ''}
-            `;
-            
-            bookmarksList.appendChild(resourceCard);
-        });
+        const resourceCard = document.createElement('div');
+        resourceCard.className = 'resource-card';
         
-        // Добавляем обработчики для кнопок закладок
-        bookmarksList.querySelectorAll('.bookmark-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const resourceId = parseInt(this.getAttribute('data-resource-id'));
-                toggleBookmark(resourceId);
-                displayBookmarks();
-                populateFilters();
-            });
+        const formattedTags = resource.tags ? resource.tags.map(tag => {
+            const isLongTag = tag.length > 15;
+            return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
+        }).join('') : '';
+        
+        const isBookmarked = getBookmarks().includes(resource.id);
+        const bookmarkIcon = isBookmarked ? 'fas fa-bookmark' : 'far fa-bookmark';
+        const bookmarkColor = isBookmarked ? '#667eea' : '#718096';
+        
+        resourceCard.innerHTML = `
+            <div class="resource-header">
+                <h3>${resource.title}</h3>
+                <button class="bookmark-btn" data-resource-id="${resource.id}" 
+                        style="background: none; border: none; cursor: pointer; color: ${bookmarkColor}; font-size: 1.2rem; padding: 0.5rem; margin: -0.5rem;">
+                    <i class="${bookmarkIcon}"></i>
+                </button>
+            </div>
+            <p class="description">${resource.description}</p>
+            <a href="${resource.link}" target="_blank" class="link" data-resource-id="${resource.id}">
+                <i class="fas fa-external-link-alt"></i> Перейти к материалу
+            </a>
+            <div class="meta">
+                <span class="type">${getTypeLabel(resource.type)}</span>
+                ${resource.category ? `<span class="category" data-category="${resource.category}">${getCategoryLabel(resource.category)}</span>` : ''}
+                ${resource.subcategory ? `<span class="subcategory">${getSubcategoryLabel(resource.subcategory)}</span>` : ''}
+            </div>
+            ${resource.tags ? `<div class="tags">${formattedTags}</div>` : ''}
+        `;
+        
+        bookmarksList.appendChild(resourceCard);
+    });
+    
+    // Добавляем обработчики для кнопок закладок
+    bookmarksList.querySelectorAll('.bookmark-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const resourceId = parseInt(this.getAttribute('data-resource-id'));
+            toggleBookmark(resourceId);
+            displayBookmarks();
+            populateFilters();
         });
-    }
+    });
+    
+    // Добавляем обработчики для ссылок ресурсов (для обновления истории тегов)
+    bookmarksList.querySelectorAll('.link').forEach(link => {
+        link.addEventListener('click', function() {
+            const resourceId = parseInt(this.getAttribute('data-resource-id'));
+            const resource = allResources.find(r => r.id === resourceId);
+            if (resource && window.updateTagsViewHistory) {
+                window.updateTagsViewHistory(resource);
+            }
+        });
+    });
+}
 
     function getTypeLabel(type) {
         const types = {

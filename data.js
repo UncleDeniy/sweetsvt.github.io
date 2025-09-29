@@ -1,4 +1,10 @@
-window.itResources = [
+window.itResources = window.itResources || [];
+window.customizationResources = window.customizationResources || [];
+window.lections = window.lections || [];
+
+// Добавьте несколько демо-ресурсов если массивы пустые
+if (window.itResources.length === 0) {
+    window.itResources = [
  {
         id: 1,
         title: "FreeCodeCamp",
@@ -3482,3 +3488,4 @@ subcategory: "terminal",
 dateAdded: new Date().toISOString()
 }
 ];
+}

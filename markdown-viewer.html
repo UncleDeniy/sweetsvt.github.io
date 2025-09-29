@@ -321,6 +321,9 @@
             <a href="lections.html" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> К лекциям
             </a>
+            <a href="settings.html" class="btn btn-secondary">
+                <i class="fas fa-cog"></i> Настройки
+            </a>
         </div>
 
         <div id="markdownContainer" class="markdown-container">
@@ -346,6 +349,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="markdown-viewer.js"></script>
+    <script src="settings-core.js"></script>
+    <script src="settings.js"></script>
+    <script>
+        // Принудительное применение темы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.settingsManager) {
+                // Небольшая задержка для гарантированного применения стилей
+                setTimeout(() => {
+                    window.settingsManager.applySettings();
+                }, 100);
+            }
+        });
+    </script>
     
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </body>

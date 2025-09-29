@@ -135,6 +135,9 @@
             <a href="bookmarks.html" class="nav-btn" style="background: linear-gradient(135deg, #48bb78, #38a169);">
                 <i class="fas fa-bookmark"></i> Мои закладки
             </a>
+            <a href="settings.html" class="nav-btn" style="background: linear-gradient(135deg, #9f7aea, #805ad5);">
+                <i class="fas fa-cog"></i> Настройки
+            </a>
         </div>
 
     <div class="container">
@@ -218,6 +221,23 @@
             </div>
         </div>
 
+<!-- Облако тегов -->
+<div class="tags-cloud-section">
+    <h3>Популярные теги</h3>
+    <div class="tags-cloud" id="tagsCloud">
+        <div class="tags-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Загрузка тегов...</p>
+        </div>
+    </div>
+    <div class="tags-actions">
+        <button id="clearTagsHistory" class="btn btn-secondary btn-small">
+            <i class="fas fa-trash"></i> Очистить историю
+        </button>
+        <span class="tags-info">На основе просмотренных материалов</span>
+    </div>
+</div>
+
         <div id="resourcesList" class="resources-grid"></div>
 
         <div class="info-section">
@@ -238,9 +258,13 @@
         </div>
     </footer>
 </div>
+
 <script src="data.js"></script>
+<script src="settings-core.js"></script>
+<script src="settings-main.js"></script>
 <script src="script.js"></script>
-     
+<script src="tags-cloud.js"></script>  
+
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </body> 
 </html>

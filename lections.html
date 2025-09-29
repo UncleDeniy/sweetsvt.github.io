@@ -322,6 +322,9 @@
         <a href="index.html" class="back-link">
             <i class="fas fa-arrow-left"></i> Назад к ресурсам
         </a>
+        <a href="settings.html" class="btn btn-secondary">
+            <i class="fas fa-cog"></i> Настройки
+        </a>
 
         <div class="search-section">
             <div class="search-box">
@@ -394,7 +397,19 @@
     <script src="lections.js"></script>
     <script src="script.js"></script>
     <script src="script-lections.js"></script>
-    
+    <script src="settings-core.js"></script>
+    <script src="settings.js"></script>    
+    <script>
+        // Принудительное применение темы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.settingsManager) {
+                // Небольшая задержка для гарантированного применения стилей
+                setTimeout(() => {
+                    window.settingsManager.applySettings();
+                }, 100);
+            }
+        });
+    </script> 
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </body>
 </html>

@@ -1,3 +1,35 @@
+// В начале файла script.js добавьте:
+let resources = [];
+
+// Функция для безопасной загрузки ресурсов
+function loadResourcesSafely() {
+    try {
+        if (window.itResources && Array.isArray(window.itResources)) {
+            resources = resources.concat(window.itResources);
+        }
+    } catch (e) {
+        console.warn('Не удалось загрузить itResources:', e);
+    }
+    
+    try {
+        if (window.customizationResources && Array.isArray(window.customizationResources)) {
+            resources = resources.concat(window.customizationResources);
+        }
+    } catch (e) {
+        console.warn('Не удалось загрузить customizationResources:', e);
+    }
+    
+    // Если все еще нет ресурсов, используем демо-данные
+    if (resources.length === 0) {
+        resources = getDemoResources();
+        console.log('Используются демо-ресурсы');
+    }
+}
+
+// Вызовите эту функцию вместо прямого доступа к window.*Resources
+loadResourcesSafely();
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const resourcesList = document.getElementById('resourcesList');
     const searchInput = document.getElementById('searchInput');
@@ -386,3 +418,42 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
     }
 });
+
+
+// В конце script.js замените этот код:
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+                window.location.href = `index.html?search=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+    });
+
+    // Парсим URL параметры для автозаполнения поиска
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    if (searchParam) {
+        searchInput.value = searchParam;
+    }
+});
+
+// Загружаем скрипт облака тегов с задержкой для стабильности
+setTimeout(() => {
+    const script = document.createElement('script');
+    script.src = 'tags-cloud.js';
+    script.onload = function() {
+        console.log('Облако тегов загружено');
+        // Инициализируем облако тегов после загрузки
+        if (window.initTagsCloud) {
+            window.initTagsCloud();
+        }
+    };
+    script.onerror = function() {
+        console.error('Ошибка загрузки облака тегов');
+    };
+    document.head.appendChild(script);
+}, 500);

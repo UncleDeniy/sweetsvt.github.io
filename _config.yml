@@ -1,0 +1,14 @@
+# _config.yml
+title: "Syntax_Syndicate"
+description: "База знаний IT-сообщества"
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Настройка кастомной 404 страницы
+include:
+  - 404.html
+
+# Дополнительные настройки
+repository: "https://github.com/UncleDeniy/sweetsvt.github.io" # Замените на ваш репозиторий
