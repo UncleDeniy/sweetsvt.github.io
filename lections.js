@@ -28,5 +28,26 @@ window.lections = [
         subcategory: "frontend",
         dateAdded: new Date().toISOString(),
         author: "Syntax_Syndicate"
+    },
+    {
+        id: 4,
+        title: "Введение в кибербезопасность и киберустойчивость",
+        description: "Основы обеспечения кибербезопасности и киберустойчивости информационных систем. Оценка угроз, принципы защиты инфраструктуры DevOps и DevSecOps.",
+        file: "Introduction _to _Cybersecurity_and_Cyber_Resilience.md",
+        category: "security",
+        subcategory: "cybersecurity",
+        dateAdded: new Date().toISOString(),
+        author: "А.А. Менщиков, Д.А. Заколдаев, А.А. Воробьева"
+    },
+    {
+        "id": 5,
+        "title": "Конспект книги: Python за 7 дней: Краткий курс для начинающих",
+        "description": "Интенсивный курс по основам Python для новичков: синтаксис, структуры данных, функции, ООП, работа с файлами, обработка исключений и популярные библиотеки.",
+        "file": "Python_in_7_Days_Crash_Course.md",
+        "category": "programming",
+        "subcategory": "python",
+        "dateAdded": new Date().toISOString(),
+        "author": "Эндрю Парк"
     }
+
 ];

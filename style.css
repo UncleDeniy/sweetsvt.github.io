@@ -723,3 +723,43 @@ body.dark-mode .btn-secondary {
 body.dark-mode .btn-secondary:hover {
     background: #718096;
 }
+/* Стили для закладок */
+.resource-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.bookmark-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #718096;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    margin: -0.5rem;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.bookmark-btn:hover {
+    transform: scale(1.1);
+    color: #667eea;
+}
+
+.bookmark-btn.active {
+    color: #667eea;
+}
+
+/* Адаптивность для заголовков с закладками */
+@media (max-width: 480px) {
+    .resource-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .bookmark-btn {
+        align-self: flex-end;
+    }
+}

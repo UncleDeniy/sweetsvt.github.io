@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена | Syntax_Syndicate</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .logo-minimal-new {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
+        
+        .logo-s {
+            font-size: 36px;
+            font-weight: 800;
+            color: #0A2463;
+            position: relative;
+            font-family: 'Bebas Neue', cursive;
+            z-index: 2;
+        }
+        
+        .logo-bracket-left, .logo-bracket-right {
+            position: absolute;
+            font-size: 42px;
+            font-weight: 800;
+            color: #3E92CC;
+            opacity: 0.8;
+            z-index: 1;
+        }
+        
+        .logo-bracket-left {
+            left: 0;
+            transform: translateX(-25%);
+        }
+        
+        .logo-bracket-right {
+            right: 0;
+            transform: translateX(25%);
+        }
+        
+        .logo-semicolon {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00E5FF;
+            border-radius: 50%;
+            bottom: 12px;
+            right: 8px;
+            box-shadow: 0 0 8px #00E5FF;
+            z-index: 3;
+        }
+
+        .error-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .error-description {
+            color: #4a5568;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .error-illustration {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+                justify-content: center;
+            }
+        }
+
+        .suggestions {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 2rem;
+        }
+
+        .suggestions h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .suggestions-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .suggestions-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestions-list a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .suggestions-list a:hover {
+            color: #5a67d8;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-minimal-new">
+                    <div class="logo-bracket-left">[</div>
+                    <div class="logo-s">S</div>
+                    <div class="logo-bracket-right">{</div>
+                    <div class="logo-semicolon"></div>
+                </div>
+                <div class="logo-text">
+                    <h1>Syntax_Syndicate</h1>
+                    <p>База знаний Syntax_Syndicate</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="error-container">
+            <div class="error-illustration">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            
+            <div class="error-code">404</div>
+            
+            <h1 class="error-title">Страница не найдена</h1>
+            
+            <p class="error-description">
+                Запрашиваемая страница не существует или была перемещена. 
+                Возможно, вы перешли по устаревшей ссылке или допустили опечатку в адресе.
+            </p>
+
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Поиск по материалам...">
+            </div>
+
+            <div class="error-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+                <a href="lections.html" class="btn btn-secondary">
+                    <i class="fas fa-book"></i> К лекциям
+                </a>
+                <button onclick="history.back()" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+            </div>
+
+            <div class="suggestions">
+                <h3>Популярные разделы:</h3>
+                <ul class="suggestions-list">
+                    <li><a href="index.html">Главная страница с материалами</a></li>
+                    <li><a href="lections.html">Лекции и учебные материалы</a></li>
+                    <li><a href="index.html#programming">Раздел программирования</a></li>
+                    <li><a href="index.html#design">Раздел дизайна</a></li>
+                    <li><a href="index.html#cybersecurity">Кибербезопасность</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon">💻🚀</div>
+                    <span>Syntax_Syndicate</span>
+                </div>
+                <p>База знаний IT-сообщества | Размещено на GitHub Pages</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const searchTerm = searchInput.value.trim();
+                    if (searchTerm) {
+                        window.location.href = `index.html?search=${encodeURIComponent(searchTerm)}`;
+                    }
+                }
+            });
+
+            // Парсим URL параметры для автозаполнения поиска
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            if (searchParam) {
+                searchInput.value = searchParam;
+            }
+        });
+
+        // Показываем текущий URL для отладки (можно удалить в продакшене)
+        console.log('Запрошенный URL:', window.location.href);
+        console.log('Доступные страницы:', ['index.html', 'lections.html', 'markdown-viewer.html']);
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</body>
+</html>

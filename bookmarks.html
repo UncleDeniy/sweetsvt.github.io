@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои закладки | Syntax_Syndicate</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .logo-minimal-new {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
+        
+        .logo-s {
+            font-size: 36px;
+            font-weight: 800;
+            color: #0A2463;
+            position: relative;
+            font-family: 'Bebas Neue', cursive;
+            z-index: 2;
+        }
+        
+        .logo-bracket-left, .logo-bracket-right {
+            position: absolute;
+            font-size: 42px;
+            font-weight: 800;
+            color: #3E92CC;
+            opacity: 0.8;
+            z-index: 1;
+        }
+        
+        .logo-bracket-left {
+            left: 0;
+            transform: translateX(-25%);
+        }
+        
+        .logo-bracket-right {
+            right: 0;
+            transform: translateX(25%);
+        }
+        
+        .logo-semicolon {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00E5FF;
+            border-radius: 50%;
+            bottom: 12px;
+            right: 8px;
+            box-shadow: 0 0 8px #00E5FF;
+            z-index: 3;
+        }
+
+        .bookmarks-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bookmarks-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .bookmark-actions {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .bookmark-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .bookmark-stat-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bookmark-stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .bookmark-stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .bookmark-stat-number {
+            display: block;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .bookmark-stat-label {
+            color: #4a5568;
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        
+        .empty-bookmarks {
+            text-align: center;
+            padding: 6rem 2rem;
+            color: #4a5568;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            opacity: 0.3;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #cbd5e0, #a0aec0);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(226, 232, 240, 0.3);
+        }
+        
+        .clear-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+        }
+        
+        .clear-btn:hover {
+            background: linear-gradient(135deg, #ff5252, #e53e3e);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .bookmark-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #667eea;
+            font-size: 1.4rem;
+            padding: 0.5rem;
+            margin: -0.5rem;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .import-file-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-name {
+            margin-left: 1rem;
+            color: #4a5568;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .bookmark-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .bookmark-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .bookmarks-hero {
+                padding: 3rem 0;
+            }
+            
+            .hero-icon {
+                font-size: 3rem;
+            }
+        }
+
+        .bookmark-filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2d3748;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-minimal-new">
+                    <div class="logo-bracket-left">[</div>
+                    <div class="logo-s">S</div>
+                    <div class="logo-bracket-right">{</div>
+                    <div class="logo-semicolon"></div>
+                </div>
+                <div class="logo-text">
+                    <h1>Syntax_Syndicate</h1>
+                    <p>Мои закладки</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="bookmarks-hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-bookmark"></i>
+                </div>
+                <h2>Мои закладки</h2>
+                <p>Сохраненные материалы для изучения</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Назад к ресурсам
+        </a>
+
+        <div class="bookmark-stats">
+            <div class="bookmark-stat-item">
+                <span class="bookmark-stat-number" id="totalBookmarks">0</span>
+                <span class="bookmark-stat-label">всего закладок</span>
+            </div>
+            <div class="bookmark-stat-item">
+                <span class="bookmark-stat-number" id="uniqueBookmarkCategories">0</span>
+                <span class="bookmark-stat-label">категорий</span>
+            </div>
+            <div class="bookmark-stat-item">
+                <span class="bookmark-stat-number" id="bookmarkTypes">0</span>
+                <span class="bookmark-stat-label">типов материалов</span>
+            </div>
+            <div class="bookmark-stat-item">
+                <span class="bookmark-stat-number" id="bookmarkTags">0</span>
+                <span class="bookmark-stat-label">уникальных тегов</span>
+            </div>
+        </div>
+
+        <div class="bookmark-filters">
+            <div class="filter-group">
+                <label>Категория:</label>
+                <select id="categoryFilter">
+                    <option value="">Все категории</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Тип материала:</label>
+                <select id="typeFilter">
+                    <option value="">Все типы</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Сортировка:</label>
+                <select id="sortFilter">
+                    <option value="date">По дате добавления</option>
+                    <option value="title">По названию</option>
+                    <option value="category">По категории</option>
+                </select>
+            </div>
+            <button id="clearFilters" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Очистить
+            </button>
+        </div>
+
+        <div class="bookmark-actions">
+            <button id="exportBookmarks" class="btn btn-success">
+                <i class="fas fa-download"></i> Экспорт закладок
+            </button>
+            <div class="import-file-container">
+                <button id="importBookmarks" class="btn btn-secondary">
+                    <i class="fas fa-upload"></i> Импорт закладок
+                </button>
+                <span class="file-name" id="fileName"></span>
+            </div>
+            <button id="clearBookmarks" class="btn clear-btn">
+                <i class="fas fa-trash"></i> Очистить все
+            </button>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+
+        <div id="bookmarksList" class="resources-grid">
+            <!-- Закладки будут загружены через JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon">💻🚀</div>
+                    <span>Syntax_Syndicate</span>
+                </div>
+                <p>База знаний IT-сообщества | Размещено на GitHub Pages</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+    <script src="bookmarks.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</body>
+</html>

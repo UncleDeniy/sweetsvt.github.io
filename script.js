@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const typeFilter = document.getElementById('typeFilter');
     const categoryFilter = document.getElementById('categoryFilter');
     const subcategoryFilter = document.getElementById('subcategoryFilter');
+    const bookmarkFilter = document.getElementById('bookmarkFilter');
     const clearFilters = document.getElementById('clearFilters');
     const totalResources = document.getElementById('totalResources');
     const uniqueCategories = document.getElementById('uniqueCategories');
@@ -31,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
     init();
 
     function init() {
-        displayResources(resources);
+        initBookmarks();
+        displayResources(resources, resourcesList);
         updateStats();
         populateSubcategories();
         
@@ -42,15 +44,68 @@ document.addEventListener('DOMContentLoaded', function() {
             filterResources();
         });
         subcategoryFilter.addEventListener('change', filterResources);
+        bookmarkFilter.addEventListener('change', filterResources);
         
         clearFilters.addEventListener('click', function() {
             searchInput.value = '';
             typeFilter.value = '';
             categoryFilter.value = '';
             subcategoryFilter.value = '';
+            bookmarkFilter.value = '';
             populateSubcategories();
             filterResources();
         });
+    }
+
+    // Функции для работы с закладками
+    function initBookmarks() {
+        if (!localStorage.getItem('bookmarks')) {
+            localStorage.setItem('bookmarks', JSON.stringify([]));
+        }
+    }
+
+    function toggleBookmark(resourceId) {
+        const bookmarks = getBookmarks();
+        const index = bookmarks.indexOf(resourceId);
+        
+        if (index > -1) {
+            bookmarks.splice(index, 1);
+        } else {
+            bookmarks.push(resourceId);
+        }
+        
+        localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+        updateBookmarkUI(resourceId);
+        
+        // Обновляем счетчик закладок в статистике
+        updateBookmarkStats();
+    }
+
+    function getBookmarks() {
+        return JSON.parse(localStorage.getItem('bookmarks') || '[]');
+    }
+
+    function isBookmarked(resourceId) {
+        return getBookmarks().includes(resourceId);
+    }
+
+    function updateBookmarkUI(resourceId) {
+        const bookmarkBtn = document.querySelector(`[data-resource-id="${resourceId}"]`);
+        if (bookmarkBtn) {
+            const isBookmarked = getBookmarks().includes(resourceId);
+            bookmarkBtn.innerHTML = isBookmarked ? 
+                '<i class="fas fa-bookmark"></i>' : 
+                '<i class="far fa-bookmark"></i>';
+            bookmarkBtn.style.color = isBookmarked ? '#667eea' : '#718096';
+            bookmarkBtn.title = isBookmarked ? 'Удалить из закладок' : 'Добавить в закладки';
+        }
+    }
+
+    function updateBookmarkStats() {
+        const bookmarkCount = document.getElementById('bookmarkCount');
+        if (bookmarkCount) {
+            bookmarkCount.textContent = getBookmarks().length;
+        }
     }
 
     function populateSubcategories() {
@@ -79,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const typeValue = typeFilter.value;
         const categoryValue = categoryFilter.value;
         const subcategoryValue = subcategoryFilter.value;
+        const bookmarkValue = bookmarkFilter.value;
         
         const filtered = resources.filter(resource => {
             const matchesSearch = resource.title.toLowerCase().includes(searchTerm) ||
@@ -88,18 +144,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const matchesType = typeValue ? resource.type === typeValue : true;
             const matchesCategory = categoryValue ? resource.category === categoryValue : true;
             const matchesSubcategory = subcategoryValue ? resource.subcategory === subcategoryValue : true;
+            const matchesBookmark = bookmarkValue === 'bookmarked' ? 
+                getBookmarks().includes(resource.id) : true;
             
-            return matchesSearch && matchesType && matchesCategory && matchesSubcategory;
+            return matchesSearch && matchesType && matchesCategory && matchesSubcategory && matchesBookmark;
         });
         
-        displayResources(filtered);
+        displayResources(filtered, resourcesList);
     }
 
-    function displayResources(resourcesToDisplay) {
-        resourcesList.innerHTML = '';
+    function displayResources(resourcesToDisplay, container = resourcesList) {
+        container.innerHTML = '';
         
         if (resourcesToDisplay.length === 0) {
-            resourcesList.innerHTML = `
+            container.innerHTML = `
                 <div class="no-results">
                     <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                     <h3>Ничего не найдено</h3>
@@ -118,8 +176,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
             }).join('') : '';
             
+            const isBookmarked = getBookmarks().includes(resource.id);
+            const bookmarkIcon = isBookmarked ? 'fas fa-bookmark' : 'far fa-bookmark';
+            const bookmarkColor = isBookmarked ? '#667eea' : '#718096';
+            
             resourceCard.innerHTML = `
-                <h3>${resource.title}</h3>
+                <div class="resource-header">
+                    <h3>${resource.title}</h3>
+                    <button class="bookmark-btn" data-resource-id="${resource.id}" 
+                            style="background: none; border: none; cursor: pointer; color: ${bookmarkColor}; font-size: 1.2rem; padding: 0.5rem; margin: -0.5rem;">
+                        <i class="${bookmarkIcon}"></i>
+                    </button>
+                </div>
                 <p class="description">${resource.description}</p>
                 <a href="${resource.link}" target="_blank" class="link">
                     <i class="fas fa-external-link-alt"></i> Перейти к материалу
@@ -132,7 +200,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${resource.tags ? `<div class="tags">${formattedTags}</div>` : ''}
             `;
             
-            resourcesList.appendChild(resourceCard);
+            container.appendChild(resourceCard);
+        });
+        
+        // Добавляем обработчики для кнопок закладок
+        container.querySelectorAll('.bookmark-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const resourceId = parseInt(this.getAttribute('data-resource-id'));
+                toggleBookmark(resourceId);
+            });
         });
     }
 
@@ -144,6 +220,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const subcategories = new Set(resources.map(r => r.subcategory).filter(Boolean));
         uniqueSubcategories.textContent = subcategories.size;
+
+        updateBookmarkStats();
     }
 
     function getTypeLabel(type) {
