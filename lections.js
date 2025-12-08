@@ -61,9 +61,9 @@ window.lections = [
     },
     {
     id: 8,
-    title: "Безопасность операционных систем",
+    title: "Методология",
     description: "Полный систематизированный конспект лекций по архитектурам компьютеров, мультипроцессорным и распределённым системам, облачным сервисам, кластерам, а также методам мониторинга и механизмам обеспечения безопасности операционных систем.",
-    file: "operating-systems-security.md",
+    file: "methodology-lectures.md",
     category: "security",
     subcategory: "operating-systems",
     dateAdded: new Date().toISOString(),
