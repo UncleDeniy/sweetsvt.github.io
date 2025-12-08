@@ -48,6 +48,17 @@ window.lections = [
         "subcategory": "python",
         "dateAdded": new Date().toISOString(),
         "author": "Эндрю Парк"
+    },
+    {
+        id: 7,
+        title: "Безопасность операционных систем",
+        description: "Систематизированный конспект лекций по архитектурам, распределённым системам, мониторингу безопасности и современным механизмам защиты операционных систем.",
+        file: "operating-systems-security.md",
+        category: "security",
+        subcategory: "operating-systems",
+        dateAdded: new Date().toISOString(),
+        author: "Волошина"
     }
+
 
 ];
