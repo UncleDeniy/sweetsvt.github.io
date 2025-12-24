@@ -142,17 +142,59 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ---------- Улучшенный поиск (RU/EN, по словам) ----------
+    function normalizeText(input) {
+        return (input || '')
+            .toString()
+            .toLowerCase()
+            .replace(/ё/g, 'е')
+            .replace(/[\p{L}\p{N}]+|[^\p{L}\p{N}]+/gu, (m) => {
+                // оставляем только буквенно-цифровые токены, остальное → пробел
+                return /[^\p{L}\p{N}]/u.test(m) ? ' ' : m;
+            })
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function getTagHistory() {
+        try {
+            return JSON.parse(localStorage.getItem('tagsViewHistory') || '{}');
+        } catch (_) {
+            return {};
+        }
+    }
+
+    function resourceSearchHaystack(resource) {
+        const parts = [
+            resource?.title,
+            resource?.description,
+            resource?.category,
+            resource?.subcategory,
+            Array.isArray(resource?.tags) ? resource.tags.join(' ') : ''
+        ].filter(Boolean);
+        return normalizeText(parts.join(' '));
+    }
+
+    function matchesAllTerms(haystack, terms) {
+        if (!terms.length) return true;
+        for (const t of terms) {
+            if (!t) continue;
+            if (!haystack.includes(t)) return false;
+        }
+        return true;
+    }
+
     function filterResources() {
-        const searchTerm = searchInput.value.toLowerCase();
+        const normalized = normalizeText(searchInput.value);
+        const terms = normalized ? normalized.split(' ') : [];
         const typeValue = typeFilter.value;
         const categoryValue = categoryFilter.value;
         const subcategoryValue = subcategoryFilter.value;
         const bookmarkValue = bookmarkFilter.value;
         
         const filtered = resources.filter(resource => {
-            const matchesSearch = resource.title.toLowerCase().includes(searchTerm) ||
-                                resource.description.toLowerCase().includes(searchTerm) ||
-                                (resource.tags && resource.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+            const haystack = resourceSearchHaystack(resource);
+            const matchesSearch = matchesAllTerms(haystack, terms);
             
             const matchesType = typeValue ? resource.type === typeValue : true;
             const matchesCategory = categoryValue ? resource.category === categoryValue : true;
@@ -180,11 +222,23 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        const tagHistory = getTagHistory();
+
         resourcesToDisplay.forEach(resource => {
             const resourceCard = document.createElement('div');
             resourceCard.className = 'resource-card';
-            
-            const formattedTags = resource.tags ? resource.tags.map(tag => {
+
+            // Персонализация: сначала показываем теги, которые пользователь чаще видит
+            const tagsSorted = Array.isArray(resource.tags)
+                ? [...resource.tags].sort((a, b) => {
+                    const ca = tagHistory[a] || 0;
+                    const cb = tagHistory[b] || 0;
+                    if (cb !== ca) return cb - ca;
+                    return a.localeCompare(b, 'ru');
+                })
+                : [];
+
+            const formattedTags = tagsSorted.length ? tagsSorted.map(tag => {
                 const isLongTag = tag.length > 15;
                 return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
             }).join('') : '';
@@ -202,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </button>
                 </div>
                 <p class="description">${resource.description}</p>
-                <a href="${resource.link}" target="_blank" class="link">
+                <a href="${resource.link}" target="_blank" rel="noopener" class="link" data-open-resource-id="${resource.id}">
                     <i class="fas fa-external-link-alt"></i> Перейти к материалу
                 </a>
                 <div class="meta">
@@ -210,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ${resource.category ? `<span class="category" data-category="${resource.category}">${getCategoryLabel(resource.category)}</span>` : ''}
                     ${resource.subcategory ? `<span class="subcategory">${getSubcategoryLabel(resource.subcategory)}</span>` : ''}
                 </div>
-                ${resource.tags ? `<div class="tags">${formattedTags}</div>` : ''}
+                ${tagsSorted.length ? `<div class="tags">${formattedTags}</div>` : ''}
             `;
             
             container.appendChild(resourceCard);
@@ -222,6 +276,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 const resourceId = parseInt(this.getAttribute('data-resource-id'));
                 toggleBookmark(resourceId);
             });
+        });
+
+        // Учёт просмотров: обновляем персональную статистику тегов при открытии ресурса
+        container.querySelectorAll('[data-open-resource-id]').forEach(a => {
+            const id = parseInt(a.getAttribute('data-open-resource-id'));
+            const res = resources.find(r => r && r.id === id);
+            a.addEventListener('pointerdown', () => {
+                try {
+                    if (res && window.updateTagsViewHistory) window.updateTagsViewHistory(res);
+                    const key = 'resourceViewHistory';
+                    const raw = localStorage.getItem(key);
+                    const map = raw ? JSON.parse(raw) : {};
+                    map[id] = (map[id] || 0) + 1;
+                    localStorage.setItem(key, JSON.stringify(map));
+                } catch (_) {}
+            }, { passive: true });
         });
     }
 

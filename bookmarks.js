@@ -184,6 +184,10 @@ function loadResourcesFromData() {
 // В функции displayBookmarkedResources в bookmarks.js добавьте:
 function displayBookmarkedResources(bookmarkedResources) {
     bookmarksList.innerHTML = '';
+
+    // Персонализация: сортируем теги по частоте просмотров пользователя
+    let tagHistory = {};
+    try { tagHistory = JSON.parse(localStorage.getItem('tagsViewHistory') || '{}'); } catch (_) { tagHistory = {}; }
     
     bookmarkedResources.forEach(resource => {
         if (!resource) return;
@@ -191,7 +195,16 @@ function displayBookmarkedResources(bookmarkedResources) {
         const resourceCard = document.createElement('div');
         resourceCard.className = 'resource-card';
         
-        const formattedTags = resource.tags ? resource.tags.map(tag => {
+        const tagsSorted = Array.isArray(resource.tags)
+            ? [...resource.tags].sort((a, b) => {
+                const ca = tagHistory[a] || 0;
+                const cb = tagHistory[b] || 0;
+                if (cb !== ca) return cb - ca;
+                return a.localeCompare(b, 'ru');
+            })
+            : [];
+
+        const formattedTags = tagsSorted.length ? tagsSorted.map(tag => {
             const isLongTag = tag.length > 15;
             return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
         }).join('') : '';
@@ -209,7 +222,7 @@ function displayBookmarkedResources(bookmarkedResources) {
                 </button>
             </div>
             <p class="description">${resource.description}</p>
-            <a href="${resource.link}" target="_blank" class="link" data-resource-id="${resource.id}">
+            <a href="${resource.link}" target="_blank" rel="noopener" class="link" data-open-resource-id="${resource.id}">
                 <i class="fas fa-external-link-alt"></i> Перейти к материалу
             </a>
             <div class="meta">
@@ -217,7 +230,7 @@ function displayBookmarkedResources(bookmarkedResources) {
                 ${resource.category ? `<span class="category" data-category="${resource.category}">${getCategoryLabel(resource.category)}</span>` : ''}
                 ${resource.subcategory ? `<span class="subcategory">${getSubcategoryLabel(resource.subcategory)}</span>` : ''}
             </div>
-            ${resource.tags ? `<div class="tags">${formattedTags}</div>` : ''}
+            ${tagsSorted.length ? `<div class="tags">${formattedTags}</div>` : ''}
         `;
         
         bookmarksList.appendChild(resourceCard);
@@ -234,14 +247,14 @@ function displayBookmarkedResources(bookmarkedResources) {
     });
     
     // Добавляем обработчики для ссылок ресурсов (для обновления истории тегов)
-    bookmarksList.querySelectorAll('.link').forEach(link => {
-        link.addEventListener('click', function() {
-            const resourceId = parseInt(this.getAttribute('data-resource-id'));
-            const resource = allResources.find(r => r.id === resourceId);
-            if (resource && window.updateTagsViewHistory) {
-                window.updateTagsViewHistory(resource);
-            }
-        });
+    bookmarksList.querySelectorAll('[data-open-resource-id]').forEach(link => {
+        const resourceId = parseInt(link.getAttribute('data-open-resource-id'));
+        const resource = allResources.find(r => r.id === resourceId);
+        link.addEventListener('pointerdown', function() {
+            try {
+                if (resource && window.updateTagsViewHistory) window.updateTagsViewHistory(resource);
+            } catch (_) {}
+        }, { passive: true });
     });
 }
 

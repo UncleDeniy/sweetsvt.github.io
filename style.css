@@ -10,7 +10,7 @@
     --primary-color: #667eea;
     --secondary-color: #764ba2;
     --primary-gradient: linear-gradient(135deg, #667eea, #764ba2);
-    --background-color: #f8f9fa;
+    --background-color: #f8fafc;
     --surface-color: #ffffff;
     --text-primary: #2d3748;
     --text-secondary: #718096;
@@ -21,17 +21,36 @@
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 20px;
+
+    /* Доп. токены для профессионального UI */
+    --bg-accent-1: rgba(102, 126, 234, 0.18);
+    --bg-accent-2: rgba(118, 75, 162, 0.14);
+    --card-bg: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.82));
+    --card-border: color-mix(in srgb, var(--border-color) 70%, transparent);
+    --chip-bg: color-mix(in srgb, var(--primary-color) 10%, white);
+    --chip-text: color-mix(in srgb, var(--primary-color) 80%, black);
+    --chip-border: color-mix(in srgb, var(--primary-color) 20%, transparent);
+    --glass: color-mix(in srgb, var(--surface-color) 75%, transparent);
 }
 
 /* Темная тема */
 body.dark-theme {
-    --background-color: #1a202c;
-    --surface-color: #2d3748;
+    --background-color: #0b1220;
+    --surface-color: #111a2e;
     --text-primary: #e2e8f0;
     --text-secondary: #a0aec0;
-    --border-color: #4a5568;
+    --border-color: #26334d;
     --shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+    --bg-accent-1: rgba(102, 126, 234, 0.20);
+    --bg-accent-2: rgba(118, 75, 162, 0.18);
+    --card-bg: linear-gradient(180deg, rgba(17,26,46,0.92), rgba(17,26,46,0.72));
+    --card-border: color-mix(in srgb, var(--border-color) 85%, transparent);
+    --chip-bg: color-mix(in srgb, var(--primary-color) 16%, #111a2e);
+    --chip-text: color-mix(in srgb, var(--primary-color) 70%, white);
+    --chip-border: color-mix(in srgb, var(--primary-color) 26%, transparent);
+    --glass: color-mix(in srgb, var(--surface-color) 70%, transparent);
 }
 
 /* Базовые стили */
@@ -43,6 +62,32 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
     font-size: 16px;
     min-height: 100vh;
+}
+
+/* Фоновая подложка: мягкие градиенты + лёгкое «зерно» */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background:
+        radial-gradient(1200px 600px at 18% -10%, var(--bg-accent-1), transparent 60%),
+        radial-gradient(900px 500px at 105% 10%, var(--bg-accent-2), transparent 55%),
+        radial-gradient(900px 500px at 25% 115%, color-mix(in srgb, var(--bg-accent-1) 70%, transparent), transparent 60%);
+    filter: saturate(1.1);
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.04;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
 }
 
 /* ---------- ПРОФЕССИОНАЛЬНЫЕ БАЗОВЫЕ УЛУЧШЕНИЯ (v2) ---------- */
@@ -690,12 +735,13 @@ header {
 }
 
 .resource-card {
-    background: var(--surface-color);
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
     border-radius: var(--radius-lg);
     padding: 2rem;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
-    border: 1px solid transparent;
+    border: 1px solid var(--card-border);
     position: relative;
     overflow: hidden;
 }
@@ -719,7 +765,7 @@ header {
 .resource-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
-    border-color: var(--primary-color);
+    border-color: color-mix(in srgb, var(--primary-color) 35%, var(--card-border));
 }
 
 .resource-header {
@@ -778,11 +824,12 @@ header {
     transition: all 0.3s ease;
     padding: 0.5rem 1rem;
     border-radius: var(--radius-sm);
-    background: rgba(102, 126, 234, 0.1);
+    background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 20%, transparent);
 }
 
 .resource-card .link:hover {
-    background: rgba(102, 126, 234, 0.2);
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
     transform: translateX(5px);
 }
 
@@ -809,13 +856,15 @@ header {
 }
 
 .resource-card .category {
-    background: rgba(226, 232, 240, 0.5);
+    background: color-mix(in srgb, var(--surface-color) 70%, transparent);
     color: var(--text-primary);
+    border: 1px solid var(--card-border);
 }
 
 .resource-card .subcategory {
-    background: rgba(254, 215, 215, 0.5);
-    color: #c53030;
+    background: color-mix(in srgb, #ed8936 14%, transparent);
+    color: color-mix(in srgb, #ed8936 75%, var(--text-primary));
+    border: 1px solid color-mix(in srgb, #ed8936 22%, transparent);
 }
 
 .resource-card .tags {
@@ -825,12 +874,12 @@ header {
 }
 
 .resource-card .tag {
-    background: rgba(247, 250, 252, 0.5);
-    color: var(--text-primary);
+    background: var(--chip-bg);
+    color: var(--chip-text);
     padding: 0.2rem 0.6rem;
     border-radius: 12px;
     font-size: 0.8rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--chip-border);
     transition: all 0.3s ease;
 }
 
@@ -1462,7 +1511,16 @@ footer {
         --text-secondary: #a0aec0;
         --border-color: #4a5568;
         --shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+    --bg-accent-1: rgba(102, 126, 234, 0.20);
+    --bg-accent-2: rgba(118, 75, 162, 0.18);
+    --card-bg: linear-gradient(180deg, rgba(17,26,46,0.92), rgba(17,26,46,0.72));
+    --card-border: color-mix(in srgb, var(--border-color) 85%, transparent);
+    --chip-bg: color-mix(in srgb, var(--primary-color) 16%, #111a2e);
+    --chip-text: color-mix(in srgb, var(--primary-color) 70%, white);
+    --chip-border: color-mix(in srgb, var(--primary-color) 26%, transparent);
+    --glass: color-mix(in srgb, var(--surface-color) 70%, transparent);
     }
 }
 
