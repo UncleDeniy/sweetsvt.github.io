@@ -1,33 +1,22 @@
-// В начале файла script.js добавьте:
-let resources = [];
-
-// Функция для безопасной загрузки ресурсов
+// script.js — главная страница (поиск/фильтры/закладки)
 function loadResourcesSafely() {
+    const out = [];
     try {
-        if (window.itResources && Array.isArray(window.itResources)) {
-            resources = resources.concat(window.itResources);
-        }
+        if (window.itResources && Array.isArray(window.itResources)) out.push(...window.itResources);
     } catch (e) {
         console.warn('Не удалось загрузить itResources:', e);
     }
-    
     try {
-        if (window.customizationResources && Array.isArray(window.customizationResources)) {
-            resources = resources.concat(window.customizationResources);
-        }
+        if (window.customizationResources && Array.isArray(window.customizationResources)) out.push(...window.customizationResources);
     } catch (e) {
         console.warn('Не удалось загрузить customizationResources:', e);
     }
-    
-    // Если все еще нет ресурсов, используем демо-данные
-    if (resources.length === 0) {
-        resources = getDemoResources();
+    if (out.length === 0 && typeof getDemoResources === 'function') {
         console.log('Используются демо-ресурсы');
+        return getDemoResources();
     }
+    return out;
 }
-
-// Вызовите эту функцию вместо прямого доступа к window.*Resources
-loadResourcesSafely();
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -42,24 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const uniqueCategories = document.getElementById('uniqueCategories');
     const uniqueSubcategories = document.getElementById('uniqueSubcategories');
 
-    // Объявляем переменную resources
-    let resources = [];
-
-    // Добавляем основные ресурсы
-    if (window.itResources) {
-        resources = resources.concat(window.itResources);
-    }
-
-    // Добавляем ресурсы по кастомизации
-    if (window.customizationResources) {
-        resources = resources.concat(window.customizationResources);
-    }
-
-    // Если нет ресурсов, используем демо-данные
-    if (resources.length === 0) {
-        resources = getDemoResources();
-        saveResources();
-    }
+    // Загружаем ресурсы безопасно (без дублирования)
+    const resources = loadResourcesSafely();
 
     init();
 
@@ -68,8 +41,16 @@ document.addEventListener('DOMContentLoaded', function() {
         displayResources(resources, resourcesList);
         updateStats();
         populateSubcategories();
-        
-        searchInput.addEventListener('input', filterResources);
+
+        const debounce = (fn, wait = 150) => {
+            let t;
+            return (...args) => {
+                clearTimeout(t);
+                t = setTimeout(() => fn(...args), wait);
+            };
+        };
+
+        searchInput.addEventListener('input', debounce(filterResources, 120));
         typeFilter.addEventListener('change', filterResources);
         categoryFilter.addEventListener('change', function() {
             populateSubcategories();

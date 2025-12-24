@@ -1,125 +1,57 @@
 <!DOCTYPE html>
-<html lang="ru"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Syntax_Syndicate | База знаний</title> 
-    <link rel="stylesheet" href="style.css"> 
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
-    <style> 
-        .logo-minimal-new {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 60px;
-            height: 60px;
-            margin-right: 15px;
-        }
-        
-        .logo-s {
-            font-size: 36px;
-            font-weight: 800;
-            color: #0A2463;
-            position: relative;
-            font-family: 'Bebas Neue', cursive;
-            z-index: 2;
-        }
-        
-        .logo-bracket-left, .logo-bracket-right {
-            position: absolute;
-            font-size: 42px;
-            font-weight: 800;
-            color: #3E92CC;
-            opacity: 0.8;
-            z-index: 1;
-        }
-        
-        .logo-bracket-left {
-            left: 0;
-            transform: translateX(-25%);
-        }
-        
-        .logo-bracket-right {
-            right: 0;
-            transform: translateX(25%);
-        }
-        
-        .logo-semicolon {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #00E5FF;
-            border-radius: 50%;
-            bottom: 12px;
-            right: 8px;
-            box-shadow: 0 0 8px #00E5FF;
-            z-index: 3;
-        }
-         
-        .logo-minimal-new:hover .logo-s {
-            transform: scale(1.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .logo-minimal-new:hover .logo-bracket-left {
-            transform: translateX(-30%) rotate(-5deg);
-            transition: transform 0.3s ease;
-        }
-        
-        .logo-minimal-new:hover .logo-bracket-right {
-            transform: translateX(30%) rotate(5deg);
-            transition: transform 0.3s ease;
-        }
-        
-        .logo-minimal-new:hover .logo-semicolon {
-            transform: scale(1.3);
-            box-shadow: 0 0 12px #00E5FF;
-            transition: all 0.3s ease;
-        } 
-        @media (max-width: 768px) {
-            .logo-minimal-new {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .logo-s {
-                font-size: 30px;
-            }
-            
-            .logo-bracket-left, .logo-bracket-right {
-                font-size: 35px;
-            }
-            
-            .logo-semicolon {
-                width: 6px;
-                height: 6px;
-                bottom: 10px;
-                right: 6px;
-            }
-        }
-    </style>
-</head> 
-<body> 
-    <header> 
-        <div class="container"> 
-            <div class="logo"> 
-                <div class="logo-minimal-new">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Профессиональная база знаний Syntax_Syndicate: курсы, инструменты, статьи и лекции. Поиск, фильтры и закладки.">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <title>Syntax_Syndicate | База знаний</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <a class="skip-link" href="#main">Перейти к содержимому</a>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="Syntax_Syndicate — на главную">
+                <div class="logo-minimal-new" aria-hidden="true">
                     <div class="logo-bracket-left">[</div>
                     <div class="logo-s">S</div>
                     <div class="logo-bracket-right">{</div>
                     <div class="logo-semicolon"></div>
-                </div> 
-                <div class="logo-text"> 
-                    <h1>Syntax_Syndicate</h1> 
-                    <p>База знаний Syntax_Syndicate</p> 
-                </div> 
-            </div> 
-        </div> 
+                </div>
+                <div class="logo-text">
+                    <h1>Syntax_Syndicate</h1>
+                    <p>База знаний</p>
+                </div>
+            </a>
+
+            <nav class="site-nav" id="siteNav" aria-label="Навигация">
+                <a href="index.html"><i class="fas fa-home"></i> Главная</a>
+                <a href="lections.html"><i class="fas fa-book"></i> Лекции</a>
+                <a href="bookmarks.html"><i class="fas fa-bookmark"></i> Закладки</a>
+                <a href="settings.html"><i class="fas fa-cog"></i> Настройки</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="icon-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="Переключить тему">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-controls="siteNav" aria-expanded="false" aria-label="Открыть меню">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <div class="hero">
+    <div class="hero" role="banner">
         <div class="container">
             <div class="hero-content">
                 <h2>Найди свой путь в IT (или нет)</h2>
@@ -127,19 +59,7 @@
             </div>
         </div>
     </div>
-<div class="container">
-        <div class="navigation-buttons">
-            <a href="lections.html" class="nav-btn">
-                <i class="fas fa-book"></i> Перейти к лекциям
-            </a>
-            <a href="bookmarks.html" class="nav-btn" style="background: linear-gradient(135deg, #48bb78, #38a169);">
-                <i class="fas fa-bookmark"></i> Мои закладки
-            </a>
-            <a href="settings.html" class="nav-btn" style="background: linear-gradient(135deg, #9f7aea, #805ad5);">
-                <i class="fas fa-cog"></i> Настройки
-            </a>
-        </div>
-
+    <main id="main">
     <div class="container">
         <div class="search-section">
             <div class="search-box">
@@ -246,6 +166,8 @@
         </div>
     </div>
 
+    </main>
+
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -257,14 +179,12 @@
             </div>
         </div>
     </footer>
-</div>
 
 <script src="data.js"></script>
 <script src="settings-core.js"></script>
 <script src="settings-main.js"></script>
 <script src="script.js"></script>
-<script src="tags-cloud.js"></script>  
-
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="tags-cloud.js"></script>
+<script src="ui.js"></script>
 </body> 
 </html>
