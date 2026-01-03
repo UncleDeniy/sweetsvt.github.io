@@ -3990,76 +3990,314 @@ body::after {
 /* =========================
    Auto Theme Tokens (aa-*)
    ========================= */
-:root{
-  --aa-bg: #0b1020;
-  --aa-surface: rgba(15,23,42,0.86);
-  --aa-text: rgba(226,232,240,0.92);
-  --aa-muted: rgba(148,163,184,0.86);
-  --aa-border: rgba(148,163,184,0.26);
-  --aa-accent: #667eea;
-  --aa-accent-2: #5a67d8;
-  --aa-bg-grad-1: rgba(102,126,234,0.18);
-  --aa-bg-grad-2: rgba(118,75,162,0.14);
+
+:root {
+    --aa-bg: #0b1020;
+    --aa-surface: rgba(15, 23, 42, 0.86);
+    --aa-text: rgba(226, 232, 240, 0.92);
+    --aa-muted: rgba(148, 163, 184, 0.86);
+    --aa-border: rgba(148, 163, 184, 0.26);
+    --aa-accent: #667eea;
+    --aa-accent-2: #5a67d8;
+    --aa-bg-grad-1: rgba(102, 126, 234, 0.18);
+    --aa-bg-grad-2: rgba(118, 75, 162, 0.14);
 }
-html[data-theme="dark"]{ color-scheme: dark; }
-html[data-theme="light"]{
-  color-scheme: light;
-  --aa-bg: #ffffff;
-  --aa-surface: rgba(255,255,255,0.86);
-  --aa-text: rgba(15,23,42,0.92);
-  --aa-muted: rgba(51,65,85,0.72);
-  --aa-border: rgba(15,23,42,0.14);
-  --aa-bg-grad-1: rgba(102,126,234,0.12);
-  --aa-bg-grad-2: rgba(118,75,162,0.10);
+
+html[data-theme="dark"] {
+    color-scheme: dark;
 }
+
+html[data-theme="light"] {
+    color-scheme: light;
+    --aa-bg: #ffffff;
+    --aa-surface: rgba(255, 255, 255, 0.86);
+    --aa-text: rgba(15, 23, 42, 0.92);
+    --aa-muted: rgba(51, 65, 85, 0.72);
+    --aa-border: rgba(15, 23, 42, 0.14);
+    --aa-bg-grad-1: rgba(102, 126, 234, 0.12);
+    --aa-bg-grad-2: rgba(118, 75, 162, 0.10);
+}
+
+
 /* Legacy token mapping → old CSS auto-adapts */
-html[data-theme="dark"], html[data-theme="light"]{
-  --background-color: var(--aa-bg);
-  --surface-color: color-mix(in oklab, var(--aa-surface) 92%, transparent);
-  --text-primary: var(--aa-text);
-  --text-secondary: var(--aa-muted);
-  --border-color: var(--aa-border);
-  --primary-color: var(--aa-accent);
+
+html[data-theme="dark"],
+html[data-theme="light"] {
+    --background-color: var(--aa-bg);
+    --surface-color: color-mix(in oklab, var(--aa-surface) 92%, transparent);
+    --text-primary: var(--aa-text);
+    --text-secondary: var(--aa-muted);
+    --border-color: var(--aa-border);
+    --primary-color: var(--aa-accent);
 }
+
+
 /* Global */
-body{ background: var(--aa-bg); color: var(--aa-text); }
+
+body {
+    background: var(--aa-bg);
+    color: var(--aa-text);
+}
+
 
 /* Surface */
-.surface{
-  background: color-mix(in oklab, var(--aa-surface) 92%, transparent);
-  color: var(--aa-text);
-  border: 1px solid var(--aa-border);
-  border-radius: 16px;
-  box-shadow: 0 18px 60px rgba(0,0,0,0.18);
-  backdrop-filter: blur(12px);
+
+.surface {
+    background: color-mix(in oklab, var(--aa-surface) 92%, transparent);
+    color: var(--aa-text);
+    border: 1px solid var(--aa-border);
+    border-radius: 16px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(12px);
 }
-.surface h1,.surface h2,.surface h3,.surface h4,.surface h5,.surface h6,
-.surface p,.surface li,.surface label,.surface small,.surface span{
-  color: inherit;
+
+.surface h1,
+.surface h2,
+.surface h3,
+.surface h4,
+.surface h5,
+.surface h6,
+.surface p,
+.surface li,
+.surface label,
+.surface small,
+.surface span {
+    color: inherit;
 }
-.surface .muted{ color: var(--aa-muted); }
+
+.surface .muted {
+    color: var(--aa-muted);
+}
+
 
 /* Links */
-a{ color: color-mix(in oklab, var(--aa-accent) 82%, var(--aa-text)); }
-a:hover{ color: var(--aa-accent); }
+
+a {
+    color: color-mix(in oklab, var(--aa-accent) 82%, var(--aa-text));
+}
+
+a:hover {
+    color: var(--aa-accent);
+}
+
 
 /* Background animation */
-body::before{
-  content:"";
-  position:fixed;
-  inset:-40vmax;
-  z-index:-2;
-  background:
-    radial-gradient(40vmax 40vmax at 20% 20%, var(--aa-bg-grad-1), transparent 60%),
-    radial-gradient(35vmax 35vmax at 80% 25%, var(--aa-bg-grad-2), transparent 58%),
-    radial-gradient(45vmax 45vmax at 50% 85%, rgba(125,211,252,.10), transparent 62%);
-  filter: blur(22px) saturate(1.05);
-  opacity:.9;
-  animation: aaFloat 18s ease-in-out infinite;
-  pointer-events:none;
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: -40vmax;
+    z-index: -2;
+    background: radial-gradient(40vmax 40vmax at 20% 20%, var(--aa-bg-grad-1), transparent 60%), radial-gradient(35vmax 35vmax at 80% 25%, var(--aa-bg-grad-2), transparent 58%), radial-gradient(45vmax 45vmax at 50% 85%, rgba(125, 211, 252, .10), transparent 62%);
+    filter: blur(22px) saturate(1.05);
+    opacity: .9;
+    animation: aaFloat 18s ease-in-out infinite;
+    pointer-events: none;
 }
-@keyframes aaFloat{
-  0%{ transform: translate3d(-1%, -1%, 0) scale(1.02); }
-  50%{ transform: translate3d(1.5%, 1%, 0) scale(1.04); }
-  100%{ transform: translate3d(-1%, -1%, 0) scale(1.02); }
+
+@keyframes aaFloat {
+    0% {
+        transform: translate3d(-1%, -1%, 0) scale(1.02);
+    }
+    50% {
+        transform: translate3d(1.5%, 1%, 0) scale(1.04);
+    }
+    100% {
+        transform: translate3d(-1%, -1%, 0) scale(1.02);
+    }
+}
+
+
+/* =========================================
+   MOBILE FIX PACK (sidebar + topbar + lections)
+   вставь в самый конец style.css
+========================================= */
+
+
+/* 1) Sidebar: нормальный off-canvas на мобилке (без "просвечивания") */
+
+@media (max-width: 980px) {
+    /* когда меню открыто — не скроллим фон */
+    html.aa-nav-open,
+    html.aa-nav-open body {
+        overflow: hidden;
+        height: 100%;
+        touch-action: none;
+    }
+    /* делаем оверлей темнее (чтобы не читался контент за меню) */
+    .aa-overlay {
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(6px);
+    }
+    /* гасим/размываем контент, когда меню открыто */
+    html.aa-nav-open .aa-content {
+        filter: blur(2px);
+        opacity: 0.75;
+        pointer-events: none;
+    }
+    /* сам sidebar делаем "не стеклянным", чтобы ничего не было видно сквозь него */
+    #aaSidebarMount {
+        background: var(--aa-bg);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    }
+    /* если внутри сайдбара есть .surface — делаем её плотнее */
+    #aaSidebarMount .surface {
+        background: color-mix(in oklab, var(--aa-surface) 92%, transparent);
+    }
+}
+
+
+/* 2) Topbar: заголовок не раздувает шапку */
+
+@media (max-width: 980px) {
+    .aa-topbar {
+        gap: 10px;
+        padding: 12px 12px;
+    }
+    .aa-topbar__title {
+        font-size: 14px;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100vw - 90px);
+        opacity: 0.9;
+    }
+    .aa-toggle {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+    }
+}
+
+
+/* 3) Общие контейнеры: меньше боковых отступов */
+
+@media (max-width: 576px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+
+/* 4) Лекции: делаем как нормальную мобильную форму */
+
+@media (max-width: 576px) {
+    .lections-hero {
+        padding: 14px 0 !important;
+    }
+    .lections-hero .hero-content h2 {
+        font-size: 18px !important;
+        line-height: 1.2;
+    }
+    .lections-hero .hero-content p {
+        font-size: 13px !important;
+        opacity: 0.9;
+    }
+    /* кнопки "назад" и "настройки" — по ширине и аккуратно */
+    .back-link,
+    .btn.btn-secondary {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+    /* фильтры в колонку, не в "плитку" */
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .filter-group {
+        min-width: 0;
+        width: 100%;
+    }
+    .filter-group select,
+    .filter-group input {
+        width: 100%;
+    }
+    /* кнопка очистки */
+    .clear-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    /* статистика/плитки ниже — 2 в ряд */
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+    .stat-item {
+        padding: 12px;
+    }
+}
+
+
+/* 5) Поиск: чтобы карточки и чипсы не "выпирали" */
+
+@media (max-width: 576px) {
+    .resource-card {
+        padding: 14px;
+    }
+    .tags,
+    .tags-list {
+        gap: 8px;
+    }
+    .tag {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+
+/* 6) Любые surface-карточки на мобилке — меньше радиус и паддинги */
+
+@media (max-width: 576px) {
+    .surface {
+        border-radius: 14px;
+    }
+    .aa-pagehead,
+    .search-results,
+    .search-filters {
+        padding: 14px !important;
+    }
+}
+
+
+/* ===============================
+   SEARCH FILTERS — MOBILE EXIT
+================================ */
+
+@media (max-width: 980px) {
+    .search-filters {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(92vw, 360px);
+        z-index: 1200;
+        transform: translateX(-100%);
+        transition: transform 0.28s ease;
+    }
+    .search-filters.is-open {
+        transform: translateX(0);
+    }
+    .filters-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+        z-index: 1100;
+    }
+    .filters-overlay.is-open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .search-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
 }
