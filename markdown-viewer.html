@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syntax_Syndicate | Просмотр лекции</title>
+    <meta name="theme-color" content="#0b0f17">
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -296,6 +298,16 @@
     </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+<div class="aa-overlay" id="aaOverlay" aria-hidden="true"></div>
+<div class="aa-shell">
+  <div id="aaSidebarMount"></div>
+  <div class="aa-content">
+    <div class="aa-topbar">
+      <button class="aa-toggle" id="aaSidebarToggle" aria-label="Открыть меню"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></button>
+      <div class="aa-topbar__title">Читалка Markdown</div>
+    </div>
+
     <header>
         <div class="container">
             <div class="logo">
@@ -314,7 +326,8 @@
     </header>
 
     <div class="container">
-        <div class="navigation-buttons">
+        <main id="main">
+<div class="navigation-buttons">
             <a href="index.html" class="btn btn-secondary">
                 <i class="fas fa-home"></i> На главную
             </a>
@@ -364,5 +377,10 @@
     </script>
     
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  </div>
+</div>
+</main>
+<script src="layout.js"></script>
 </body>
 </html> 

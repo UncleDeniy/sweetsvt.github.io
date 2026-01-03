@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0f17">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <title>UncleDeniy | Граф знаний</title>
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="layout-root">
+        <div id="sidebar-mount"></div>
+        <div class="aa-overlay" id="aaOverlay"></div>
+
+        <div class="page-content">
+            <header class="topbar">
+                <div class="topbar__title">Граф знаний</div>
+                <div class="topbar__right">
+                    <input id="graphQuery" class="graph-search" placeholder="Фильтр по тегу (например: devops)" />
+                    <a class="btn-primary" href="search.html">Поиск</a>
+                </div>
+            </header>
+
+            <main id="main">
+                <div class="container">
+                    <section class="graph-card">
+                        <div class="graph-hint">
+                            Перетаскивай узлы. Клик по узлу → поиск по этому тегу. Колёсико → масштаб. Пустое место → перетаскивание (пан).
+                        </div>
+
+                        <div class="graph-wrap" id="graphWrap">
+                            <canvas id="graphCanvas" class="graph-canvas"></canvas>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+    <script src="data.js"></script>
+    <script src="lections.js"></script>
+    <script src="graph.js"></script>
+</body>
+
+</html>

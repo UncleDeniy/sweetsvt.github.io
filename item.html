@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0f17">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>UncleDeniy | Материал</title>
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div id="layout-root">
+    <div id="sidebar-mount"></div>
+    <div class="aa-overlay" id="aaOverlay"></div>
+
+    <div class="page-content">
+      <header class="topbar">
+        <div class="topbar__title">Материал</div>
+        <button class="topbar__help" type="button" id="helpBtn" title="Горячие клавиши">?</button>
+      </header>
+
+      <main id="main">
+        <div class="container">
+          <section class="item-card" id="itemCard">
+            <div class="skeleton">Загрузка…</div>
+          </section>
+
+          <section class="item-similar">
+            <div class="item-similar__head">
+              <div class="item-similar__title">Похожие материалы</div>
+              <div class="item-similar__hint">Режим исследования: похожее по тегам и категории</div>
+            </div>
+            <div id="similarList" class="similar-list"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="layout.js"></script>
+  <script src="data.js"></script>
+  <script src="lections.js"></script>
+  <script src="item.js"></script>
+</body>
+</html>

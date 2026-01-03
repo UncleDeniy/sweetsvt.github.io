@@ -10,181 +10,56 @@
     <title>Syntax_Syndicate | База знаний</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+<div class="aa-overlay" id="aaOverlay" aria-hidden="true"></div>
+<div class="aa-shell">
+  <div id="aaSidebarMount"></div>
+  <div class="aa-content">
+    <div class="aa-topbar">
+      <button class="aa-toggle" id="aaSidebarToggle" aria-label="Открыть меню"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg></button>
+      <div class="aa-topbar__title">📚 Полная датабаза • книги, газеты, журналы, метаданные…</div>
+    </div>
+
     <a class="skip-link" href="#main">Перейти к содержимому</a>
 
-    <header class="site-header">
-        <div class="container header-inner">
-            <a class="brand" href="index.html" aria-label="Syntax_Syndicate — на главную">
-                <div class="logo-minimal-new" aria-hidden="true">
-                    <div class="logo-bracket-left">[</div>
-                    <div class="logo-s">S</div>
-                    <div class="logo-bracket-right">{</div>
-                    <div class="logo-semicolon"></div>
-                </div>
-                <div class="logo-text">
-                    <h1>Syntax_Syndicate</h1>
-                    <p>База знаний</p>
-                </div>
-            </a>
-
-            <nav class="site-nav" id="siteNav" aria-label="Навигация">
-                <a href="index.html"><i class="fas fa-home"></i> Главная</a>
-                <a href="lections.html"><i class="fas fa-book"></i> Лекции</a>
-                <a href="bookmarks.html"><i class="fas fa-bookmark"></i> Закладки</a>
-                <a href="settings.html"><i class="fas fa-cog"></i> Настройки</a>
-            </nav>
-
-            <div class="header-actions">
-                <button class="icon-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="Переключить тему">
-                    <i class="fas fa-moon" aria-hidden="true"></i>
-                </button>
-                <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-controls="siteNav" aria-expanded="false" aria-label="Открыть меню">
-                    <i class="fas fa-bars" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
+    <header class="aa-pagehead" role="banner">
+      <div class="aa-pagehead__title">📚 Полная датабаза</div>
+      <div class="aa-pagehead__sub">Книги, курсы, статьи, инструменты, лекции, метаданные…</div>
     </header>
-
-    <div class="hero" role="banner">
-        <div class="container">
-            <div class="hero-content">
-                <h2>Найди свой путь в IT (или нет)</h2>
-                <p>Курсы, программы, инструменты и полезные материалы для развития</p>
-            </div>
-        </div>
-    </div>
     <main id="main">
-    <div class="container">
-        <div class="search-section">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Поиск по курсам, программам, инструментам...">
-            </div>
-            <div class="filters">
-                <div class="filter-group">
-                    <label>Тип материала:</label>
-                    <select id="typeFilter">
-                        <option value="">Все типы</option>
-                        <option value="course">Курсы</option>
-                        <option value="program">Программы</option>
-                        <option value="book">Книги</option>
-                        <option value="article">Статьи</option>
-                        <option value="video">Видео</option>
-                        <option value="tool">Инструменты</option>
-                        <option value="library">Библиотеки</option>
-                        <option value="script">Скрипты</option>
-                        <option value="reference">Справочники</option>
-                        <option value="cheatsheet">Шпаргалки</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Категория:</label>
-                    <select id="categoryFilter">
-                        <option value="">Все категории</option>
-                        <option value="programming">Программирование</option>
-                        <option value="design">Дизайн</option>
-                        <option value="devops">DevOps</option>
-                        <option value="data-science">Data Science</option>
-                        <option value="cybersecurity">Кибербезопасность</option>
-                        <option value="career">Карьера</option>
-                        <option value="profession">Профессии</option>
-                        <option value="ai">Искусственный интеллект</option>
-                        <option value="productivity">Продуктивность</option>
-                        <option value="linux">Linux</option>
-                        <option value="windows">Windows</option>
-                        <option value="mobile">Мобильная разработка</option>
-                        <option value="cloud">Облачные технологии</option>
-                        <option value="other">Другое</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Подкатегория:</label>
-                    <select id="subcategoryFilter">
-                        <option value="">Все подкатегории</option> 
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Закладки:</label>
-                    <select id="bookmarkFilter">
-                        <option value="">Все материалы</option>
-                        <option value="bookmarked">Только закладки</option>
-                    </select>
-                </div>
-                <button id="clearFilters" class="clear-btn">
-                    <i class="fas fa-times"></i> Очистить
-                </button>
-            </div>
-        </div>
+  <div class="container">
+    <section class="home-hero" role="banner" aria-label="Полная датабаза">
+      <h1 class="home-title">Полная датабаза <span class="home-brand">UncleDeniy</span></h1>
+      <p class="home-sub">Книги, газеты, журналы, комиксы, библиотечные записи, метаданные, …</p>
 
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-number" id="totalResources">0</span>
-                <span class="stat-label">материалов</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" id="uniqueCategories">0</span>
-                <span class="stat-label">категорий</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" id="uniqueSubcategories">0</span>
-                <span class="stat-label">подкатегорий</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" id="bookmarkCount">0</span>
-                <span class="stat-label">закладок</span>
-            </div>
-        </div>
+      <form class="home-search" action="search.html" method="get" role="search">
+        <label class="sr-only" for="homeSearch">Поиск по материалам</label>
+        <input id="homeSearch" name="q" type="search" placeholder="Например: python, devops, nginx…" autocomplete="off" />
+        <button type="submit" class="btn-primary">Поиск</button>
+      </form>
 
-<!-- Облако тегов -->
-<div class="tags-cloud-section">
-    <h3>Популярные теги</h3>
-    <div class="tags-cloud" id="tagsCloud">
-        <div class="tags-loading">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Загрузка тегов...</p>
-        </div>
-    </div>
-    <div class="tags-actions">
-        <button id="clearTagsHistory" class="btn btn-secondary btn-small">
-            <i class="fas fa-trash"></i> Очистить историю
-        </button>
-        <span class="tags-info">На основе просмотренных материалов</span>
-    </div>
-</div>
+      <div class="home-hint">Ищет по названию, описанию, ссылке и тегам — включая лекции.</div>
+<div class="home-keys">Подсказка: на странице поиска нажми <kbd>/</kbd> (фокус), <kbd>Enter</kbd> (открыть 1-й), <kbd>B</kbd> (закладка), <kbd>?</kbd> (помощь).</div>
+    </section>
+  </div>
+</main>
 
-        <div id="resourcesList" class="resources-grid"></div>
-
-        <div class="info-section">
-            <h3>Как добавить свой материал?</h3>
-            <p>А никак (☞ﾟ∀ﾟ)☞</p>
-        </div>
-    </div>
-
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <div class="logo-icon">💻🚀</div>
-                    <span>Syntax_Syndicate</span>
-                </div>
-                <p>База знаний IT-сообщества | Размещено на GitHub Pages</p>
-            </div>
-        </div>
+    <footer class="aa-footer">
+      <div class="aa-muted">Syntax_Syndicate • GitHub Pages • офлайн-кэш (PWA)</div>
     </footer>
-
-<script src="data.js"></script>
 <script src="settings-core.js"></script>
 <script src="settings-main.js"></script>
-<script src="script.js"></script>
-<script src="tags-cloud.js"></script>
 <script src="ui.js"></script>
+
+  </div>
+</div>
+<script src="layout.js"></script>
 </body> 
 </html>

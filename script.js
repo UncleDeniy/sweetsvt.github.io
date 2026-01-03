@@ -1,510 +1,800 @@
-// script.js — главная страница (поиск/фильтры/закладки)
-function loadResourcesSafely() {
+// script.js — поиск/фильтры/закладки/горячие клавиши (Search page)
+// Работает на GitHub Pages без бэкенда.
+
+(function () {
+  'use strict';
+
+  /* ---------------------------
+     Utilities
+  ---------------------------- */
+  const LS_BOOKMARKS = 'ud:bookmarks';      // legacy array of ids
+  const LS_LIBRARY   = 'ud:library';        // new map: { [id]: {status, folder, addedAt} }
+  const LS_TAGHIST   = 'tagHistory';
+
+  const normalizeText = (t) =>
+    (t || '')
+      .toString()
+      .toLowerCase()
+      .replace(/ё/g, 'е')
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .trim();
+
+  const uniq = (arr) => Array.from(new Set(arr));
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+  function debounce(fn, wait = 150) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  }
+
+  /* ---------------------------
+     Data loading
+  ---------------------------- */
+  function loadResourcesSafely() {
     const out = [];
+
+    // Основные ресурсы
     try {
-        if (window.itResources && Array.isArray(window.itResources)) out.push(...window.itResources);
+      if (window.itResources && Array.isArray(window.itResources)) out.push(...window.itResources);
     } catch (e) {
-        console.warn('Не удалось загрузить itResources:', e);
+      console.warn('Не удалось загрузить itResources:', e);
     }
     try {
-        if (window.customizationResources && Array.isArray(window.customizationResources)) out.push(...window.customizationResources);
+      if (window.customizationResources && Array.isArray(window.customizationResources)) out.push(...window.customizationResources);
     } catch (e) {
-        console.warn('Не удалось загрузить customizationResources:', e);
+      console.warn('Не удалось загрузить customizationResources:', e);
     }
+
+    // Лекции → в общий список
+    try {
+      if (window.lections && Array.isArray(window.lections) && window.lections.length) {
+        const lectureResources = window.lections.map((l) => ({
+          id: `lecture-${l.id}`,
+          title: l.title || 'Лекция',
+          description: l.description || '',
+          link: `markdown-viewer.html?file=${encodeURIComponent(l.file || '')}`,
+          tags: Array.isArray(l.tags) ? l.tags : [],
+          type: 'lecture',
+          category: l.category || 'programming',
+          subcategory: l.subcategory || '',
+          dateAdded: l.dateAdded || new Date().toISOString(),
+          author: l.author || '',
+          version: l.version || '',
+          versions: l.versions || null
+        }));
+        out.push(...lectureResources);
+      }
+    } catch (e) {
+      console.warn('Не удалось загрузить lections:', e);
+    }
+
+    // Демо (если вдруг пусто)
     if (out.length === 0 && typeof getDemoResources === 'function') {
-        console.log('Используются демо-ресурсы');
-        return getDemoResources();
+      console.log('Используются демо-ресурсы');
+      return getDemoResources();
     }
+
+    // Нормализуем id
+    out.forEach((r, i) => {
+      if (!r.id) r.id = `res-${i}`;
+    });
+
     return out;
-}
+  }
 
+  /* ---------------------------
+     Bookmarks / Library
+  ---------------------------- */
+  function readJSON(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+  function writeJSON(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+  }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const resourcesList = document.getElementById('resourcesList');
+  // Back-compat: if old array exists, migrate into library map.
+  function migrateBookmarksIfNeeded() {
+    const lib = readJSON(LS_LIBRARY, null);
+    if (lib) return;
+
+    const old = readJSON(LS_BOOKMARKS, []);
+    const map = {};
+    if (Array.isArray(old)) {
+      old.forEach((id) => {
+        map[id] = { status: 'saved', folder: 'Избранное', addedAt: Date.now() };
+      });
+    }
+    writeJSON(LS_LIBRARY, map);
+  }
+
+  function getLibrary() {
+    migrateBookmarksIfNeeded();
+    return readJSON(LS_LIBRARY, {});
+  }
+
+  function setLibrary(map) {
+    writeJSON(LS_LIBRARY, map);
+    // also maintain legacy list
+    writeJSON(LS_BOOKMARKS, Object.keys(map));
+  }
+
+  function isBookmarked(id) {
+    const lib = getLibrary();
+    return !!lib[id];
+  }
+
+  function toggleBookmark(id) {
+    const lib = getLibrary();
+    if (lib[id]) {
+      delete lib[id];
+    } else {
+      lib[id] = { status: 'saved', folder: 'Избранное', addedAt: Date.now() };
+    }
+    setLibrary(lib);
+  }
+
+  function getBookmarkIds() {
+    return Object.keys(getLibrary());
+  }
+
+  function updateBookmarkCountUI() {
+    const el = document.getElementById('bookmarkCount');
+    if (el) el.textContent = getBookmarkIds().length;
+  }
+
+  /* ---------------------------
+     Tag history (optional personalization)
+  ---------------------------- */
+  function getTagHistory() {
+    const h = readJSON(LS_TAGHIST, {});
+    return (h && typeof h === 'object') ? h : {};
+  }
+  function bumpTag(tag) {
+    if (!tag) return;
+    const key = LS_TAGHIST;
+    const map = getTagHistory();
+    map[tag] = (map[tag] || 0) + 1;
+    writeJSON(key, map);
+  }
+
+  /* ---------------------------
+     Labels
+  ---------------------------- */
+  const TYPE_LABELS = {
+    course: 'Курс',
+    program: 'Программа',
+    book: 'Книга',
+    article: 'Статья',
+    video: 'Видео',
+    tool: 'Инструмент',
+    library: 'Библиотека',
+    script: 'Скрипт',
+    reference: 'Справочник',
+    cheatsheet: 'Шпаргалка',
+    lecture: 'Лекция'
+  };
+
+  const CATEGORY_LABELS = {
+    programming: 'Программирование',
+    devops: 'DevOps',
+    system: 'Системное администрирование',
+    security: 'Безопасность',
+    databases: 'Базы данных',
+    web: 'Веб',
+    career: 'Карьера',
+    tools: 'Инструменты',
+    other: 'Другое'
+  };
+
+  function getTypeLabel(t) { return TYPE_LABELS[t] || (t ? t : 'Материал'); }
+  function getCategoryLabel(c) { return CATEGORY_LABELS[c] || (c ? c : 'Категория'); }
+  function getSubcategoryLabel(s) { return s ? s : 'Подкатегория'; }
+
+  /* ---------------------------
+     Local index cache (IndexedDB)
+  ---------------------------- */
+  const DB_NAME = 'ud_search_db';
+  const DB_VER = 1;
+  const STORE = 'index';
+  const INDEX_KEY = 'index_v1';
+
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VER);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function idbGet(key) {
+    try {
+      const db = await openDB();
+      return await new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readonly');
+        const st = tx.objectStore(STORE);
+        const r = st.get(key);
+        r.onsuccess = () => resolve(r.result);
+        r.onerror = () => reject(r.error);
+      });
+    } catch { return null; }
+  }
+
+  async function idbSet(key, val) {
+    try {
+      const db = await openDB();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        const st = tx.objectStore(STORE);
+        const r = st.put(val, key);
+        r.onsuccess = () => resolve(true);
+        r.onerror = () => reject(r.error);
+      });
+    } catch { /* ignore */ }
+  }
+
+  function computeDataHash(resources) {
+    // Cheap, stable hash: length + sum of title lengths + last dateAdded
+    let sum = resources.length;
+    let last = '';
+    for (let i = 0; i < resources.length; i++) {
+      const r = resources[i];
+      sum += (r.title ? r.title.length : 0) + (r.description ? r.description.length : 0);
+      if (r.dateAdded && r.dateAdded > last) last = r.dateAdded;
+    }
+    return `${resources.length}:${sum}:${last}`;
+  }
+
+  /* ---------------------------
+     Smart search (local "Google-like")
+  ---------------------------- */
+  function buildDocs(resources) {
+    return resources.map((r) => {
+      const tags = Array.isArray(r.tags) ? r.tags : [];
+      const tagsText = tags.map(normalizeText).join(' ');
+      const title = r.title || '';
+      const description = r.description || '';
+      const link = r.link || '';
+      const author = r.author || '';
+      const hay = normalizeText([title, description, link, tagsText, author].join(' '));
+      return {
+        id: r.id,
+        title,
+        description,
+        link,
+        tags,
+        tagsText,
+        author,
+        type: r.type || '',
+        category: r.category || '',
+        subcategory: r.subcategory || '',
+        dateAdded: r.dateAdded || '',
+        lang: r.lang || r.language || '',
+        format: r.format || '',
+        size: r.size || '',
+        source: r.source || '',
+        version: r.version || '',
+        versions: r.versions || null,
+        _hay: hay
+      };
+    });
+  }
+
+  function scoreDoc(doc, tokens) {
+    // Weighted scoring (fast, no heavy fuzzy)
+    let score = 0;
+    const title = normalizeText(doc.title);
+    const desc = normalizeText(doc.description);
+    const link = normalizeText(doc.link);
+    const tags = normalizeText(doc.tagsText);
+    const auth = normalizeText(doc.author);
+
+    for (const t of tokens) {
+      if (!t) continue;
+
+      // Exact contains
+      const inTitle = title.includes(t);
+      const inDesc  = desc.includes(t);
+      const inLink  = link.includes(t);
+      const inTags  = tags.includes(t);
+      const inAuth  = auth.includes(t);
+
+      if (inTitle) score += 6;
+      if (inDesc)  score += 3;
+      if (inTags)  score += 2.5;
+      if (inLink)  score += 1.5;
+      if (inAuth)  score += 2;
+
+      // Prefix bonus
+      if (title.startsWith(t)) score += 2;
+      if (tags.startsWith(t)) score += 1;
+
+      // Simple fuzzy (subsequence) bonus for title
+      if (!inTitle && t.length >= 4) {
+        if (isSubsequence(t, title)) score += 1.25;
+      }
+    }
+
+    return score;
+  }
+
+  function isSubsequence(needle, hay) {
+    // very cheap fuzzy match
+    let i = 0, j = 0;
+    while (i < needle.length && j < hay.length) {
+      if (needle[i] === hay[j]) i++;
+      j++;
+    }
+    return i === needle.length;
+  }
+
+  function smartSearch(docs, query) {
+    const q = normalizeText(query);
+    if (!q) return docs.map(d => ({ doc: d, score: 0 }));
+
+    const tokens = q.split(/\s+/).filter(Boolean);
+    const out = [];
+    for (const d of docs) {
+      // fast pre-check
+      let ok = true;
+      for (const t of tokens) {
+        if (!d._hay.includes(t) && !(t.length >= 4 && isSubsequence(t, normalizeText(d.title)))) {
+          ok = false; break;
+        }
+      }
+      if (!ok) continue;
+      const s = scoreDoc(d, tokens);
+      out.push({ doc: d, score: s });
+    }
+    out.sort((a, b) => b.score - a.score);
+    return out;
+  }
+
+  /* ---------------------------
+     Rendering
+  ---------------------------- */
+  function escapeHtml(s) {
+    return (s || '').toString()
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#39;');
+  }
+
+  function formatTagPills(tags, tagHistory) {
+    if (!Array.isArray(tags) || !tags.length) return '';
+    const sorted = [...tags].sort((a, b) => (tagHistory[b] || 0) - (tagHistory[a] || 0));
+    return sorted.slice(0, 10).map(t => `<button class="tag-pill" type="button" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</button>`).join('');
+  }
+
+  function compactMetaLine(r) {
+    const parts = [];
+    if (r.lang) parts.push(`${escapeHtml(r.lang)}`);
+    if (r.format) parts.push(`${escapeHtml(r.format)}`);
+    if (r.size) parts.push(`${escapeHtml(r.size)}`);
+    if (r.type) parts.push(`📦 ${escapeHtml(getTypeLabel(r.type))}`);
+    if (r.category) parts.push(`• ${escapeHtml(getCategoryLabel(r.category))}`);
+    if (r.subcategory) parts.push(`• ${escapeHtml(getSubcategoryLabel(r.subcategory))}`);
+    if (r.source) parts.push(`• ${escapeHtml(r.source)}`);
+    return parts.join(' · ');
+  }
+
+  function toInternalUrl(resourceId) {
+    return `item.html?id=${encodeURIComponent(resourceId)}`;
+  }
+
+  function renderResources(list, container, opts = {}) {
+    const { query = '' } = opts;
+    container.innerHTML = '';
+
+    const foundEl = document.getElementById('foundCount');
+    if (foundEl) foundEl.textContent = String(list.length);
+
+    if (!list.length) {
+      container.innerHTML = `
+        <div class="no-results">
+          <div class="no-results__icon">🔎</div>
+          <h3>Ничего не найдено</h3>
+          <p>Попробуйте: изменить запрос, убрать подкатегорию или нажать «Очистить».</p>
+        </div>
+      `;
+      return;
+    }
+
+    const tagHistory = getTagHistory();
+
+    for (const r of list) {
+      const card = document.createElement('article');
+      card.className = 'result-card';
+
+      const bm = isBookmarked(r.id);
+      const bmIcon = bm ? 'fas fa-bookmark' : 'far fa-bookmark';
+
+      const meta = compactMetaLine(r);
+
+      const title = escapeHtml(r.title || 'Без названия');
+      const desc = escapeHtml(r.description || '');
+      const author = r.author ? `<span class="result-author">👤 ${escapeHtml(r.author)}</span>` : '';
+      const ver = r.version ? `<span class="badge badge--ver">v${escapeHtml(r.version)}</span>` : '';
+
+      card.innerHTML = `
+        <div class="result-top">
+          <div class="result-main">
+            <a class="result-title" href="${toInternalUrl(r.id)}">${title}</a>
+            <div class="result-sub">
+              ${author}
+              ${meta ? `<span class="result-meta">${meta}</span>` : ''}
+              ${ver}
+            </div>
+          </div>
+
+          <button class="bookmark-btn2" type="button" title="Закладка" data-id="${escapeHtml(r.id)}">
+            <i class="${bmIcon}"></i>
+          </button>
+        </div>
+
+        ${desc ? `<div class="result-desc">${desc}</div>` : ''}
+
+        <div class="result-actions">
+          <a class="btn-link" href="${escapeHtml(r.link)}" target="_blank" rel="noopener" data-open="${escapeHtml(r.id)}">
+            <i class="fas fa-external-link-alt"></i> Открыть
+          </a>
+          <a class="btn-ghost" href="${toInternalUrl(r.id)}">
+            Подробнее
+          </a>
+        </div>
+
+        ${r.tags && r.tags.length ? `<div class="result-tags">${formatTagPills(r.tags, tagHistory)}</div>` : ''}
+      `;
+
+      container.appendChild(card);
+    }
+
+    // bookmark buttons
+    container.querySelectorAll('.bookmark-btn2').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        toggleBookmark(id);
+        updateBookmarkCountUI();
+        // refresh icon
+        const i = btn.querySelector('i');
+        if (i) i.className = isBookmarked(id) ? 'fas fa-bookmark' : 'far fa-bookmark';
+      }, { passive: true });
+    });
+
+    // tag click -> search by tag
+    container.querySelectorAll('.tag-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.getAttribute('data-tag');
+        if (!tag) return;
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.value = tag;
+          searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+          bumpTag(tag);
+        }
+      });
+    });
+
+    // open click -> bump tag history a bit
+    container.querySelectorAll('[data-open]').forEach(a => {
+      a.addEventListener('click', () => {
+        try {
+          const id = a.getAttribute('data-open');
+          const doc = list.find(x => x.id === id);
+          if (doc && Array.isArray(doc.tags)) doc.tags.forEach(bumpTag);
+        } catch {}
+      }, { passive: true });
+    });
+  }
+
+  function renderActiveChips(state) {
+    const host = document.getElementById('activeChips');
+    if (!host) return;
+    host.innerHTML = '';
+
+    const chips = [];
+    if (state.q) chips.push({ key: 'q', label: `Запрос: ${state.q}` });
+    if (state.type) chips.push({ key: 'type', label: `Тип: ${getTypeLabel(state.type)}` });
+    if (state.cat) chips.push({ key: 'cat', label: `Категория: ${getCategoryLabel(state.cat)}` });
+    if (state.sub) chips.push({ key: 'sub', label: `Подкатегория: ${getSubcategoryLabel(state.sub)}` });
+    if (state.bm === 'bookmarked') chips.push({ key: 'bm', label: 'Только закладки' });
+    if (state.bm === 'not_bookmarked') chips.push({ key: 'bm', label: 'Без закладок' });
+
+    if (!chips.length) {
+      host.innerHTML = `<span class="chips-empty">Фильтры не выбраны</span>`;
+      return;
+    }
+
+    chips.forEach(ch => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'chip';
+      el.setAttribute('data-chip', ch.key);
+      el.innerHTML = `${escapeHtml(ch.label)} <span class="chip-x">×</span>`;
+      host.appendChild(el);
+    });
+  }
+
+  /* ---------------------------
+     Filters & URL sync
+  ---------------------------- */
+  function parseURL() {
+    const p = new URLSearchParams(location.search);
+    return {
+      q: p.get('q') || '',
+      type: p.get('type') || '',
+      cat: p.get('cat') || '',
+      sub: p.get('sub') || '',
+      bm: p.get('bm') || ''
+    };
+  }
+
+  function setURL(state) {
+    const p = new URLSearchParams();
+    if (state.q) p.set('q', state.q);
+    if (state.type) p.set('type', state.type);
+    if (state.cat) p.set('cat', state.cat);
+    if (state.sub) p.set('sub', state.sub);
+    if (state.bm) p.set('bm', state.bm);
+    const qs = p.toString();
+    const url = qs ? `?${qs}` : location.pathname;
+    history.replaceState({}, '', url);
+  }
+
+  function populateCategories(selectEl, docs) {
+    const cats = uniq(docs.map(d => d.category).filter(Boolean))
+      .sort((a,b) => getCategoryLabel(a).localeCompare(getCategoryLabel(b),'ru'));
+    selectEl.innerHTML = `<option value="">Все категории</option>` + cats.map(c =>
+      `<option value="${escapeHtml(c)}">${escapeHtml(getCategoryLabel(c))}</option>`).join('');
+  }
+
+  function populateSubcategories(selectEl, docs, cat) {
+    const subs = uniq(docs.filter(d => !cat || d.category === cat).map(d => d.subcategory).filter(Boolean))
+      .sort((a,b) => getSubcategoryLabel(a).localeCompare(getSubcategoryLabel(b),'ru'));
+    selectEl.innerHTML = `<option value="">Все подкатегории</option>` + subs.map(s =>
+      `<option value="${escapeHtml(s)}">${escapeHtml(getSubcategoryLabel(s))}</option>`).join('');
+  }
+
+  function updateStatsUI(docs) {
+    const totalResources = document.getElementById('totalResources');
+    const uniqueCategories = document.getElementById('uniqueCategories');
+    const uniqueSubcategories = document.getElementById('uniqueSubcategories');
+
+    if (totalResources) totalResources.textContent = String(docs.length);
+    if (uniqueCategories) uniqueCategories.textContent = String(new Set(docs.map(d => d.category).filter(Boolean)).size);
+    if (uniqueSubcategories) uniqueSubcategories.textContent = String(new Set(docs.map(d => d.subcategory).filter(Boolean)).size);
+  }
+
+  /* ---------------------------
+     Hotkeys + Help modal
+  ---------------------------- */
+  function ensureHelpModal() {
+    if (document.getElementById('hotkeysModal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'hotkeysModal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal__overlay" data-close="1"></div>
+      <div class="modal__card" role="dialog" aria-modal="true" aria-label="Горячие клавиши">
+        <div class="modal__head">
+          <div class="modal__title">Горячие клавиши</div>
+          <button class="modal__close" type="button" data-close="1">×</button>
+        </div>
+        <div class="modal__body">
+          <div class="hk-row"><kbd>/</kbd><span>Фокус на поиск</span></div>
+          <div class="hk-row"><kbd>Enter</kbd><span>Открыть первый результат</span></div>
+          <div class="hk-row"><kbd>B</kbd><span>Закладка для первого результата</span></div>
+          <div class="hk-row"><kbd>Esc</kbd><span>Очистить поиск / закрыть окна</span></div>
+          <div class="hk-row"><kbd>?</kbd><span>Открыть эту подсказку</span></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelectorAll('[data-close]').forEach(el => {
+      el.addEventListener('click', () => modal.classList.remove('is-open'));
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') modal.classList.remove('is-open');
+    });
+  }
+
+  function openHelpModal() {
+    ensureHelpModal();
+    document.getElementById('hotkeysModal')?.classList.add('is-open');
+  }
+
+  /* ---------------------------
+     Main init
+  ---------------------------- */
+  async function initSearchPage() {
     const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const resourcesList = document.getElementById('resourcesList');
+
+    // If no search UI — skip (e.g., other pages load script.js accidentally)
+    if (!resourcesList) return;
+
     const typeFilter = document.getElementById('typeFilter');
     const categoryFilter = document.getElementById('categoryFilter');
     const subcategoryFilter = document.getElementById('subcategoryFilter');
     const bookmarkFilter = document.getElementById('bookmarkFilter');
     const clearFilters = document.getElementById('clearFilters');
-    const totalResources = document.getElementById('totalResources');
-    const uniqueCategories = document.getElementById('uniqueCategories');
-    const uniqueSubcategories = document.getElementById('uniqueSubcategories');
+    const activeChips = document.getElementById('activeChips');
 
-    // Загружаем ресурсы безопасно (без дублирования)
+    updateBookmarkCountUI();
+
+    // Load resources & build docs (maybe from cache)
     const resources = loadResourcesSafely();
+    const hash = computeDataHash(resources);
 
-    init();
-
-    function init() {
-        initBookmarks();
-        displayResources(resources, resourcesList);
-        updateStats();
-        populateSubcategories();
-
-        const debounce = (fn, wait = 150) => {
-            let t;
-            return (...args) => {
-                clearTimeout(t);
-                t = setTimeout(() => fn(...args), wait);
-            };
-        };
-
-        searchInput.addEventListener('input', debounce(filterResources, 120));
-        typeFilter.addEventListener('change', filterResources);
-        categoryFilter.addEventListener('change', function() {
-            populateSubcategories();
-            filterResources();
-        });
-        subcategoryFilter.addEventListener('change', filterResources);
-        bookmarkFilter.addEventListener('change', filterResources);
-        
-        clearFilters.addEventListener('click', function() {
-            searchInput.value = '';
-            typeFilter.value = '';
-            categoryFilter.value = '';
-            subcategoryFilter.value = '';
-            bookmarkFilter.value = '';
-            populateSubcategories();
-            filterResources();
-        });
+    let docs = null;
+    const cached = await idbGet(INDEX_KEY);
+    if (cached && cached.hash === hash && Array.isArray(cached.docs)) {
+      docs = cached.docs;
+    } else {
+      docs = buildDocs(resources);
+      // cache (without functions)
+      await idbSet(INDEX_KEY, { hash, docs });
     }
 
-    // Функции для работы с закладками
-    function initBookmarks() {
-        if (!localStorage.getItem('bookmarks')) {
-            localStorage.setItem('bookmarks', JSON.stringify([]));
-        }
+    updateStatsUI(docs);
+
+    // Fill selects
+    if (categoryFilter) populateCategories(categoryFilter, docs);
+    if (subcategoryFilter) populateSubcategories(subcategoryFilter, docs, '');
+
+    // Apply URL state
+    const state = parseURL();
+    if (searchInput) searchInput.value = state.q || '';
+    if (typeFilter) typeFilter.value = state.type || '';
+    if (categoryFilter) categoryFilter.value = state.cat || '';
+    if (bookmarkFilter) bookmarkFilter.value = state.bm || '';
+
+    if (subcategoryFilter) {
+      populateSubcategories(subcategoryFilter, docs, state.cat || '');
+      subcategoryFilter.value = state.sub || '';
     }
 
-    function toggleBookmark(resourceId) {
-        const bookmarks = getBookmarks();
-        const index = bookmarks.indexOf(resourceId);
-        
-        if (index > -1) {
-            bookmarks.splice(index, 1);
-        } else {
-            bookmarks.push(resourceId);
-        }
-        
-        localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-        updateBookmarkUI(resourceId);
-        
-        // Обновляем счетчик закладок в статистике
-        updateBookmarkStats();
+    function apply() {
+      const s = {
+        q: searchInput ? searchInput.value.trim() : '',
+        type: typeFilter ? typeFilter.value : '',
+        cat: categoryFilter ? categoryFilter.value : '',
+        sub: subcategoryFilter ? subcategoryFilter.value : '',
+        bm: bookmarkFilter ? bookmarkFilter.value : ''
+      };
+
+      setURL(s);
+      renderActiveChips(s);
+
+      // filter by dropdowns first (cheap)
+      let base = docs;
+
+      if (s.type) base = base.filter(d => (d.type || '') === s.type);
+      if (s.cat) base = base.filter(d => (d.category || '') === s.cat);
+      if (s.sub) base = base.filter(d => (d.subcategory || '') === s.sub);
+
+      const bmIds = new Set(getBookmarkIds());
+      if (s.bm === 'bookmarked') base = base.filter(d => bmIds.has(d.id));
+      if (s.bm === 'not_bookmarked') base = base.filter(d => !bmIds.has(d.id));
+
+      // search
+      const ranked = smartSearch(base, s.q);
+      const list = ranked.map(x => x.doc);
+
+      renderResources(list, resourcesList, { query: s.q });
+
+      // store "last list" for hotkeys
+      window.__ud_lastResults = list;
     }
 
-    function getBookmarks() {
-        return JSON.parse(localStorage.getItem('bookmarks') || '[]');
-    }
+    const applyDebounced = debounce(apply, 150);
 
-    function isBookmarked(resourceId) {
-        return getBookmarks().includes(resourceId);
-    }
+    // listeners
+    searchInput?.addEventListener('input', applyDebounced);
+    searchBtn?.addEventListener('click', apply);
 
-    function updateBookmarkUI(resourceId) {
-        const bookmarkBtn = document.querySelector(`[data-resource-id="${resourceId}"]`);
-        if (bookmarkBtn) {
-            const isBookmarked = getBookmarks().includes(resourceId);
-            bookmarkBtn.innerHTML = isBookmarked ? 
-                '<i class="fas fa-bookmark"></i>' : 
-                '<i class="far fa-bookmark"></i>';
-            bookmarkBtn.style.color = isBookmarked ? '#667eea' : '#718096';
-            bookmarkBtn.title = isBookmarked ? 'Удалить из закладок' : 'Добавить в закладки';
-        }
-    }
+    typeFilter?.addEventListener('change', apply);
+    categoryFilter?.addEventListener('change', () => {
+      // refresh subcats
+      populateSubcategories(subcategoryFilter, docs, categoryFilter.value);
+      // reset sub
+      if (subcategoryFilter) subcategoryFilter.value = '';
+      apply();
+    });
+    subcategoryFilter?.addEventListener('change', apply);
+    bookmarkFilter?.addEventListener('change', apply);
 
-    function updateBookmarkStats() {
-        const bookmarkCount = document.getElementById('bookmarkCount');
-        if (bookmarkCount) {
-            bookmarkCount.textContent = getBookmarks().length;
-        }
-    }
-
-    function populateSubcategories() {
-        const category = categoryFilter.value;
-        subcategoryFilter.innerHTML = '<option value="">Все подкатегории</option>';
-        
-        if (!category) return;
-        
-        const subcategories = new Set();
-        resources.forEach(resource => {
-            if (resource.category === category && resource.subcategory) {
-                subcategories.add(resource.subcategory);
-            }
-        });
-        
-        subcategories.forEach(subcategory => {
-            const option = document.createElement('option');
-            option.value = subcategory;
-            option.textContent = getSubcategoryLabel(subcategory);
-            subcategoryFilter.appendChild(option);
-        });
-    }
-
-    // ---------- Улучшенный поиск (RU/EN, по словам) ----------
-    function normalizeText(input) {
-        return (input || '')
-            .toString()
-            .toLowerCase()
-            .replace(/ё/g, 'е')
-            .replace(/[\p{L}\p{N}]+|[^\p{L}\p{N}]+/gu, (m) => {
-                // оставляем только буквенно-цифровые токены, остальное → пробел
-                return /[^\p{L}\p{N}]/u.test(m) ? ' ' : m;
-            })
-            .replace(/\s+/g, ' ')
-            .trim();
-    }
-
-    function getTagHistory() {
-        try {
-            return JSON.parse(localStorage.getItem('tagsViewHistory') || '{}');
-        } catch (_) {
-            return {};
-        }
-    }
-
-    function resourceSearchHaystack(resource) {
-        const parts = [
-            resource?.title,
-            resource?.description,
-            resource?.category,
-            resource?.subcategory,
-            Array.isArray(resource?.tags) ? resource.tags.join(' ') : ''
-        ].filter(Boolean);
-        return normalizeText(parts.join(' '));
-    }
-
-    function matchesAllTerms(haystack, terms) {
-        if (!terms.length) return true;
-        for (const t of terms) {
-            if (!t) continue;
-            if (!haystack.includes(t)) return false;
-        }
-        return true;
-    }
-
-    function filterResources() {
-        const normalized = normalizeText(searchInput.value);
-        const terms = normalized ? normalized.split(' ') : [];
-        const typeValue = typeFilter.value;
-        const categoryValue = categoryFilter.value;
-        const subcategoryValue = subcategoryFilter.value;
-        const bookmarkValue = bookmarkFilter.value;
-        
-        const filtered = resources.filter(resource => {
-            const haystack = resourceSearchHaystack(resource);
-            const matchesSearch = matchesAllTerms(haystack, terms);
-            
-            const matchesType = typeValue ? resource.type === typeValue : true;
-            const matchesCategory = categoryValue ? resource.category === categoryValue : true;
-            const matchesSubcategory = subcategoryValue ? resource.subcategory === subcategoryValue : true;
-            const matchesBookmark = bookmarkValue === 'bookmarked' ? 
-                getBookmarks().includes(resource.id) : true;
-            
-            return matchesSearch && matchesType && matchesCategory && matchesSubcategory && matchesBookmark;
-        });
-        
-        displayResources(filtered, resourcesList);
-    }
-
-    function displayResources(resourcesToDisplay, container = resourcesList) {
-        container.innerHTML = '';
-        
-        if (resourcesToDisplay.length === 0) {
-            container.innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                    <h3>Ничего не найдено</h3>
-                    <p>Попробуйте изменить параметры поиска или фильтры</p>
-                </div>
-            `;
-            return;
-        }
-        
-        const tagHistory = getTagHistory();
-
-        resourcesToDisplay.forEach(resource => {
-            const resourceCard = document.createElement('div');
-            resourceCard.className = 'resource-card';
-
-            // Персонализация: сначала показываем теги, которые пользователь чаще видит
-            const tagsSorted = Array.isArray(resource.tags)
-                ? [...resource.tags].sort((a, b) => {
-                    const ca = tagHistory[a] || 0;
-                    const cb = tagHistory[b] || 0;
-                    if (cb !== ca) return cb - ca;
-                    return a.localeCompare(b, 'ru');
-                })
-                : [];
-
-            const formattedTags = tagsSorted.length ? tagsSorted.map(tag => {
-                const isLongTag = tag.length > 15;
-                return `<span class="tag ${isLongTag ? 'long-tag' : ''}" title="${tag}">#${tag}</span>`;
-            }).join('') : '';
-            
-            const isBookmarked = getBookmarks().includes(resource.id);
-            const bookmarkIcon = isBookmarked ? 'fas fa-bookmark' : 'far fa-bookmark';
-            const bookmarkColor = isBookmarked ? '#667eea' : '#718096';
-            
-            resourceCard.innerHTML = `
-                <div class="resource-header">
-                    <h3>${resource.title}</h3>
-                    <button class="bookmark-btn" data-resource-id="${resource.id}" 
-                            style="background: none; border: none; cursor: pointer; color: ${bookmarkColor}; font-size: 1.2rem; padding: 0.5rem; margin: -0.5rem;">
-                        <i class="${bookmarkIcon}"></i>
-                    </button>
-                </div>
-                <p class="description">${resource.description}</p>
-                <a href="${resource.link}" target="_blank" rel="noopener" class="link" data-open-resource-id="${resource.id}">
-                    <i class="fas fa-external-link-alt"></i> Перейти к материалу
-                </a>
-                <div class="meta">
-                    <span class="type">${getTypeLabel(resource.type)}</span>
-                    ${resource.category ? `<span class="category" data-category="${resource.category}">${getCategoryLabel(resource.category)}</span>` : ''}
-                    ${resource.subcategory ? `<span class="subcategory">${getSubcategoryLabel(resource.subcategory)}</span>` : ''}
-                </div>
-                ${tagsSorted.length ? `<div class="tags">${formattedTags}</div>` : ''}
-            `;
-            
-            container.appendChild(resourceCard);
-        });
-        
-        // Добавляем обработчики для кнопок закладок
-        container.querySelectorAll('.bookmark-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const resourceId = parseInt(this.getAttribute('data-resource-id'));
-                toggleBookmark(resourceId);
-            });
-        });
-
-        // Учёт просмотров: обновляем персональную статистику тегов при открытии ресурса
-        container.querySelectorAll('[data-open-resource-id]').forEach(a => {
-            const id = parseInt(a.getAttribute('data-open-resource-id'));
-            const res = resources.find(r => r && r.id === id);
-            a.addEventListener('pointerdown', () => {
-                try {
-                    if (res && window.updateTagsViewHistory) window.updateTagsViewHistory(res);
-                    const key = 'resourceViewHistory';
-                    const raw = localStorage.getItem(key);
-                    const map = raw ? JSON.parse(raw) : {};
-                    map[id] = (map[id] || 0) + 1;
-                    localStorage.setItem(key, JSON.stringify(map));
-                } catch (_) {}
-            }, { passive: true });
-        });
-    }
-
-    function updateStats() {
-        totalResources.textContent = resources.length;
-        
-        const categories = new Set(resources.map(r => r.category).filter(Boolean));
-        uniqueCategories.textContent = categories.size;
-        
-        const subcategories = new Set(resources.map(r => r.subcategory).filter(Boolean));
-        uniqueSubcategories.textContent = subcategories.size;
-
-        updateBookmarkStats();
-    }
-
-    function getTypeLabel(type) {
-        const types = {
-            'course': '📚 Курс',
-            'program': '🎯 Программа',
-            'book': '📖 Книга',
-            'article': '📄 Статья',
-            'video': '🎥 Видео',
-            'tool': '🛠️ Инструмент',
-            'library': '📦 Библиотека',
-            'list': '📋 Список',
-            'script': '📜 Скрипт',
-            'reference': '📘 Справочник',
-            'interactive': '🎮 Интерактив',
-            'cheatsheet': '📝 Шпаргалка'
-        };
-        return types[type] || type;
-    }
-
-    function getCategoryLabel(category) {
-        const categories = {
-            'programming': '💻 Программирование',
-            'design': '🎨 Дизайн',
-            'devops': '⚙️ DevOps',
-            'data-science': '📊 Data Science',
-            'cybersecurity': '🔐 Кибербезопасность',
-            'career': '🚀 Карьера',
-            'profession': '👨‍💼 Профессии',
-            'ai': '🤖 ИИ',
-            'productivity': '⚡ Продуктивность',
-            'linux': '🐧 Linux',
-            'windows': '🪟 Windows',
-            'mobile': '📱 Мобильная разработка',
-            'cloud': '☁️ Облачные технологии',
-            'other': '🔍 Другое'
-        };
-        return categories[category] || category;
-    }
-
-    function getSubcategoryLabel(subcategory) {
-        const subcategories = {
-            // Linux подкатегории
-            'ubuntu': '📦 Ubuntu',
-            'debian': '🎯 Debian',
-            'arch': '⚡ Arch',
-            'fedora': '🎩 Fedora',
-            'centos': '🔴 CentOS',
-            'redhat': '🔺 Red Hat',
-            'opensuse': '🦎 OpenSUSE',
-            'mint': '🍃 Mint',
-            'kali': '🔓 Kali',
-            'bash': '🐚 Bash',
-            
-            // Windows подкатегории
-            'windows10': '🪟 Windows 10',
-            'windows11': '🪟 Windows 11',
-            'windowsserver': '🗄️ Windows Server',
-            'powershell': '💻 PowerShell',
-            'batch': '📜 Batch',
-            'terminal': '⌨️ Terminal',
-            'wsl': '🐧 WSL',
-            'registry': '🔧 Реестр',
-            'taskscheduler': '⏰ Планировщик',
-            'security': '🔒 Безопасность',
-            
-            // Профессии
-            'frontend': '🎨 Frontend',
-            'backend': '⚙️ Backend',
-            'fullstack': '🔧 Fullstack',
-            'devops': '🔄 DevOps',
-            'data-scientist': '📈 Data Scientist',
-            'ml-engineer': '🧠 ML Engineer',
-            'qa': '🔍 QA',
-            'ux-ui': '🎯 UX/UI',
-            'mobile': '📱 Mobile',
-            'game-dev': '🎮 Game Dev',
-            'security': '🛡️ Security',
-            'cloud': '☁️ Cloud',
-            'sysadmin': '🖥️ SysAdmin',
-            'dba': '🗄️ DBA',
-            'project-manager': '📊 Project Manager',
-            'product-manager': '🚀 Product Manager',
-            'tech-lead': '👨‍💻 Tech Lead',
-            'cto': '🏢 CTO',
-            
-            // Дизайн подкатегории
-            'ui-design': '🎨 UI Design',
-            'ux-design': '🧠 UX Design',
-            'ux-research': '🔍 UX Research',
-            'ui-animation': '✨ Анимация',
-            'design-system': '📐 Дизайн-системы',
-            'typography': '🔤 Типографика',
-            'color-theory': '🎨 Теория цвета',
-            'tools': '🛠️ Инструменты',
-            'accessibility': '♿ Доступность',
-
-            // Новые подкатегории для SysAdmin
-            'other': '🔍 Другое',
-            'web-security': '🌐 Веб-безопасность',
-            'pentesting': '🔓 Пентестинг',
-            'practice': '🛠️ Практика',
-            'education': '🎓 Обучение',
-            'certification': '📜 Сертификация',
-            'best-practices': '✅ Best Practices',
-            'frameworks': '📐 Фреймворки',
-            'architecture': '🏗️ Архитектура',
-            
-            // Подкатегории для облачных технологий
-            'aws': '☁️ AWS',
-            'azure': '🔷 Azure',
-            'gcp': '🔶 GCP',
-            'devops': '🔄 DevOps',
-            'containerization': '📦 Контейнеризация',
-            'aws-sdk': '⚙️ AWS SDK',
-            'data-orchestration': '🎵 Оркестрация данных',
-            'big-data': '📊 Big Data',
-            'kubernetes-tools': '⚓ Kubernetes Tools',
-            'monitoring': '👀 Мониторинг',
-            'devops-tools': '🛠️ DevOps Tools',
-            
-            // Подкатегории для мобильной разработки
-            'android': '🤖 Android',
-            'ios': '🍎 iOS',
-            'cross-platform': '📱 Кроссплатформенный',
-            'android-libraries': '📚 Android Libraries',
-            'ios-libraries': '📚 iOS Libraries',
-            
-            // Подкатегории для Data Science
-            'data-analysis': '📈 Анализ данных',
-            'data-visualization': '📊 Визуализация',
-            'deep-learning': '🧠 Deep Learning',
-            'ml-libraries': '📚 ML Libraries',
-            'ml-deployment': '🚀 ML Deployment',
-            
-            // Подкатегории для кибербезопасности
-            'network-security': '🌐 Сетевая безопасность',
-            'cryptography': '🔐 Криптография',
-            'malware-analysis': '🦠 Анализ malware'
-        };
-        return subcategories[subcategory] || subcategory;
-    }
-
-    function saveResources() {
-        localStorage.setItem('it-huishniki-resources', JSON.stringify(resources));
-        updateStats();
-    }
-
-    function getDemoResources() {
-        // Минимальный набор демо-ресурсов
-        return [
-            {
-                id: 1,
-                title: "FreeCodeCamp",
-                description: "Бесплатные курсы по программированию с сертификатами. Идеально для начинающих.",
-                link: "https://www.freecodecamp.org/",
-                tags: ["программирование", "бесплатно", "курсы", "сертификаты"],
-                type: "course",
-                category: "programming",
-                dateAdded: new Date().toISOString()
-            }
-        ];
-    }
-});
-
-
-// В конце script.js замените этот код:
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            const searchTerm = searchInput.value.trim();
-            if (searchTerm) {
-                window.location.href = `index.html?search=${encodeURIComponent(searchTerm)}`;
-            }
-        }
+    clearFilters?.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      if (typeFilter) typeFilter.value = '';
+      if (categoryFilter) categoryFilter.value = '';
+      if (subcategoryFilter) {
+        populateSubcategories(subcategoryFilter, docs, '');
+        subcategoryFilter.value = '';
+      }
+      if (bookmarkFilter) bookmarkFilter.value = '';
+      apply();
     });
 
-    // Парсим URL параметры для автозаполнения поиска
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('search');
-    if (searchParam) {
-        searchInput.value = searchParam;
-    }
-});
+    // chip remove
+    activeChips?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      const key = btn.getAttribute('data-chip');
+      if (key === 'q' && searchInput) searchInput.value = '';
+      if (key === 'type' && typeFilter) typeFilter.value = '';
+      if (key === 'cat' && categoryFilter) {
+        categoryFilter.value = '';
+        populateSubcategories(subcategoryFilter, docs, '');
+        if (subcategoryFilter) subcategoryFilter.value = '';
+      }
+      if (key === 'sub' && subcategoryFilter) subcategoryFilter.value = '';
+      if (key === 'bm' && bookmarkFilter) bookmarkFilter.value = '';
+      apply();
+    });
 
-// Загружаем скрипт облака тегов с задержкой для стабильности
-setTimeout(() => {
-    const script = document.createElement('script');
-    script.src = 'tags-cloud.js';
-    script.onload = function() {
-        console.log('Облако тегов загружено');
-        // Инициализируем облако тегов после загрузки
-        if (window.initTagsCloud) {
-            window.initTagsCloud();
+    // Hotkeys
+    ensureHelpModal();
+    window.addEventListener('keydown', (e) => {
+      const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+      const typing = tag === 'input' || tag === 'textarea';
+
+      if (e.key === '/' && !typing) {
+        e.preventDefault();
+        searchInput?.focus();
+        return;
+      }
+      if (e.key === '?' && !typing) {
+        e.preventDefault();
+        openHelpModal();
+        return;
+      }
+      if (e.key === 'Escape') {
+        if (document.getElementById('hotkeysModal')?.classList.contains('is-open')) {
+          document.getElementById('hotkeysModal')?.classList.remove('is-open');
+          return;
         }
-    };
-    script.onerror = function() {
-        console.error('Ошибка загрузки облака тегов');
-    };
-    document.head.appendChild(script);
-}, 500);
+        if (searchInput && searchInput.value) {
+          searchInput.value = '';
+          apply();
+        }
+        return;
+      }
+      if (e.key === 'Enter' && !typing) {
+        const list = window.__ud_lastResults || [];
+        if (list.length) {
+          window.location.href = toInternalUrl(list[0].id);
+        }
+        return;
+      }
+      if ((e.key === 'b' || e.key === 'B') && !typing) {
+        const list = window.__ud_lastResults || [];
+        if (!list.length) return;
+        toggleBookmark(list[0].id);
+        updateBookmarkCountUI();
+        apply(); // reflect
+      }
+    });
+
+    // initial render
+    apply();
+  }
+
+  document.addEventListener('DOMContentLoaded', initSearchPage);
+})();

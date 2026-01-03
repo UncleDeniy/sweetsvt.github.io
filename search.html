@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Поиск по базе знаний Syntax_Syndicate: фильтры по типу, категории, подкатегории и закладкам.">
+  <meta name="theme-color" content="#0b0f17">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Syntax_Syndicate | Поиск</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+  <div class="aa-overlay" id="aaOverlay" aria-hidden="true"></div>
+  <div class="aa-shell">
+    <div id="aaSidebarMount"></div>
+    <div class="aa-content">
+      <div class="aa-topbar">
+        <button class="aa-toggle" id="aaSidebarToggle" aria-label="Открыть меню">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        </button>
+        <div class="aa-topbar__title">Поиск • фильтры • закладки</div>
+      </div>
+
+      <main id="main">
+  <div class="container">
+    <div class="search-shell">
+      <aside class="search-filters" id="filtersPanel" aria-label="Фильтры поиска">
+        <div class="filters-title">Фильтры</div>
+
+        <div class="filter-group">
+          <label for="typeFilter">Тип материала</label>
+          <select id="typeFilter">
+            <option value="">Все типы</option>
+            <option value="course">Курсы</option>
+            <option value="program">Программы</option>
+            <option value="book">Книги</option>
+            <option value="article">Статьи</option>
+            <option value="video">Видео</option>
+            <option value="tool">Инструменты</option>
+            <option value="library">Библиотеки</option>
+            <option value="script">Скрипты</option>
+            <option value="reference">Справочники</option>
+            <option value="cheatsheet">Шпаргалки</option>
+            <option value="lecture">Лекции</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="categoryFilter">Категория</label>
+          <select id="categoryFilter">
+            <option value="">Все категории</option>
+            <!-- категории заполняются автоматически -->
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="subcategoryFilter">Подкатегория</label>
+          <select id="subcategoryFilter">
+            <option value="">Все подкатегории</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="bookmarkFilter">Закладки</label>
+          <select id="bookmarkFilter">
+            <option value="">Все материалы</option>
+            <option value="bookmarked">Только закладки</option>
+            <option value="not_bookmarked">Без закладок</option>
+          </select>
+        </div>
+
+        <button id="clearFilters" class="btn-secondary" type="button">
+          <i class="fas fa-times" aria-hidden="true"></i> Очистить
+        </button>
+
+        <div class="filters-meta" aria-label="Статистика">
+          <div class="stat-row"><span class="stat-num" id="totalResources">0</span><span class="stat-label">материалов</span></div>
+          <div class="stat-row"><span class="stat-num" id="uniqueCategories">0</span><span class="stat-label">категорий</span></div>
+          <div class="stat-row"><span class="stat-num" id="uniqueSubcategories">0</span><span class="stat-label">подкатегорий</span></div>
+        </div>
+      </aside>
+
+      <section class="search-results" aria-label="Результаты поиска">
+        <div class="search-topbar">
+          <button class="filters-toggle" id="filtersToggle" type="button" aria-controls="filtersPanel" aria-expanded="false">
+            <i class="fas fa-sliders-h" aria-hidden="true"></i>
+            Фильтры
+          </button>
+
+          <div class="search-box search-box--page">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="text" id="searchInput" placeholder="Название, описание, ссылка, теги… (например: python)" autocomplete="off">
+          </div>
+
+          <button id="searchBtn" class="btn-primary" type="button">Поиск</button>
+        </div>
+
+        <div class="results-head">
+  <div class="results-left">
+    <div class="results-title">Результаты</div>
+    <div class="results-sub">Найдено: <span id="foundCount">0</span></div>
+  </div>
+  <div class="results-sub"><span id="bookmarkCount">0</span> в закладках</div>
+</div>
+<div class="chips-bar" id="activeChips"></div>
+<div id="resourcesList" class="resources-list" aria-live="polite"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+      <footer class="aa-footer">
+        <div class="aa-muted">Syntax_Syndicate • GitHub Pages • офлайн-кэш (PWA)</div>
+      </footer>
+
+      
+<script>
+(function(){
+  const btn = document.getElementById('searchBtn');
+  const input = document.getElementById('searchInput');
+  if (btn && input) btn.addEventListener('click', () => input.dispatchEvent(new Event('input', {bubbles:true})));
+
+  const toggle = document.getElementById('filtersToggle');
+  const panel = document.getElementById('filtersPanel');
+  const overlay = document.getElementById('aaOverlay');
+  function close(){
+    if(!panel) return;
+    panel.classList.remove('is-open');
+    if(overlay) overlay.classList.remove('is-open');
+    if(toggle) toggle.setAttribute('aria-expanded','false');
+  }
+  function open(){
+    if(!panel) return;
+    panel.classList.add('is-open');
+    if(overlay) overlay.classList.add('is-open');
+    if(toggle) toggle.setAttribute('aria-expanded','true');
+  }
+  if (toggle && panel){
+    toggle.addEventListener('click', () => panel.classList.contains('is-open') ? close() : open());
+  }
+  if (overlay){
+    overlay.addEventListener('click', close);
+  }
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+})();
+</script>
+
+<script src="data.js"></script>
+<script src="lections.js"></script>
+      <script src="settings-core.js"></script>
+      <script src="settings-main.js"></script>
+      <script src="script.js"></script>
+      <script src="ui.js"></script>
+    </div>
+  </div>
+  <script src="layout.js"></script>
+</body>
+</html>

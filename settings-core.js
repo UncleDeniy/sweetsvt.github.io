@@ -50,10 +50,14 @@ class SettingsManager {
 
     applySettings() {
         // Применяем тему
-        if (this.settings.darkTheme) {
-            document.body.classList.add('dark-theme');
+        const wantDark = !!this.settings.darkTheme;
+        document.body.classList.toggle('dark-theme', wantDark);
+        // Единый источник истины для новой темы (CSS vars)
+        if (window.__SS_THEME__) {
+            window.__SS_THEME__.set(wantDark ? 'dark' : 'light');
         } else {
-            document.body.classList.remove('dark-theme');
+            // fallback: на всякий случай, если theme.js не подключился
+            document.documentElement.dataset.theme = wantDark ? 'dark' : 'light';
         }
         
         // Применяем цветовую схему
