@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
+
         .logo-minimal-new {
             display: flex;
             align-items: center;
@@ -82,7 +83,7 @@
         }
         
         .settings-section {
-            background: white;
+            background: var(--aa-surface);
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 2rem;
@@ -90,7 +91,7 @@
         }
         
         .settings-section h2 {
-            color: #2d3748;
+            color: var(--aa-text);
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
             display: flex;
@@ -107,7 +108,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 1.2rem 0;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--aa-border);
         }
         
         .setting-item:last-child {
@@ -120,12 +121,12 @@
         
         .setting-title {
             font-weight: 600;
-            color: #2d3748;
+            color: var(--aa-text);
             margin-bottom: 0.3rem;
         }
         
         .setting-description {
-            color: #718096;
+            color: var(--aa-muted);
             font-size: 0.9rem;
             line-height: 1.4;
         }
@@ -185,9 +186,9 @@
         .select-wrapper select {
             width: 100%;
             padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
+            border: 1px solid var(--aa-border);
             border-radius: 8px;
-            background: white;
+            background: var(--aa-surface);
             font-size: 1rem;
             cursor: pointer;
             appearance: none;
@@ -231,7 +232,7 @@
         
         .btn-secondary {
             background: #e2e8f0;
-            color: #4a5568;
+            color: var(--aa-muted);
         }
         
         .btn-secondary:hover {
@@ -310,7 +311,7 @@
         }
         
         .modal-content {
-            background: white;
+            background: var(--aa-surface);
             border-radius: 16px;
             padding: 2rem;
             max-width: 500px;
@@ -320,53 +321,53 @@
         
         .modal h3 {
             margin-bottom: 1rem;
-            color: #2d3748;
+            color: var(--aa-text);
         }
         
         .modal p {
             margin-bottom: 2rem;
-            color: #4a5568;
+            color: var(--aa-muted);
             line-height: 1.6;
         }
         
         /* Темная тема */
-        body.dark-theme {
+        html[data-theme="dark"] body {
             background: #1a202c;
             color: #e2e8f0;
         }
         
-        body.dark-theme .settings-section {
+        html[data-theme="dark"] body .settings-section {
             background: #2d3748;
         }
         
-        body.dark-theme .settings-section h2 {
+        html[data-theme="dark"] body .settings-section h2 {
             color: #e2e8f0;
         }
         
-        body.dark-theme .setting-title {
+        html[data-theme="dark"] body .setting-title {
             color: #e2e8f0;
         }
         
-        body.dark-theme .setting-description {
+        html[data-theme="dark"] body .setting-description {
             color: #a0aec0;
         }
         
-        body.dark-theme .setting-item {
-            border-bottom-color: #4a5568;
+        html[data-theme="dark"] body .setting-item {
+            border-bottom-color: var(--aa-muted);
         }
         
-        body.dark-theme .select-wrapper select {
+        html[data-theme="dark"] body .select-wrapper select {
             background: #2d3748;
-            border-color: #4a5568;
+            border-color: var(--aa-muted);
             color: #e2e8f0;
         }
         
-        body.dark-theme .btn-secondary {
+        html[data-theme="dark"] body .btn-secondary {
             background: #4a5568;
             color: #e2e8f0;
         }
         
-        body.dark-theme .btn-secondary:hover {
+        html[data-theme="dark"] body .btn-secondary:hover {
             background: #718096;
         }
         
@@ -413,14 +414,14 @@
         }
         
         .stat-card {
-            background: white;
+            background: var(--aa-surface);
             padding: 1.5rem;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
         
-        body.dark-theme .stat-card {
+        html[data-theme="dark"] body .stat-card {
             background: #2d3748;
         }
         
@@ -436,14 +437,15 @@
         }
         
         .stat-label {
-            color: #718096;
+            color: var(--aa-muted);
             font-size: 0.9rem;
         }
         
-        body.dark-theme .stat-label {
+        html[data-theme="dark"] body .stat-label {
             color: #a0aec0;
         }
-    </style>
+    
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
@@ -528,7 +530,7 @@
             </div>
 
             <!-- Внешний вид -->
-            <div class="settings-section">
+            <div class="settings-section surface">
                 <h2><i class="fas fa-palette"></i> Внешний вид</h2>
                 
                 <div class="setting-item">
@@ -585,7 +587,7 @@
             </div>
 
             <!-- Поведение -->
-            <div class="settings-section">
+            <div class="settings-section surface">
                 <h2><i class="fas fa-cog"></i> Поведение</h2>
                 
                 <div class="setting-item">
@@ -634,7 +636,7 @@
             </div>
 
             <!-- Данные -->
-            <div class="settings-section">
+            <div class="settings-section surface">
                 <h2><i class="fas fa-database"></i> Данные</h2>
                 
                 <div class="setting-item">
@@ -670,7 +672,7 @@
             </div>
 
             <!-- Опасная зона -->
-            <div class="settings-section" style="border-left: 4px solid #ff6b6b;">
+            <div class="settings-section surface" style="border-left: 4px solid #ff6b6b;">
                 <h2 style="color: #ff6b6b;"><i class="fas fa-exclamation-triangle"></i> Опасная зона</h2>
                 
                 <div class="setting-item">

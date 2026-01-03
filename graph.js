@@ -1,4 +1,4 @@
-// graph.js — простой интерактивный граф тегов (без библиотек)
+// @ts-nocheck
 (function() {
     'use strict';
 
@@ -244,6 +244,15 @@
         return { x: (x - panX) / zoom, y: (y - panY) / zoom };
     }
 
+    function colorForId(id) {
+        // стабильный “хэш” -> hue
+        let h = 0;
+        for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+        const hue = h % 360;
+        return `hsla(${hue}, 70%, 55%, 0.9)`;
+    }
+
+
     function draw(nodes, links, query) {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, W, H);
@@ -256,36 +265,84 @@
         const q = normalize(query);
         const highlight = q ? new Set(q.split(/\s+/).filter(Boolean)) : null;
 
+        const isDark =
+            document.documentElement.getAttribute('data-theme') === 'dark' ||
+            document.body.classList.contains('dark-theme');
+
+        const labelColor = isDark ? 'rgba(226,232,240,0.90)' : 'rgba(15,23,42,0.86)';
+        const linkColor = isDark ? 'rgba(148,163,184,0.35)' : 'rgba(100,116,139,0.35)';
+        const nodeStroke = isDark ? 'rgba(148,163,184,0.60)' : 'rgba(15,23,42,0.25)';
+        const tooltipBg = isDark ? 'rgba(15,23,42,0.92)' : 'rgba(255,255,255,0.92)';
+        const tooltipText = isDark ? 'rgba(226,232,240,0.95)' : 'rgba(15,23,42,0.92)';
+        const tooltipBorder = isDark ? 'rgba(148,163,184,0.55)' : 'rgba(15,23,42,0.18)';
+
+
+        let focus = null;
+        if (hovering) {
+            focus = new Set([hovering.id]);
+            const neigh = neighbors && neighbors.get(hovering.id);
+            if (neigh)
+                for (const id of neigh) focus.add(id);
+        }
+
+
+
         // links
-        ctx.globalAlpha = 0.45;
-        ctx.lineWidth = 1;
+        ctx.save();
+        ctx.lineCap = 'round';
+
         for (const l of links) {
-            const a = nodesById.get(l.a),
-                b = nodesById.get(l.b);
+            const a = nodesById.get(l.a);
+            const b = nodesById.get(l.b);
             if (!a || !b) continue;
+
+            const inFocus = !focus || (focus.has(a.id) && focus.has(b.id));
+            ctx.globalAlpha = inFocus ? 0.55 : 0.14; // мягкое затемнение, не исчезает
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = linkColor;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = 'rgba(148,163,184,0.35)';
             ctx.stroke();
         }
-        ctx.globalAlpha = 1;
+
+        ctx.restore(); // ← обязательно!
+
+
 
         // nodes
         for (const n of nodes) {
             const isHi = highlight && highlight.has(n.id);
             ctx.beginPath();
+            const nodeAlpha = !focus ? 1 : (n === hovering ? 1 : (focus.has(n.id) ? 0.92 : 0.35));
+            ctx.globalAlpha = nodeAlpha;
             ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-            ctx.fillStyle = isHi ? 'rgba(99,102,241,0.85)' : 'rgba(51,65,85,0.85)';
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(148,163,184,0.6)';
-            ctx.stroke();
+            const base = colorForId(n.id);
+            ctx.shadowColor = base;
+            ctx.shadowBlur = isHi ? 18 : 10;
 
+            ctx.fillStyle = isHi ? base : base.replace('0.9', '0.55');
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = nodeStroke;
+            ctx.stroke();
             // label
-            ctx.font = `${Math.max(11, Math.min(16, n.r))}px system-ui`;
-            ctx.fillStyle = 'rgba(226,232,240,0.92)';
-            ctx.fillText(n.id, n.x + n.r + 4, n.y + 4);
+            const showAllLabels = zoom >= 0.9;
+
+            const shouldShowLabel =
+                showAllLabels ||
+                n === hovering ||
+                n.r >= 14;
+
+            if (shouldShowLabel) {
+                ctx.font = `${Math.max(11, Math.min(16, n.r))}px system-ui`;
+                ctx.fillStyle = labelColor;
+                ctx.fillText(n.id, n.x + n.r + 5, n.y + 4);
+            }
+
         }
+        ctx.globalAlpha = 1;
 
         ctx.restore();
 
@@ -293,18 +350,19 @@
         if (hovering) {
             const text = `#${hovering.id} · ${hovering.count}`;
             ctx.save();
+            ctx.globalAlpha = 1;
             ctx.font = '13px system-ui';
             const w = ctx.measureText(text).width + 16;
             const x = lastX + 12,
                 y = lastY + 12;
-            ctx.fillStyle = 'rgba(15,23,42,0.92)';
-            ctx.strokeStyle = 'rgba(148,163,184,0.55)';
+            ctx.fillStyle = tooltipBg;
+            ctx.strokeStyle = tooltipBorder;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.roundRect(x, y, w, 28, 10);
             ctx.fill();
             ctx.stroke();
-            ctx.fillStyle = 'rgba(226,232,240,0.95)';
+            ctx.fillStyle = tooltipText;
             ctx.fillText(text, x + 8, y + 18);
             ctx.restore();
         }
@@ -328,7 +386,8 @@
     let nodes = [],
         links = [],
         nodesById = new Map(),
-        sim = null;
+        sim = null,
+        neighbors = null;
 
     function pickNode(mx, my) {
         const p = toWorld(mx, my);
@@ -347,7 +406,43 @@
         nodes = g.nodes;
         links = g.links;
         nodesById = new Map(nodes.map(n => [n.id, n]));
+        neighbors = new Map();
+        for (const n of nodes) neighbors.set(n.id, new Set());
+        for (const l of links) {
+            if (neighbors.has(l.a)) {
+                neighbors.get(l.a).add(l.b);
+            }
+
+            if (neighbors.has(l.b)) {
+                neighbors.get(l.b).add(l.a);
+            }
+        }
         sim = simulate(nodes, links);
+
+        let paused = false;
+
+        const btnReset = document.getElementById('graphReset');
+        const btnCenter = document.getElementById('graphCenter');
+        const btnPause = document.getElementById('graphPause');
+
+        if (btnReset) btnReset.addEventListener('click', () => {
+            zoom = 1;
+            panX = 0;
+            panY = 0;
+            sim.kick();
+        });
+
+        if (btnCenter) btnCenter.addEventListener('click', () => {
+            panX = 0;
+            panY = 0;
+            sim.kick();
+        });
+
+        if (btnPause) btnPause.addEventListener('click', () => {
+            paused = !paused;
+            btnPause.textContent = paused ? 'Продолжить' : 'Пауза';
+        });
+
 
         // interactions
         canvas.addEventListener('mousemove', (e) => {
@@ -435,21 +530,22 @@
         const queryInput = document.getElementById('graphQuery');
 
         function loop() {
-            sim.step();
+            if (!paused) {
+                sim.step();
+            }
+
             draw(nodes, links, queryInput ? queryInput.value : '');
+
             requestAnimationFrame(loop);
         }
         loop();
+
 
         if (queryInput) {
             queryInput.addEventListener('input', () => {
                 // render loop reads it
             });
         }
-
-
-
-
     }
 
     document.addEventListener('DOMContentLoaded', init);

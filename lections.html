@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
+
         .logo-minimal-new {
             display: flex;
             align-items: center;
@@ -75,7 +76,7 @@
         }
         
         .lection-card {
-            background: white;
+            background: var(--aa-surface);
             border-radius: 16px;
             padding: 2rem;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
@@ -99,7 +100,7 @@
         
         .lection-title {
             font-size: 1.4rem;
-            color: #2d3748;
+            color: var(--aa-text);
             margin-bottom: 0.5rem;
             flex: 1;
         }
@@ -121,7 +122,7 @@
         }
         
         .lection-description {
-            color: #4a5568;
+            color: var(--aa-muted);
             line-height: 1.6;
             margin-bottom: 1.5rem;
         }
@@ -149,7 +150,7 @@
         
         .btn-secondary {
             background: #e2e8f0;
-            color: #4a5568;
+            color: var(--aa-muted);
             padding: 0.7rem 1.5rem;
             border-radius: 8px;
             text-decoration: none;
@@ -164,7 +165,7 @@
         .no-lections {
             text-align: center;
             padding: 4rem 2rem;
-            color: #4a5568;
+            color: var(--aa-muted);
         }
         
         .back-link {
@@ -183,7 +184,7 @@
         
         /* Стили для поиска и фильтров */
         .search-section {
-            background: white;
+            background: var(--aa-surface);
             padding: 2rem;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
@@ -206,7 +207,7 @@
         #searchInput {
             width: 100%;
             padding: 1rem 1rem 1rem 3rem;
-            border: 2px solid #e2e8f0;
+            border: 1px solid var(--aa-border);
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -234,15 +235,15 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: #2d3748;
+            color: var(--aa-text);
         }
         
         .filter-group select {
             width: 100%;
             padding: 0.8rem;
-            border: 2px solid #e2e8f0;
+            border: 1px solid var(--aa-border);
             border-radius: 8px;
-            background: white;
+            background: var(--aa-surface);
             font-size: 1rem;
             cursor: pointer;
         }
@@ -273,7 +274,7 @@
         }
         
         .stat-item {
-            background: white;
+            background: var(--aa-surface);
             padding: 1.2rem;
             border-radius: 12px;
             text-align: center;
@@ -293,11 +294,12 @@
         }
         
         .stat-label {
-            color: #4a5568;
+            color: var(--aa-muted);
             font-size: 0.8rem;
             opacity: 0.8;
         }
-    </style>
+    
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
@@ -363,7 +365,7 @@
             <i class="fas fa-cog"></i> Настройки
         </a>
 
-        <div class="search-section">
+        <div class="search-section surface">
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="searchInput" placeholder="Поиск по лекциям...">
