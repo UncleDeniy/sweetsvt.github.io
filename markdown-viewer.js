@@ -1,155 +1,239 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const markdownContainer = document.getElementById('markdownContainer');
-    
-    // Получаем параметры из URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const file = urlParams.get('file');
-    const title = urlParams.get('title') || 'Лекция';
-    const category = urlParams.get('category') || 'programming';
-    const subcategory = urlParams.get('subcategory') || '';
-    const author = urlParams.get('author') || 'Syntax_Syndicate';
-    
-    if (!file) {
-        showError('Файл не указан');
-        return;
-    }
-    
-    loadMarkdownFile(file, title, category, subcategory, author);
-    
-// В файле markdown-viewer.js замените функцию loadMarkdownFile:
-function loadMarkdownFile(file, title, category, subcategory, author) {
-    // Нормализуем путь к файлу
-    let filePath = `docs/${file}`;
-    
-    // Убираем лишние слеши
-    filePath = filePath.replace(/\/\//g, '/');
-    
-    fetch(filePath)
-        .then(response => {
-            if (!response.ok) {
-                // Пробуем альтернативный путь
-                const altPath = file.startsWith('docs/') ? file : `docs/${file}`;
-                return fetch(altPath);
-            }
-            return response;
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Файл не найден');
-            }
-            return response.text();
-        })
-        .then(markdown => {
-            displayMarkdown(markdown, title, category, subcategory, author);
-        })
-        .catch(error => {
-            console.error('Ошибка загрузки файла:', error);
-            showError('Не удалось загрузить лекцию: ' + error.message);
-        });
-}
-    
-    function displayMarkdown(markdown, title, category, subcategory, author) {
-        // Настраиваем marked для подсветки синтаксиса
-        marked.setOptions({
-            highlight: function(code, lang) {
-                if (lang && hljs.getLanguage(lang)) {
-                    try {
-                        return hljs.highlight(code, { language: lang }).value;
-                    } catch (err) {
-                        console.error('Ошибка подсветки синтаксиса:', err);
-                    }
-                }
-                return hljs.highlightAuto(code).value;
-            },
-            breaks: true,
-            gfm: true
-        });
-        
-        // Конвертируем markdown в HTML
-        const htmlContent = marked.parse(markdown);
-        
-        // Создаем красивый интерфейс
-        const content = `
-            <div class="markdown-header">
-                <h1 class="markdown-title">${title}</h1>
-                <div class="markdown-meta">
-                    <span class="meta-badge">${getCategoryLabel(category)}</span>
-                    ${subcategory ? `<span class="meta-badge" style="background: #ed8936;">${getSubcategoryLabel(subcategory)}</span>` : ''}
-                    <span class="meta-badge" style="background: #48bb78;">👨‍💻 ${author}</span>
-                    <span class="meta-badge" style="background: #9f7aea;">📚 Лекция</span>
-                </div>
-                <div class="lection-actions">
-                    <button onclick="window.print()" class="btn btn-primary">
-                        <i class="fas fa-print"></i> Печать
-                    </button>
-                    <button onclick="toggleDarkMode()" class="btn btn-secondary">
-                        <i class="fas fa-moon"></i> Темная тема
-                    </button>
-                </div>
+// markdown-viewer.js — красивый ридер Markdown (GitHub Pages friendly)
+document.addEventListener('DOMContentLoaded', () => {
+  const root = document.getElementById('markdownContainer');
+
+  const url = new URLSearchParams(location.search);
+  const file = url.get('file');
+  const title = url.get('title') || 'Лекция';
+  const category = url.get('category') || 'programming';
+  const subcategory = url.get('subcategory') || '';
+  const author = url.get('author') || 'Syntax_Syndicate';
+
+  if (!file) {
+    renderError('Файл не указан');
+    return;
+  }
+
+  loadMarkdown(file)
+    .then((md) => renderMarkdown(md, { title, category, subcategory, author }))
+    .catch((err) => {
+      console.error(err);
+      renderError('Не удалось загрузить лекцию: ' + (err?.message || err));
+    });
+
+  function loadMarkdown(file) {
+    const candidates = [];
+    // support both "intro.md" and "docs/intro.md"
+    if (file.startsWith('docs/')) candidates.push(file);
+    candidates.push(`docs/${file}`);
+    // de-dupe
+    const uniq = [...new Set(candidates.map((p) => p.replace(/\/+/g, '/')))];
+    return (async () => {
+      for (const path of uniq) {
+        const res = await fetch(path);
+        if (res.ok) return await res.text();
+      }
+      throw new Error('Файл не найден');
+    })();
+  }
+
+  function renderMarkdown(markdown, meta) {
+    // marked + highlight.js
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      highlight(code, lang) {
+        try {
+          if (lang && hljs.getLanguage(lang)) {
+            return hljs.highlight(code, { language: lang }).value;
+          }
+          return hljs.highlightAuto(code).value;
+        } catch {
+          return code;
+        }
+      }
+    });
+
+    const rawHtml = marked.parse(markdown);
+
+    // Build DOM for TOC + heading ids
+    const tmp = document.createElement('div');
+    tmp.innerHTML = rawHtml;
+
+    const headings = [...tmp.querySelectorAll('h1, h2, h3')];
+    const toc = [];
+    const slug = (s) =>
+      (s || '')
+        .toString()
+        .toLowerCase()
+        .replace(/ё/g, 'е')
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
+        .replace(/-+/g, '-')
+        .replace(/(^-|-$)/g, '') || 'section';
+
+    const used = new Map();
+    headings.forEach((h) => {
+      const level = Number(h.tagName.slice(1));
+      const text = h.textContent.trim();
+      if (!text) return;
+      let id = slug(text);
+      const n = (used.get(id) || 0) + 1;
+      used.set(id, n);
+      if (n > 1) id = `${id}-${n}`;
+      h.id = id;
+      toc.push({ id, text, level });
+    });
+
+    // Wrap tables to avoid overflow on mobile
+    tmp.querySelectorAll('table').forEach((t) => {
+      const wrap = document.createElement('div');
+      wrap.style.maxWidth = '100%';
+      wrap.style.overflowX = 'auto';
+      wrap.style.webkitOverflowScrolling = 'touch';
+      t.parentNode.insertBefore(wrap, t);
+      wrap.appendChild(t);
+    });
+
+    const tocHtml = toc.length
+      ? toc
+          .map((it) => {
+            const cls = it.level === 2 ? 'l2' : it.level === 3 ? 'l3' : 'l1';
+            return `<a class="${cls}" href="#${it.id}">${escapeHtml(it.text)}</a>`;
+          })
+          .join('')
+      : `<div class="aa-muted" style="padding:8px 10px;">Нет оглавления</div>`;
+
+    root.innerHTML = `
+      <div class="md-reader">
+        <section class="md-reader__head surface">
+          <div style="min-width:0;">
+            <h1 class="md-reader__title">${escapeHtml(meta.title)}</h1>
+            <div class="md-reader__meta">
+              <span class="md-pill">${escapeHtml(getCategoryLabel(meta.category))}</span>
+              ${meta.subcategory ? `<span class="md-pill">${escapeHtml(getSubcategoryLabel(meta.subcategory))}</span>` : ''}
+              <span class="md-pill">👨‍💻 ${escapeHtml(meta.author)}</span>
+              <span class="md-pill">📚 Markdown</span>
             </div>
-            <div class="markdown-content">
-                ${htmlContent}
+          </div>
+          <div class="md-reader__actions">
+            <button class="md-btn" type="button" id="backBtn" title="Назад">
+              <i class="fas fa-arrow-left"></i><span>Назад</span>
+            </button>
+            <button class="md-btn primary" type="button" id="copyLinkBtn" title="Скопировать ссылку">
+              <i class="fas fa-link"></i><span>Ссылка</span>
+            </button>
+            <button class="md-btn" type="button" id="themeBtn" title="Переключить тему">
+              <i class="fas fa-moon"></i><span>Тема</span>
+            </button>
+            <button class="md-btn" type="button" id="printBtn" title="Печать">
+              <i class="fas fa-print"></i><span>Печать</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="md-reader__body">
+          <aside class="md-toc surface" aria-label="Оглавление">
+            <div class="md-toc__title">Содержание</div>
+            ${tocHtml}
+          </aside>
+
+          <article class="md-article md-content surface" id="main">
+            ${tmp.innerHTML}
+          </article>
+        </section>
+      </div>
+    `;
+
+    document.title = `${meta.title} | Syntax_Syndicate`;
+
+    // Actions
+    document.getElementById('backBtn')?.addEventListener('click', () => {
+      // if came from lectures, go back; else fallback
+      if (history.length > 1) history.back();
+      else location.href = 'lections.html';
+    });
+
+    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+
+    document.getElementById('copyLinkBtn')?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        toast?.('Ссылка скопирована');
+      } catch {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = location.href;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        toast?.('Ссылка скопирована');
+      }
+    });
+
+    document.getElementById('themeBtn')?.addEventListener('click', () => {
+      // Prefer theme.js API if available
+      const cur = document.documentElement.dataset.theme || 'dark';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      if (window.__SS_THEME__ && typeof window.__SS_THEME__.set === 'function') {
+        window.__SS_THEME__.set(next);
+      } else {
+        document.documentElement.dataset.theme = next;
+      }
+    });
+  }
+
+  function renderError(message) {
+    root.innerHTML = `
+      <div class="md-reader">
+        <section class="surface" style="padding:18px;border-radius:18px;">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <i class="fas fa-exclamation-triangle" style="font-size:1.8rem;"></i>
+            <div>
+              <div style="font-weight:800;font-size:18px;">Ошибка загрузки</div>
+              <div class="aa-muted" style="margin-top:6px;">${escapeHtml(message)}</div>
             </div>
-        `;
-        
-        markdownContainer.innerHTML = content;
-        
-        // Обновляем заголовок страницы
-        document.title = `${title} | Syntax_Syndicate`;
-    }
-    
-    function showError(message) {
-        markdownContainer.innerHTML = `
-            <div class="error">
-                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                <h3>Ошибка загрузки</h3>
-                <p>${message}</p>
-                <div style="margin-top: 2rem;">
-                    <a href="lections.html" class="btn btn-primary">
-                        <i class="fas fa-arrow-left"></i> Вернуться к лекциям
-                    </a>
-                </div>
-            </div>
-        `;
-    }
-    
-    function getCategoryLabel(category) {
-        const categories = {
-            'programming': '💻 Программирование',
-            'design': '🎨 Дизайн',
-            'devops': '⚙️ DevOps',
-            'data-science': '📊 Data Science',
-            'cybersecurity': '🔐 Кибербезопасность',
-            'linux': '🐧 Linux',
-            'windows': '🪟 Windows'
-        };
-        return categories[category] || category;
-    }
-    
-    function getSubcategoryLabel(subcategory) {
-        const subcategories = {
-            'frontend': '🎨 Frontend',
-            'backend': '⚙️ Backend',
-            'bash': '🐚 Bash',
-            'ux-design': '🎨 UX Design',
-            'ui-design': '🎨 UI Design'
-        };
-        return subcategories[subcategory] || subcategory;
-    }
+          </div>
+          <div style="margin-top:14px;">
+            <a class="md-btn primary" href="lections.html" style="text-decoration:none;display:inline-flex;">
+              <i class="fas fa-arrow-left"></i><span>Вернуться к лекциям</span>
+            </a>
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
+  function getCategoryLabel(category) {
+    const categories = {
+      programming: 'Программирование',
+      design: 'Дизайн',
+      devops: 'DevOps',
+      'data-science': 'Data Science',
+      cybersecurity: 'Кибербезопасность',
+      linux: 'Linux',
+      windows: 'Windows'
+    };
+    return categories[category] || category;
+  }
+
+  function getSubcategoryLabel(subcategory) {
+    const subcategories = {
+      frontend: 'Frontend',
+      backend: 'Backend',
+      'operating-systems': 'ОС',
+      python: 'Python',
+      javascript: 'JavaScript'
+    };
+    return subcategories[subcategory] || subcategory;
+  }
+
+  function escapeHtml(s) {
+    return (s ?? '').toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 });
-
-// Функция для переключения темной темы
-function toggleDarkMode() {
-    const isDark = document.body.classList.toggle('dark-mode');
-    window.settingsManager.updateSetting('darkTheme', isDark);
-}
-
-// Функция для применения сохраненной темы
-function applySavedTheme() {
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-}
-
-// Применяем тему при загрузке
-applySavedTheme();

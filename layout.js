@@ -160,14 +160,23 @@
     if (btn) btn.addEventListener('click', () => {
       document.documentElement.classList.contains('aa-nav-open') ? close() : open();
     });
-    if (overlay) overlay.addEventListener('click', close);
-
-    // улучшение: закрывать меню после клика по ссылке на мобилке
-    if (sidebar) sidebar.addEventListener('click', (e) => {
-      const a = e.target.closest('a');
-      if (!a) return;
-      close();
+    // Overlay should close ONLY when the user taps the overlay itself.
+    // On mobile, if the overlay ends up on top (z-index issues) or taps
+    // are "composited", an unconditional close breaks interaction.
+    if (overlay) overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close();
     });
+
+    // Prevent taps inside the sidebar from bubbling to the overlay.
+    if (sidebar) {
+      sidebar.addEventListener('pointerdown', (e) => e.stopPropagation());
+      sidebar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const a = e.target.closest('a');
+        if (!a) return;
+        close();
+      });
+    }
 
     // highlight текущий якорь/страницы
     window.addEventListener('hashchange', () => {
@@ -182,4 +191,366 @@
   } else {
     mount();
   }
+})();
+
+
+/* ===========================
+   Live Wallpapers (canvas)
+   Supports: particles, matrix, rain, snow
+   Controlled by html[data-wallpaper], [data-wallpaper-intensity], [data-wallpaper-speed], [data-wallpaper-density], [data-wallpaper-color]
+=========================== */
+(() => {
+  const CANVAS_TYPES = new Set(['particles','matrix','rain','snow']);
+  let raf = 0;
+  let runningType = null;
+  let canvas = null;
+  let ctx = null;
+  let w=0,h=0,dpr=1;
+  let state = null;
+
+  const $html = () => document.documentElement;
+
+  function prefersReduced(){
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function getSetting(name, fallback){
+    const v = $html().dataset[name];
+    return v || fallback;
+  }
+
+  function intensityAlpha(){
+    const v = getSetting('wallpaperIntensity','normal');
+    if (v==='low') return 0.35;
+    if (v==='high') return 0.75;
+    return 0.55;
+  }
+
+  function speedMul(){
+    const v = getSetting('wallpaperSpeed','normal');
+    if (v==='slow') return 0.75;
+    if (v==='fast') return 1.35;
+    return 1.0;
+  }
+
+  function densityMul(){
+    const v = getSetting('wallpaperDensity','normal');
+    if (v==='low') return 0.75;
+    if (v==='high') return 1.35;
+    return 1.0;
+  }
+
+  function colorMode(){
+    return getSetting('wallpaperColor','auto');
+  }
+
+  function palette(){
+    const mode = colorMode();
+    const styles = getComputedStyle(document.documentElement);
+    const primary = (styles.getPropertyValue('--primary-color') || '#667eea').trim();
+    const theme = ($html().dataset.theme || '').toLowerCase();
+    if (mode === 'mono') return { fg: 'rgba(255,255,255,', dim:'rgba(255,255,255,' , primary: 'rgba(255,255,255,' };
+    if (mode === 'accent') return { fg: hexToRgbaPrefix(primary), dim: hexToRgbaPrefix(primary), primary: hexToRgbaPrefix(primary) };
+    // auto
+    if (theme === 'light') return { fg:'rgba(30,41,59,', dim:'rgba(30,41,59,', primary: hexToRgbaPrefix(primary) };
+    return { fg:'rgba(226,232,240,', dim:'rgba(226,232,240,', primary: hexToRgbaPrefix(primary) };
+  }
+
+  function hexToRgbaPrefix(hex){
+    // returns 'rgba(r,g,b,' (alpha appended later)
+    const h = (hex||'').replace('#','').trim();
+    const v = h.length===3 ? h.split('').map(c=>c+c).join('') : h;
+    if (v.length!==6) return 'rgba(102,126,234,';
+    const r=parseInt(v.slice(0,2),16), g=parseInt(v.slice(2,4),16), b=parseInt(v.slice(4,6),16);
+    return `rgba(${r},${g},${b},`;
+  }
+
+  function ensureCanvas(){
+    const host = document.querySelector('.aa-wallpaper');
+    if (!host) return null;
+    if (!canvas){
+      canvas = document.createElement('canvas');
+      canvas.setAttribute('aria-hidden','true');
+      host.appendChild(canvas);
+      ctx = canvas.getContext('2d', { alpha:true });
+    }
+    resize();
+    return canvas;
+  }
+
+  function destroyCanvas(){
+    stop();
+    if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas);
+    canvas=null; ctx=null;
+  }
+
+  function resize(){
+    if (!canvas) return;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    const rect = canvas.getBoundingClientRect();
+    w = Math.max(1, Math.floor(rect.width));
+    h = Math.max(1, Math.floor(rect.height));
+    canvas.width = Math.floor(w*dpr);
+    canvas.height = Math.floor(h*dpr);
+    if (ctx) ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function stop(){
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    runningType = null;
+    state = null;
+  }
+
+  function start(type){
+    stop();
+    if (prefersReduced()) return; // respect user preference
+    runningType = type;
+    ensureCanvas();
+    if (!ctx) return;
+    if (type === 'particles') state = initParticles();
+    if (type === 'rain') state = initRain();
+    if (type === 'snow') state = initSnow();
+    if (type === 'matrix') state = initMatrix();
+    loop();
+  }
+
+  function loop(){
+    if (!ctx || !canvas || !runningType) return;
+    if (document.hidden) { raf = requestAnimationFrame(loop); return; }
+    draw();
+    raf = requestAnimationFrame(loop);
+  }
+
+  function clear(){
+    ctx.clearRect(0,0,w,h);
+  }
+
+  function draw(){
+    const a = intensityAlpha();
+    const pal = palette();
+    const s = speedMul();
+    const d = densityMul();
+
+    clear();
+
+    if (runningType === 'particles'){
+      const p = state;
+      const count = p.points.length;
+      ctx.globalCompositeOperation = 'lighter';
+      for (let i=0;i<count;i++){
+        const pt = p.points[i];
+        pt.x += pt.vx * s;
+        pt.y += pt.vy * s;
+        if (pt.x < -20) pt.x = w+20;
+        if (pt.x > w+20) pt.x = -20;
+        if (pt.y < -20) pt.y = h+20;
+        if (pt.y > h+20) pt.y = -20;
+
+        ctx.fillStyle = pal.primary + (0.25*a) + ')';
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+      // links
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.lineWidth = 1;
+      for (let i=0;i<count;i++){
+        const aPt = p.points[i];
+        for (let j=i+1;j<count;j++){
+          const bPt = p.points[j];
+          const dx=aPt.x-bPt.x, dy=aPt.y-bPt.y;
+          const dist = Math.hypot(dx,dy);
+          const max = 140 / (1.0/d);
+          if (dist < max){
+            const alpha = (1 - dist/max) * 0.35 * a;
+            ctx.strokeStyle = pal.primary + alpha + ')';
+            ctx.beginPath();
+            ctx.moveTo(aPt.x, aPt.y);
+            ctx.lineTo(bPt.x, bPt.y);
+            ctx.stroke();
+          }
+        }
+      }
+      return;
+    }
+
+    if (runningType === 'rain'){
+      const r = state;
+      const drops = r.drops;
+      ctx.lineWidth = 1.4;
+      ctx.lineCap = 'round';
+      for (let i=0;i<drops.length;i++){
+        const dr = drops[i];
+        dr.x += dr.vx * s;
+        dr.y += dr.vy * s;
+        if (dr.y > h+40 || dr.x > w+80){
+          dr.x = Math.random()*w - 60;
+          dr.y = -Math.random()*h*0.35;
+        }
+        const alpha = (0.10 + dr.alpha*0.22) * a;
+        ctx.strokeStyle = pal.fg + alpha + ')';
+        ctx.beginPath();
+        ctx.moveTo(dr.x, dr.y);
+        ctx.lineTo(dr.x - dr.vx*3.2, dr.y - dr.vy*3.2);
+        ctx.stroke();
+      }
+      return;
+    }
+
+    if (runningType === 'snow'){
+      const sn = state;
+      const flakes = sn.flakes;
+      for (let i=0;i<flakes.length;i++){
+        const f = flakes[i];
+        f.t += 0.01 * s;
+        f.y += f.vy * s;
+        f.x += Math.sin(f.t) * f.vx * s;
+        if (f.y > h+30){
+          f.y = -20;
+          f.x = Math.random()*w;
+        }
+        const alpha = (0.18 + f.alpha*0.35) * a;
+        ctx.fillStyle = pal.fg + alpha + ')';
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+      return;
+    }
+
+    if (runningType === 'matrix'){
+      const m = state;
+      const cols = m.cols;
+      const charSet = m.chars;
+      const size = m.size;
+      const alphaBase = a;
+      ctx.font = `${size}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`;
+      ctx.textBaseline = 'top';
+      for (let i=0;i<cols.length;i++){
+        const c = cols[i];
+        c.y += c.vy * s;
+        if (c.y > h + size*10){
+          c.y = -Math.random()*h*0.5;
+          c.vy = (1.8 + Math.random()*3.2) * (0.75 + d*0.35);
+        }
+        const x = c.x;
+        // tail
+        for (let t=0;t<c.len;t++){
+          const yy = c.y - t*size*1.15;
+          if (yy < -size*2 || yy > h+size*2) continue;
+          const ch = charSet[(Math.random()*charSet.length)|0];
+          const fade = (1 - t/c.len);
+          const alpha = (0.05 + fade*0.45) * alphaBase;
+          ctx.fillStyle = pal.primary + alpha + ')';
+          ctx.fillText(ch, x, yy);
+        }
+      }
+      return;
+    }
+  }
+
+  function initParticles(){
+    const count = Math.round(28 * densityMul() + (Math.min(w,h)/50));
+    const points = [];
+    for (let i=0;i<count;i++){
+      points.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        vx: (Math.random()*0.6 - 0.3),
+        vy: (Math.random()*0.6 - 0.3),
+        r: 1 + Math.random()*2.2
+      });
+    }
+    return { points };
+  }
+
+  function initRain(){
+    const count = Math.round((120 + (w/8)) * densityMul());
+    const drops=[];
+    for (let i=0;i<count;i++){
+      const sp = 5 + Math.random()*7;
+      drops.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        vx: 2.4 + Math.random()*1.6,
+        vy: sp,
+        alpha: Math.random()
+      });
+    }
+    return { drops };
+  }
+
+  function initSnow(){
+    const count = Math.round((70 + (w/14)) * densityMul());
+    const flakes=[];
+    for (let i=0;i<count;i++){
+      flakes.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        vy: 0.6 + Math.random()*1.6,
+        vx: 0.3 + Math.random()*0.8,
+        r: 1.2 + Math.random()*2.6,
+        alpha: Math.random(),
+        t: Math.random()*Math.PI*2
+      });
+    }
+    return { flakes };
+  }
+
+  function initMatrix(){
+    const size = 14;
+    const colCount = Math.max(10, Math.floor(w / (size*1.05)));
+    const cols=[];
+    for (let i=0;i<colCount;i++){
+      cols.push({
+        x: i * (w/colCount),
+        y: Math.random()*h,
+        vy: (2 + Math.random()*3.5) * (0.75 + densityMul()*0.25),
+        len: 8 + Math.floor(Math.random()*12*densityMul())
+      });
+    }
+    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789';
+    return { cols, chars: chars.split(''), size };
+  }
+
+  function currentType(){
+    return getSetting('wallpaper','none');
+  }
+
+  function apply(){
+    const type = currentType();
+    if (!CANVAS_TYPES.has(type)){
+      // css wallpapers
+      destroyCanvas();
+      return;
+    }
+    start(type);
+  }
+
+  // Observe dataset changes (settings)
+  const obs = new MutationObserver(() => apply());
+
+  function init(){
+    const html = document.documentElement;
+    obs.observe(html, { attributes:true, attributeFilter:['data-wallpaper','data-wallpaper-intensity','data-wallpaper-speed','data-wallpaper-density','data-wallpaper-color','data-theme'] });
+    window.addEventListener('resize', () => {
+      resize();
+      // re-init state to match new size
+      if (runningType) start(runningType);
+    }, { passive:true });
+    document.addEventListener('visibilitychange', () => {
+      // keep loop alive; no heavy work when hidden
+    });
+    apply();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // expose for debugging
+  window.__AA_WP__ = { apply };
 })();

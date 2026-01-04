@@ -39,7 +39,7 @@
                         <aside class="search-filters surface" id="filtersPanel" aria-label="Фильтры поиска">
 
                             <div class="filters-head">
-                                <button class="btn-secondary filters-close" id="closeFiltersBtn" type="button" aria-label="Закрыть фильтры">← Назад</button>
+
                             </div>
                             <div class="filters-title">Фильтры</div>
 
@@ -98,7 +98,7 @@
 
                         <section class="search-results surface" aria-label="Результаты поиска">
                             <div class="search-topbar">
-                                <button class="filters-toggle" id="openFiltersBtn" id="filtersToggle" type="button" aria-controls="filtersPanel" aria-expanded="false">
+                                <button class="filters-toggle" id="openFiltersBtn" type="button" aria-controls="filtersPanel" aria-expanded="false">
             <i class="fas fa-sliders-h" aria-hidden="true"></i>
             Фильтры
           </button>
@@ -131,41 +131,16 @@
 
 
             <script>
+                // Trigger search on button click
                 (function() {
                     const btn = document.getElementById('searchBtn');
                     const input = document.getElementById('searchInput');
                     if (btn && input) btn.addEventListener('click', () => input.dispatchEvent(new Event('input', {
                         bubbles: true
                     })));
-
-                    const toggle = document.getElementById('filtersToggle');
-                    const panel = document.getElementById('filtersPanel');
-                    const overlay = document.getElementById('aaOverlay');
-
-                    function close() {
-                        if (!panel) return;
-                        panel.classList.remove('is-open');
-                        if (overlay) overlay.classList.remove('is-open');
-                        if (toggle) toggle.setAttribute('aria-expanded', 'false');
-                    }
-
-                    function open() {
-                        if (!panel) return;
-                        panel.classList.add('is-open');
-                        if (overlay) overlay.classList.add('is-open');
-                        if (toggle) toggle.setAttribute('aria-expanded', 'true');
-                    }
-                    if (toggle && panel) {
-                        toggle.addEventListener('click', () => panel.classList.contains('is-open') ? close() : open());
-                    }
-                    if (overlay) {
-                        overlay.addEventListener('click', close);
-                    }
-                    window.addEventListener('keydown', (e) => {
-                        if (e.key === 'Escape') close();
-                    });
                 })();
 
+                // Filters (desktop + mobile drawer)
                 (function() {
                     const filters = document.getElementById('filtersPanel');
                     const overlay = document.getElementById('filtersOverlay');
@@ -178,22 +153,39 @@
                         filters.classList.add('is-open');
                         overlay.classList.add('is-open');
                         document.documentElement.classList.add('aa-filters-open');
+                        if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
                     }
 
                     function closeFilters() {
                         filters.classList.remove('is-open');
                         overlay.classList.remove('is-open');
                         document.documentElement.classList.remove('aa-filters-open');
+                        if (openBtn) openBtn.setAttribute('aria-expanded', 'false');
                     }
 
                     if (openBtn) openBtn.addEventListener('click', openFilters);
                     if (closeBtn) closeBtn.addEventListener('click', closeFilters);
 
-                    // 🔥 ТАП В ПУСТОЕ МЕСТО
-                    overlay.addEventListener('click', closeFilters);
+                    // Prevent overlay from stealing taps inside the filters drawer
+                    filters.addEventListener('pointerdown', (e) => e.stopPropagation());
+                    filters.addEventListener('click', (e) => e.stopPropagation());
+
+                    // Close only when tapping the overlay itself (not when interacting inside the drawer)
+                    overlay.addEventListener('click', (e) => {
+                        if (e.target === overlay) closeFilters();
+                    });
+
+                    // Prevent taps inside the drawer from bubbling to the overlay on some mobile browsers
+                    filters.addEventListener('pointerdown', (e) => e.stopPropagation());
+                    filters.addEventListener('click', (e) => e.stopPropagation());
 
                     // 🔥 BACK КНОПКА ТЕЛЕФОНА
                     window.addEventListener('popstate', closeFilters);
+
+                    // ESC
+                    window.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape') closeFilters();
+                    });
                 })();
 
                 // ✅ FIX: reset mobile filter drawer when switching viewport (DevTools / rotate)

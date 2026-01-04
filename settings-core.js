@@ -21,7 +21,10 @@ class SettingsManager {
 
             // Live wallpaper (global background layer)
             wallpaper: 'none',
-            wallpaperIntensity: 'normal'
+            wallpaperIntensity: 'normal',
+            wallpaperSpeed: 'normal',
+            wallpaperDensity: 'normal',
+            wallpaperColor: 'auto'
         };
     }
 
@@ -78,6 +81,9 @@ class SettingsManager {
         try {
             document.documentElement.dataset.wallpaper = this.settings.wallpaper || 'none';
             document.documentElement.dataset.wallpaperIntensity = this.settings.wallpaperIntensity || 'normal';
+            document.documentElement.dataset.wallpaperSpeed = this.settings.wallpaperSpeed || 'normal';
+            document.documentElement.dataset.wallpaperDensity = this.settings.wallpaperDensity || 'normal';
+            document.documentElement.dataset.wallpaperColor = this.settings.wallpaperColor || 'auto';
         } catch {}
 
         // Применяем анимации

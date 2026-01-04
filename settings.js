@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
         liveSearchToggle: document.getElementById('liveSearchToggle'),
         wallpaperSelect: document.getElementById('wallpaperSelect'),
         wallpaperIntensity: document.getElementById('wallpaperIntensity'),
+        wallpaperSpeed: document.getElementById('wallpaperSpeedSelect'),
+        wallpaperDensity: document.getElementById('wallpaperDensitySelect'),
+        wallpaperColor: document.getElementById('wallpaperColorSelect'),
         exportDataBtn: document.getElementById('exportDataBtn'),
         importDataBtn: document.getElementById('importDataBtn'),
         importFile: document.getElementById('importFile'),
@@ -86,6 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Live wallpaper
         if (elements.wallpaperSelect) elements.wallpaperSelect.value = settings.wallpaper || 'none';
         if (elements.wallpaperIntensity) elements.wallpaperIntensity.value = settings.wallpaperIntensity || 'normal';
+        if (elements.wallpaperSpeed) elements.wallpaperSpeed.value = settings.wallpaperSpeed || 'normal';
+        if (elements.wallpaperDensity) elements.wallpaperDensity.value = settings.wallpaperDensity || 'normal';
+        if (elements.wallpaperColor) elements.wallpaperColor.value = settings.wallpaperColor || 'auto';
         
         console.log('Интерфейс настроек инициализирован');
     }
@@ -162,7 +168,26 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Кнопки действий
+        
+        if (elements.wallpaperSpeed) {
+            elements.wallpaperSpeed.addEventListener('change', function() {
+                settingsManager.updateSetting('wallpaperSpeed', this.value);
+                showNotification('Скорость обоев обновлена', 'success');
+            });
+        }
+        if (elements.wallpaperDensity) {
+            elements.wallpaperDensity.addEventListener('change', function() {
+                settingsManager.updateSetting('wallpaperDensity', this.value);
+                showNotification('Плотность обоев обновлена', 'success');
+            });
+        }
+        if (elements.wallpaperColor) {
+            elements.wallpaperColor.addEventListener('change', function() {
+                settingsManager.updateSetting('wallpaperColor', this.value);
+                showNotification('Цвет обоев обновлён', 'success');
+            });
+        }
+// Кнопки действий
         if (elements.saveSettingsBtn) {
             elements.saveSettingsBtn.addEventListener('click', function() {
                 const success = settingsManager.saveSettings();
