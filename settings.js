@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
         newTabToggle: document.getElementById('newTabToggle'),
         notificationsToggle: document.getElementById('notificationsToggle'),
         liveSearchToggle: document.getElementById('liveSearchToggle'),
+        wallpaperSelect: document.getElementById('wallpaperSelect'),
+        wallpaperIntensity: document.getElementById('wallpaperIntensity'),
         exportDataBtn: document.getElementById('exportDataBtn'),
         importDataBtn: document.getElementById('importDataBtn'),
         importFile: document.getElementById('importFile'),
@@ -80,6 +82,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (elements.newTabToggle) elements.newTabToggle.checked = settings.newTab;
         if (elements.notificationsToggle) elements.notificationsToggle.checked = settings.notifications;
         if (elements.liveSearchToggle) elements.liveSearchToggle.checked = settings.liveSearch;
+
+        // Live wallpaper
+        if (elements.wallpaperSelect) elements.wallpaperSelect.value = settings.wallpaper || 'none';
+        if (elements.wallpaperIntensity) elements.wallpaperIntensity.value = settings.wallpaperIntensity || 'normal';
         
         console.log('Интерфейс настроек инициализирован');
     }
@@ -139,6 +145,20 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.liveSearchToggle.addEventListener('change', function() {
                 settingsManager.updateSetting('liveSearch', this.checked);
                 showNotification(this.checked ? 'Поиск при вводе включен' : 'Поиск при вводе отключен', 'success');
+            });
+        }
+
+        // Live wallpaper
+        if (elements.wallpaperSelect) {
+            elements.wallpaperSelect.addEventListener('change', function() {
+                settingsManager.updateSetting('wallpaper', this.value);
+                showNotification('Живые обои обновлены', 'success');
+            });
+        }
+        if (elements.wallpaperIntensity) {
+            elements.wallpaperIntensity.addEventListener('change', function() {
+                settingsManager.updateSetting('wallpaperIntensity', this.value);
+                showNotification('Интенсивность обоев обновлена', 'success');
             });
         }
         

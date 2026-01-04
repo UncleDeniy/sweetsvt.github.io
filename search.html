@@ -37,6 +37,10 @@
                         <div class="filters-overlay" id="filtersOverlay"></div>
 
                         <aside class="search-filters surface" id="filtersPanel" aria-label="Фильтры поиска">
+
+                            <div class="filters-head">
+                                <button class="btn-secondary filters-close" id="closeFiltersBtn" type="button" aria-label="Закрыть фильтры">← Назад</button>
+                            </div>
                             <div class="filters-title">Фильтры</div>
 
                             <div class="filter-group">
@@ -94,7 +98,7 @@
 
                         <section class="search-results surface" aria-label="Результаты поиска">
                             <div class="search-topbar">
-                                <button class="filters-toggle" id="filtersToggle" type="button" aria-controls="filtersPanel" aria-expanded="false">
+                                <button class="filters-toggle" id="openFiltersBtn" id="filtersToggle" type="button" aria-controls="filtersPanel" aria-expanded="false">
             <i class="fas fa-sliders-h" aria-hidden="true"></i>
             Фильтры
           </button>
@@ -190,6 +194,33 @@
 
                     // 🔥 BACK КНОПКА ТЕЛЕФОНА
                     window.addEventListener('popstate', closeFilters);
+                })();
+
+                // ✅ FIX: reset mobile filter drawer when switching viewport (DevTools / rotate)
+                (function() {
+                    const filters = document.getElementById("filtersPanel");
+                    const overlay = document.getElementById("filtersOverlay");
+
+                    if (!filters || !overlay) return;
+
+                    function closeFilters() {
+                        filters.classList.remove("is-open");
+                        overlay.classList.remove("is-open");
+                        document.documentElement.classList.remove("aa-filters-open");
+                    }
+
+                    function isMobileLayout() {
+                        // ДОЛЖНО совпадать с брейкпоинтом из CSS (@media max-width: 980px)
+                        return window.matchMedia("(max-width: 980px)").matches;
+                    }
+
+                    // если перешли в desktop — закрываем drawer
+                    window.addEventListener("resize", () => {
+                        if (!isMobileLayout()) closeFilters();
+                    });
+
+                    // и на всякий: при загрузке тоже
+                    if (!isMobileLayout()) closeFilters();
                 })();
             </script>
 

@@ -54,7 +54,11 @@
         })));
       }
     }catch{}
-    out.forEach((r,i)=>{ if(!r.id) r.id=`res-${i}`; });
+    // Normalize ids to strings (localStorage keys are strings)
+    out.forEach((r,i)=>{
+      if (r && (r.id === 0 || r.id)) r.id = String(r.id);
+      if(!r.id) r.id=`res-${i}`;
+    });
     return out;
   }
 
@@ -92,7 +96,7 @@
     if(totalEl) totalEl.textContent = String(ids.length);
 
     const resources = loadResources();
-    const map = new Map(resources.map(r=>[r.id,r]));
+    const map = new Map(resources.map(r=>[String(r.id),r]));
 
     // folder options
     const folders = Array.from(new Set(ids.map(id => (lib[id]?.folder || 'Избранное')))).sort((a,b)=>a.localeCompare(b,'ru'));

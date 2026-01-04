@@ -104,19 +104,6 @@
     cat.appendChild(ul);
     aside.appendChild(cat);
 
-    // Тема
-    const theme = document.createElement('section');
-    theme.className = 'aa-sidecard';
-    theme.innerHTML = `
-      <h2 class="aa-sidecard__title">Тема</h2>
-      <div class="aa-theme" role="group" aria-label="Переключение темы">
-        <button type="button" data-theme-mode="system">Сист</button>
-        <button type="button" data-theme-mode="light">Свет</button>
-        <button type="button" data-theme-mode="dark">Тёмн</button>
-      </div>
-    `;
-    aside.appendChild(theme);
-
     // Что нового
     const nw = document.createElement('section');
     nw.className = 'aa-sidecard';
@@ -143,6 +130,16 @@
   }
 
   function mount() {
+    // Live wallpaper layer (controlled via settings-core.js -> html[data-wallpaper])
+    // Inject once for all pages so the background is visible everywhere.
+    if (!document.querySelector('.aa-wallpaper')) {
+      const w = document.createElement('div');
+      w.className = 'aa-wallpaper';
+      w.setAttribute('aria-hidden', 'true');
+      // put it at the very top so overlays/sidebars stay above
+      document.body.insertBefore(w, document.body.firstChild);
+    }
+
     const mountEl = document.getElementById('aaSidebarMount');
     const contentEl = document.querySelector('.aa-content');
     if (!mountEl || !contentEl) return;
@@ -171,24 +168,6 @@
       if (!a) return;
       close();
     });
-
-    // Theme buttons
-    const themeGroup = document.querySelector('.aa-theme');
-    if (themeGroup && window.__SS_THEME__) {
-      const sync = () => {
-        const mode = window.__SS_THEME__.get();
-        themeGroup.querySelectorAll('button').forEach((b) => {
-          b.classList.toggle('is-active', b.dataset.themeMode === mode);
-        });
-      };
-      sync();
-      themeGroup.addEventListener('click', (e) => {
-        const btn2 = e.target.closest('button[data-theme-mode]');
-        if (!btn2) return;
-        window.__SS_THEME__.set(btn2.dataset.themeMode);
-        sync();
-      });
-    }
 
     // highlight текущий якорь/страницы
     window.addEventListener('hashchange', () => {

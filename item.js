@@ -53,7 +53,11 @@
         out.push(...lectureResources);
       }
     } catch {}
-    out.forEach((r,i)=>{ if(!r.id) r.id=`res-${i}`; });
+    // Normalize ids to strings so they match URL params and localStorage keys
+    out.forEach((r,i)=>{
+      if (r && (r.id === 0 || r.id)) r.id = String(r.id);
+      if(!r.id) r.id=`res-${i}`;
+    });
     return out;
   }
 

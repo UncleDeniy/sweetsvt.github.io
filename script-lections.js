@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let lections = [];
 
+    // Chips UI (like on search page)
+    const chipsHost = document.getElementById('activeChips');
+
     // Проверяем, есть ли лекции
     if (!window.lections || window.lections.length === 0) {
         showNoLections();
@@ -23,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         displayLections(lections);
         updateStats();
         populateSubcategories();
+        renderActiveChips();
         
         searchInput.addEventListener('input', filterLections);
         categoryFilter.addEventListener('change', function() {
@@ -77,6 +81,51 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         displayLections(filtered);
+        renderActiveChips();
+    }
+
+    function renderActiveChips() {
+        if (!chipsHost) return;
+        chipsHost.innerHTML = '';
+
+        const chips = [];
+        const q = (searchInput?.value || '').trim();
+        const cat = categoryFilter?.value || '';
+        const sub = subcategoryFilter?.value || '';
+
+        if (q) chips.push({ key: 'q', label: `Запрос: ${q}` });
+        if (cat) chips.push({ key: 'cat', label: `Категория: ${getCategoryLabel(cat)}` });
+        if (sub) chips.push({ key: 'sub', label: `Подкатегория: ${getSubcategoryLabel(sub)}` });
+
+        if (!chips.length) {
+            chipsHost.innerHTML = `<span class="chips-empty">Фильтры не выбраны</span>`;
+            return;
+        }
+
+        chips.forEach(ch => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'chip';
+            b.setAttribute('data-chip', ch.key);
+            b.innerHTML = `${escapeHtml(ch.label)} <span class="chip-x">×</span>`;
+            b.addEventListener('click', () => {
+                if (ch.key === 'q' && searchInput) searchInput.value = '';
+                if (ch.key === 'cat' && categoryFilter) categoryFilter.value = '';
+                if (ch.key === 'sub' && subcategoryFilter) subcategoryFilter.value = '';
+                populateSubcategories();
+                filterLections();
+            });
+            chipsHost.appendChild(b);
+        });
+    }
+
+    function escapeHtml(s) {
+        return (s || '').toString()
+            .replaceAll('&','&amp;')
+            .replaceAll('<','&lt;')
+            .replaceAll('>','&gt;')
+            .replaceAll('"','&quot;')
+            .replaceAll("'",'&#39;');
     }
 
     function displayLections(lectionsToDisplay) {
@@ -94,34 +143,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         lectionsToDisplay.forEach(lection => {
-            const lectionCard = document.createElement('div');
-            lectionCard.className = 'lection-card';
-            
-            // Формируем путь к файлу лекции
-            const filePath = `docs/${lection.file}`;
-            
-            lectionCard.innerHTML = `
-            <div class="lection-header">
-                <h3 class="lection-title">${lection.title}</h3>
-            </div>
-            <div class="lection-meta">
-                <span class="lection-badge">${getCategoryLabel(lection.category)}</span>
-                ${lection.subcategory ? `<span class="lection-badge" style="background: #ed8936;">${getSubcategoryLabel(lection.subcategory)}</span>` : ''}
-                <span class="lection-badge" style="background: #48bb78;">📚 Лекция</span>
-            </div>
-            <p class="lection-description">${lection.description}</p>
-            <div class="lection-actions">
-                <a href="markdown-viewer.html?file=${lection.file}&title=${encodeURIComponent(lection.title)}&category=${lection.category}&subcategory=${lection.subcategory || ''}&author=${lection.author || 'Syntax_Syndicate'}" 
-                   class="btn-primary">
-                    <i class="fas fa-book-open"></i> Читать лекцию
+            const card = document.createElement('article');
+            card.className = 'result-card lection-card';
+
+            const title = escapeHtml(lection.title || 'Без названия');
+            const desc = escapeHtml(lection.description || '');
+            const author = escapeHtml(lection.author || 'Syntax_Syndicate');
+            const cat = lection.category ? getCategoryLabel(lection.category) : '';
+            const sub = lection.subcategory ? getSubcategoryLabel(lection.subcategory) : '';
+
+            const href = `markdown-viewer.html?file=${encodeURIComponent(lection.file || '')}`
+              + `&title=${encodeURIComponent(lection.title || '')}`
+              + `&category=${encodeURIComponent(lection.category || '')}`
+              + `&subcategory=${encodeURIComponent(lection.subcategory || '')}`
+              + `&author=${encodeURIComponent(lection.author || 'Syntax_Syndicate')}`;
+
+            card.innerHTML = `
+              <div class="result-top">
+                <div class="result-main">
+                  <a class="result-title" href="${href}">${title}</a>
+                  <div class="result-sub">
+                    <span class="badge">📚 Лекция</span>
+                    ${cat ? `<span class="badge">${escapeHtml(cat)}</span>` : ''}
+                    ${sub ? `<span class="badge badge--warm">${escapeHtml(sub)}</span>` : ''}
+                    <span class="result-meta">👤 ${author}</span>
+                  </div>
+                </div>
+              </div>
+
+              ${desc ? `<div class="result-desc">${desc}</div>` : ''}
+
+              <div class="result-actions">
+                <a class="btn-primary" href="${href}">
+                  <i class="fas fa-book-open"></i> Читать
                 </a>
-                <span style="color: #718096; font-size: 0.9rem;">
-                    <i class="fas fa-user"></i> ${lection.author || 'Syntax_Syndicate'}
-                </span>
-            </div>
-        `;
-            
-            lectionsList.appendChild(lectionCard);
+              </div>
+            `;
+
+            lectionsList.appendChild(card);
         });
     }
 

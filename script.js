@@ -79,6 +79,7 @@
 
     // Нормализуем id
     out.forEach((r, i) => {
+      if (r && (r.id === 0 || r.id)) r.id = String(r.id);
       if (!r.id) r.id = `res-${i}`;
     });
 

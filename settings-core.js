@@ -9,7 +9,7 @@ class SettingsManager {
 
     getDefaultSettings() {
         return {
-            version: '1.0',
+            version: '1.1',
             darkTheme: false,
             colorScheme: 'default',
             fontSize: 'medium',
@@ -17,7 +17,11 @@ class SettingsManager {
             autoSave: true,
             newTab: true,
             notifications: true,
-            liveSearch: true
+            liveSearch: true,
+
+            // Live wallpaper (global background layer)
+            wallpaper: 'none',
+            wallpaperIntensity: 'normal'
         };
     }
 
@@ -70,6 +74,12 @@ class SettingsManager {
         const sizes = { 'small': '14px', 'medium': '16px', 'large': '18px', 'xlarge': '20px' };
         document.documentElement.style.fontSize = sizes[this.settings.fontSize] || '16px';
         
+        // Live wallpaper
+        try {
+            document.documentElement.dataset.wallpaper = this.settings.wallpaper || 'none';
+            document.documentElement.dataset.wallpaperIntensity = this.settings.wallpaperIntensity || 'normal';
+        } catch {}
+
         // Применяем анимации
         if (this.settings.animations) {
             document.body.classList.remove('no-animations');
@@ -118,43 +128,53 @@ class SettingsManager {
 
     // Метод для показа уведомлений
     showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `settings-notification settings-notification-${type}`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            color: white;
-            font-weight: 500;
-            z-index: 10000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            max-width: 300px;
-        `;
-        
-        notification.textContent = message;
-        
-        document.body.appendChild(notification);
-        
-        // Анимация появления
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-        
-        // Автоматическое скрытие
-        setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        }, 3000);
+        // Respect user preference
+        if (this.settings && this.settings.notifications === false) return;
+
+        const containerId = 'aaToasts';
+        let host = document.getElementById(containerId);
+        if (!host) {
+            host = document.createElement('div');
+            host.id = containerId;
+            host.className = 'aa-toasts';
+            host.setAttribute('aria-live', 'polite');
+            host.setAttribute('aria-relevant', 'additions');
+            document.body.appendChild(host);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `aa-toast aa-toast-${type}`;
+        toast.setAttribute('role', 'status');
+
+        const icon = document.createElement('div');
+        icon.className = 'aa-toast__icon';
+        icon.innerHTML = type === 'success' ? '✓' : (type === 'error' ? '!' : 'i');
+
+        const text = document.createElement('div');
+        text.className = 'aa-toast__text';
+        text.textContent = message;
+
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'aa-toast__close';
+        close.setAttribute('aria-label', 'Закрыть уведомление');
+        close.textContent = '×';
+
+        toast.appendChild(icon);
+        toast.appendChild(text);
+        toast.appendChild(close);
+
+        const remove = () => {
+            toast.classList.add('is-leaving');
+            setTimeout(() => toast.remove(), 200);
+        };
+
+        close.addEventListener('click', remove);
+
+        host.appendChild(toast);
+
+        // Auto-hide
+        setTimeout(remove, 3200);
     }
 }
 
