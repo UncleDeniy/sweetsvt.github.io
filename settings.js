@@ -43,6 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
         storageUsed: document.getElementById('storageUsed'),
         settingsCount: document.getElementById('settingsCount'),
         storageProgress: document.getElementById('storageProgress'),
+
+        // Storage card (Данные)
+        storageBar: document.getElementById('storageBar'),
+        storagePercent: document.getElementById('storagePercent'),
+        storageSize: document.getElementById('storageSize'),
+        storageDetails: document.getElementById('storageDetails'),
+        storagePie: document.getElementById('storagePie'),
+        clearStorageBtn: document.getElementById('clearStorageBtn'),
         
         // Модальное окно
         confirmModal: document.getElementById('confirmModal'),
@@ -226,6 +234,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (elements.importFile) {
             elements.importFile.addEventListener('change', importData);
         }
+
+        if (elements.clearStorageBtn) {
+            elements.clearStorageBtn.addEventListener('click', () => showConfirmModal(
+                'Очистить кэш',
+                'Будут удалены локальные данные сайта (закладки, история, настройки). Продолжить?',
+                clearCache
+            ));
+        }
         
         if (elements.resetBookmarksBtn) {
             elements.resetBookmarksBtn.addEventListener('click', () => showConfirmModal(
@@ -277,10 +293,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateStats() {
         // Закладки
         try {
-            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-            if (elements.totalBookmarks) {
-                elements.totalBookmarks.textContent = bookmarks.length;
-            }
+            // В проекте используются ud:library (map). Поддерживаем и legacy.
+            const lib = JSON.parse(localStorage.getItem('ud:library') || '{}');
+            const legacy = JSON.parse(localStorage.getItem('ud:bookmarks') || '[]');
+            const count = lib && typeof lib === 'object' ? Object.keys(lib).length : (Array.isArray(legacy) ? legacy.length : 0);
+            if (elements.totalBookmarks) elements.totalBookmarks.textContent = count;
         } catch (e) {
             console.error('Ошибка загрузки закладок:', e);
         }
@@ -300,12 +317,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Использование хранилища
         const storage = calculateStorageUsage();
         const usagePercent = Math.min(100, Math.round((storage.used / storage.total) * 100));
-        if (elements.storageUsed) {
-            elements.storageUsed.textContent = `${usagePercent}%`;
-        }
-        if (elements.storageProgress) {
-            elements.storageProgress.style.width = `${usagePercent}%`;
-        }
+        const usedMB = storage.used / (1024 * 1024);
+        if (elements.storageUsed) elements.storageUsed.textContent = `${usagePercent}%`;
+        if (elements.storageProgress) elements.storageProgress.style.width = `${usagePercent}%`;
+        updateStorageCard(storage, usagePercent, usedMB);
+        drawStoragePie(storage, usagePercent);
         
         // Количество настроек
         const settings = settingsManager.getSettings();
@@ -315,52 +331,169 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Статистика обновлена');
     }
+
+    function updateStorageCard(storage, usagePercent, usedMB) {
+        if (elements.storagePercent) elements.storagePercent.textContent = `${usagePercent}%`;
+        if (elements.storageSize) elements.storageSize.textContent = `${usedMB.toFixed(2)} MB из ${(storage.total / (1024*1024)).toFixed(0)} MB`;
+
+        if (elements.storageBar) {
+            elements.storageBar.style.width = `${usagePercent}%`;
+            elements.storageBar.classList.remove('storage-ok', 'storage-warn', 'storage-danger');
+            if (usagePercent >= 90) elements.storageBar.classList.add('storage-danger');
+            else if (usagePercent >= 70) elements.storageBar.classList.add('storage-warn');
+            else elements.storageBar.classList.add('storage-ok');
+        }
+
+        if (elements.storageDetails) {
+            const kb = (b) => (b / 1024).toFixed(1);
+            elements.storageDetails.innerHTML = [
+                `<div class="row"><span><strong>Закладки</strong></span><span>${kb(storage.groups.bookmarks)} KB</span></div>`,
+                `<div class="row"><span><strong>Настройки</strong></span><span>${kb(storage.groups.settings)} KB</span></div>`,
+                `<div class="row"><span><strong>История</strong></span><span>${kb(storage.groups.history)} KB</span></div>`,
+                `<div class="row"><span><strong>Прочее</strong></span><span>${kb(storage.groups.other)} KB</span></div>`
+            ].join('');
+        }
+    }
+
+    function drawStoragePie(storage, usagePercent) {
+        if (!elements.storagePie) return;
+        const c = elements.storagePie;
+        const ctx = c.getContext('2d');
+        if (!ctx) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        const cssSize = 120;
+        if (c.width !== cssSize * dpr) {
+            c.width = cssSize * dpr;
+            c.height = cssSize * dpr;
+            c.style.width = cssSize + 'px';
+            c.style.height = cssSize + 'px';
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const center = cssSize / 2;
+        const r = 54;
+        const hole = 34;
+
+        ctx.clearRect(0, 0, cssSize, cssSize);
+
+        const totalUsed = Object.values(storage.groups).reduce((a,b)=>a+b,0) || 1;
+        const segs = [
+            { k: 'bookmarks', label: 'B', color: '#60a5fa' },
+            { k: 'settings',  label: 'S', color: '#a78bfa' },
+            { k: 'history',   label: 'H', color: '#facc15' },
+            { k: 'other',     label: 'O', color: '#22c55e' },
+        ];
+
+        let a = -Math.PI / 2;
+        for (const s of segs) {
+            const v = storage.groups[s.k] || 0;
+            const da = (v / totalUsed) * Math.PI * 2;
+            if (da <= 0) continue;
+            ctx.beginPath();
+            ctx.moveTo(center, center);
+            ctx.arc(center, center, r, a, a + da);
+            ctx.closePath();
+            ctx.fillStyle = s.color;
+            ctx.fill();
+            a += da;
+        }
+
+        // donut hole
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(center, center, hole, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+
+        // center text
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--aa-text') || '#111';
+        ctx.font = '700 18px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`${usagePercent}%`, center, center - 2);
+        ctx.font = '500 10px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--aa-text-muted') || '#666';
+        ctx.fillText('localStorage', center, center + 14);
+    }
     
+    function bytesUTF16(str) {
+        return (str ? String(str).length : 0) * 2;
+    }
+
+    // Группируем ключи, чтобы показать детализацию (закладки/настройки/история/прочее)
+    function classifyKey(key) {
+        if (!key) return 'other';
+        if (key === 'bookmarks' || key.startsWith('ud:')) return 'bookmarks';
+        if (key === 'syntax_syndicate_settings' || key === 'ss:theme' || key.startsWith('ss:')) return 'settings';
+        if (key === 'tagHistory' || key === 'tagsViewHistory' || key.toLowerCase().includes('history')) return 'history';
+        return 'other';
+    }
+
     function calculateStorageUsage() {
-        let total = 0;
+        const groups = { bookmarks: 0, settings: 0, history: 0, other: 0 };
         let used = 0;
         
         try {
             if (typeof Storage !== 'undefined') {
-                for (let key in localStorage) {
-                    if (localStorage.hasOwnProperty(key)) {
-                        const value = localStorage.getItem(key);
-                        used += key.length + (value ? value.length : 0);
-                    }
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key) || '';
+                    const bytes = bytesUTF16(key) + bytesUTF16(value);
+                    used += bytes;
+                    const bucket = classifyKey(key);
+                    groups[bucket] += bytes;
                 }
-                total = 5 * 1024 * 1024; // 5MB
             }
-        } catch(e) {
+        } catch (e) {
             console.warn('localStorage недоступен:', e);
-            total = 1;
-            used = 0;
         }
-        
-        return { used, total };
+
+        // На практике quota зависит от браузера. Делаем “честную” шкалу для UI (20MB) + защиту.
+        const total = 20 * 1024 * 1024;
+        return { used, total, groups };
     }
     
     function exportData() {
         try {
+            const entries = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                entries[k] = localStorage.getItem(k);
+            }
+
+            const storage = calculateStorageUsage();
+            const usedMB = storage.used / (1024 * 1024);
+
             const data = {
-                version: '2.0',
-                exportDate: new Date().toISOString(),
-                bookmarks: JSON.parse(localStorage.getItem('bookmarks') || '[]'),
-                settings: settingsManager.getSettings(),
-                tagsHistory: JSON.parse(localStorage.getItem('tagsViewHistory') || '{}')
+                version: '3.0',
+                exportedAt: new Date().toISOString(),
+                app: 'Syntax Syndicate',
+                entries,
+                summary: {
+                    usedMB: Number(usedMB.toFixed(2)),
+                    groupsKB: {
+                        bookmarks: Number((storage.groups.bookmarks / 1024).toFixed(1)),
+                        settings: Number((storage.groups.settings / 1024).toFixed(1)),
+                        history: Number((storage.groups.history / 1024).toFixed(1)),
+                        other: Number((storage.groups.other / 1024).toFixed(1))
+                    }
+                }
             };
-            
+
             const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
             const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
+            link.href = url;
             link.download = `syntax_syndicate_backup_${new Date().toISOString().split('T')[0]}.json`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
+            URL.revokeObjectURL(url);
+
             showNotification('Данные успешно экспортированы!', 'success');
-            console.log('Данные экспортированы');
         } catch (error) {
             console.error('Ошибка экспорта данных:', error);
             showNotification('Ошибка экспорта данных', 'error');
@@ -370,36 +503,40 @@ document.addEventListener('DOMContentLoaded', function() {
     function importData(event) {
         const file = event.target.files[0];
         if (!file) return;
-        
+
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             try {
                 const data = JSON.parse(e.target.result);
-                
+                const entries = data && data.entries && typeof data.entries === 'object' ? data.entries : null;
+
+                if (!entries) {
+                    showNotification('Файл не похож на резервную копию (нет поля entries)', 'error');
+                    event.target.value = '';
+                    return;
+                }
+
                 showConfirmModal(
                     'Импорт данных',
-                    'Вы уверены, что хотите импортировать данные? Существующие данные могут быть перезаписаны.',
-                    function() {
+                    'Импорт заменит текущие локальные данные сайта. Продолжить?',
+                    function () {
                         try {
-                            if (data.bookmarks) {
-                                localStorage.setItem('bookmarks', JSON.stringify(data.bookmarks));
-                            }
-                            
-                            if (data.settings) {
-                                Object.keys(data.settings).forEach(key => {
-                                    settingsManager.updateSetting(key, data.settings[key]);
-                                });
-                                initSettingsInterface();
-                            }
-                            
-                            if (data.tagsHistory) {
-                                localStorage.setItem('tagsViewHistory', JSON.stringify(data.tagsHistory));
-                            }
-                            
-                            showNotification('Данные успешно импортированы!', 'success');
+                            localStorage.clear();
+                            Object.keys(entries).forEach((k) => {
+                                if (entries[k] === null || typeof entries[k] === 'undefined') return;
+                                localStorage.setItem(k, String(entries[k]));
+                            });
+
+                            // Перечитываем и применяем настройки
+                            try {
+                                settingsManager.loadSettings?.();
+                                settingsManager.applySettings?.();
+                            } catch {}
+                            initSettingsInterface();
                             updateStats();
+
+                            showNotification('Данные успешно импортированы!', 'success');
                             event.target.value = '';
-                            console.log('Данные импортированы');
                         } catch (importError) {
                             console.error('Ошибка импорта данных:', importError);
                             showNotification('Ошибка импорта данных', 'error');
@@ -411,10 +548,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNotification('Ошибка при чтении файла: ' + error.message, 'error');
             }
         };
-        reader.onerror = function() {
+        reader.onerror = function () {
             showNotification('Ошибка чтения файла', 'error');
         };
         reader.readAsText(file);
+    }
+
+    function clearCache() {
+        try {
+            const keep = new Map();
+            // Сохраним режим темы, чтобы после очистки не было “мигания”
+            const themeKey = window.__SS_THEME__?.key || 'ss:theme';
+            const themeVal = localStorage.getItem(themeKey);
+            if (themeVal) keep.set(themeKey, themeVal);
+
+            localStorage.clear();
+            for (const [k, v] of keep.entries()) {
+                localStorage.setItem(k, v);
+            }
+
+            try {
+                settingsManager.resetToDefault?.();
+            } catch {}
+            initSettingsInterface();
+            updateStats();
+            showNotification('Кэш очищен', 'success');
+        } catch (e) {
+            console.error('Ошибка очистки кэша:', e);
+            showNotification('Не удалось очистить кэш', 'error');
+        }
     }
     
     function resetBookmarks() {

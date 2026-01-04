@@ -1,5 +1,4 @@
-window.lections = [
-    {
+window.lections = [{
         id: 1,
         title: "Введение в веб-разработку",
         description: "Основные понятия и технологии веб-разработки для начинающих.",
@@ -68,7 +67,28 @@ window.lections = [
         subcategory: "operating-systems",
         dateAdded: new Date().toISOString(),
         author: "Волошина Виктория Николаевна"
+    },
+    {
+        id: 9,
+        title: "14 дистрибутивов Linux для оптимизации старых ПК",
+        description: "Подборка лёгких дистрибутивов Linux (категории: до 1 ГБ, до 500 МБ, до 100 МБ) + быстрый гайд как выбрать систему для слабого железа. Внутри — иллюстрации из лекции.",
+        file: "linux-lite-distros.md",
+        category: "linux",
+        subcategory: "operating-systems",
+        dateAdded: new Date().toISOString(),
+        author: "UncleDeniy"
+    },
+    {
+        id: 10,
+        title: "Сетевые протоколы: шпаргалка + разбор по уровням TCP/IP",
+        description: "Наглядная карта протоколов (DNS/DHCP/HTTP/HTTPS/SSH/SMTP и др.) + объяснение TCP vs UDP, ICMP/IGMP, ARP и базовая практика диагностики.",
+        file: "networking-protocols.md",
+        category: "networking",
+        subcategory: "protocols",
+        dateAdded: new Date().toISOString(),
+        author: "UncleDeniy"
     }
+
 
 
 

@@ -1,113 +1,114 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Настройки Syntax_Syndicate: тема, цветовая схема, шрифт, анимации и поведение сайта.">
-  <meta name="theme-color" content="#667eea">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <title>Настройки | Syntax_Syndicate</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <script src="theme.js"></script>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Настройки Syntax_Syndicate: тема, цветовая схема, шрифт, анимации и поведение сайта.">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <title>Настройки | Syntax_Syndicate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <a class="skip-link" href="#main">Перейти к содержимому</a>
+    <a class="skip-link" href="#main">Перейти к содержимому</a>
 
-  <div class="aa-overlay" id="aaOverlay" aria-hidden="true"></div>
-  <div class="aa-shell">
-    <div id="aaSidebarMount"></div>
+    <div class="aa-overlay" id="aaOverlay" aria-hidden="true"></div>
+    <div class="aa-shell">
+        <div id="aaSidebarMount"></div>
 
-    <div class="aa-content">
-      <div class="aa-topbar">
-        <button class="aa-toggle" id="aaSidebarToggle" aria-label="Открыть меню">
+        <div class="aa-content">
+            <div class="aa-topbar">
+                <button class="aa-toggle" id="aaSidebarToggle" aria-label="Открыть меню">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
         </button>
-        <div class="aa-topbar__title">Настройки</div>
-        <div class="aa-topbar__actions">
-          <button class="icon-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="Переключить тему">
+                <div class="aa-topbar__title">Настройки</div>
+                <div class="aa-topbar__actions">
+                    <button class="icon-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="Переключить тему">
             <i class="fas fa-moon" aria-hidden="true"></i>
           </button>
-        </div>
-      </div>
-
-      <main id="main">
-        <div class="settings-hero">
-          <div class="container">
-            <div class="hero-content">
-              <h2>Настройки</h2>
-              <p>Минимально и по делу — всё, что нужно для комфортной работы</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="container">
-          <div class="page-actions">
-            <a href="index.html" class="back-link">
-              <i class="fas fa-arrow-left"></i> Назад к ресурсам
-            </a>
-          </div>
-
-          <div class="settings-container">
-            <div class="stats-grid">
-              <div class="stat-card surface">
-                <span class="stat-number" id="totalBookmarks">0</span>
-                <span class="stat-label">закладок</span>
-              </div>
-              <div class="stat-card surface">
-                <span class="stat-number" id="totalResources">0</span>
-                <span class="stat-label">ресурсов</span>
-              </div>
-              <div class="stat-card surface">
-                <span class="stat-number" id="storageUsed">0%</span>
-                <span class="stat-label">хранилища</span>
-              </div>
-              <div class="stat-card surface">
-                <span class="stat-number" id="settingsCount">0</span>
-                <span class="stat-label">настроек</span>
-              </div>
-            </div>
-
-            <div class="settings-section surface">
-              <h2><i class="fas fa-sliders-h"></i> Основное</h2>
-
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Тёмная тема</div>
-                  <div class="setting-description">Комфортнее ночью и экономит заряд на OLED</div>
                 </div>
-                <label class="switch">
+            </div>
+
+            <main id="main">
+                <div class="settings-hero">
+                    <div class="container">
+                        <div class="hero-content">
+                            <h2>Настройки</h2>
+                            <p>Минимально и по делу — всё, что нужно для комфортной работы</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="page-actions">
+                        <a href="index.html" class="back-link">
+                            <i class="fas fa-arrow-left"></i> Назад к ресурсам
+                        </a>
+                    </div>
+
+                    <div class="settings-container">
+                        <div class="stats-grid">
+                            <div class="stat-card surface">
+                                <span class="stat-number" id="totalBookmarks">0</span>
+                                <span class="stat-label">закладок</span>
+                            </div>
+                            <div class="stat-card surface">
+                                <span class="stat-number" id="totalResources">0</span>
+                                <span class="stat-label">ресурсов</span>
+                            </div>
+                            <div class="stat-card surface">
+                                <span class="stat-number" id="storageUsed">0%</span>
+                                <span class="stat-label">хранилища</span>
+                            </div>
+                            <div class="stat-card surface">
+                                <span class="stat-number" id="settingsCount">0</span>
+                                <span class="stat-label">настроек</span>
+                            </div>
+                        </div>
+
+                        <div class="settings-section surface">
+                            <h2><i class="fas fa-sliders-h"></i> Основное</h2>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <div class="setting-title">Тёмная тема</div>
+                                    <div class="setting-description">Комфортнее ночью и экономит заряд на OLED</div>
+                                </div>
+                                <label class="switch">
                   <input type="checkbox" id="darkThemeToggle">
                   <span class="slider"></span>
                 </label>
-              </div>
+                            </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Анимации</div>
-                  <div class="setting-description">Плавные переходы и микро-анимации</div>
-                </div>
-                <label class="switch">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <div class="setting-title">Анимации</div>
+                                    <div class="setting-description">Плавные переходы и микро-анимации</div>
+                                </div>
+                                <label class="switch">
                   <input type="checkbox" id="animationsToggle" checked>
                   <span class="slider"></span>
                 </label>
-              </div>
+                            </div>
 
-              
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Живые обои</div>
-                  <div class="setting-description">Фоновая анимация по выбору (можно отключить для максимальной скорости)</div>
-                </div>
-                <div class="select-wrapper">
-                  <select id="wallpaperSelect">
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <div class="setting-title">Живые обои</div>
+                                    <div class="setting-description">Фоновая анимация по выбору (можно отключить для максимальной скорости)</div>
+                                </div>
+                                <div class="select-wrapper">
+                                    <select id="wallpaperSelect">
                     <option value="none">Выключено</option>
                     <option value="aurora">Aurora (мягкие переливы)</option>
                     <option value="waves">Waves (волны градиента)</option>
@@ -119,252 +120,274 @@
                     <option value="rain">Rain (дождь)</option>
                     <option value="snow">Snow (снег)</option>
                   </select>
-                </div>
-              </div>
+                                </div>
+                            </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Интенсивность обоев</div>
-                  <div class="setting-description">Если отвлекает — поставь «Низкая»</div>
-                </div>
-                <div class="select-wrapper">
-                  <select id="wallpaperIntensity">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <div class="setting-title">Интенсивность обоев</div>
+                                    <div class="setting-description">Если отвлекает — поставь «Низкая»</div>
+                                </div>
+                                <div class="select-wrapper">
+                                    <select id="wallpaperIntensity">
                     <option value="low">Низкая</option>
                     <option value="normal" selected>Нормальная</option>
                     <option value="high">Высокая</option>
                   </select>
-                
-                </div>
-              </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Скорость обоев</div>
-                  <div class="setting-description">Как быстро двигаются элементы фона</div>
-                </div>
-                <div class="select-wrapper">
-                  <select id="wallpaperSpeedSelect">
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <div class="setting-title">Скорость обоев</div>
+                                    <div class="setting-description">Как быстро двигаются элементы фона</div>
+                                </div>
+                                <div class="select-wrapper">
+                                    <select id="wallpaperSpeedSelect">
                     <option value="slow">Медленно</option>
                     <option value="normal" selected>Нормально</option>
                     <option value="fast">Быстро</option>
                   </select>
-                </div>
-              </div>
+                                </div>
+                            </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Плотность</div>
-                  <div class="setting-description">Сколько частиц/капель/звёзд рисовать</div>
-                </div>
-                <div class="select-wrapper">
-                  <select id="wallpaperDensitySelect">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <div class="setting-title">Плотность</div>
+                                    <div class="setting-description">Сколько частиц/капель/звёзд рисовать</div>
+                                </div>
+                                <div class="select-wrapper">
+                                    <select id="wallpaperDensitySelect">
                     <option value="low">Низкая</option>
                     <option value="normal" selected>Нормальная</option>
                     <option value="high">Высокая</option>
                   </select>
-                </div>
-              </div>
+                                </div>
+                            </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Цвет фона</div>
-                  <div class="setting-description">Авто — подстраивается под тему; Акцент — ближе к вашему акцентному цвету</div>
-                </div>
-                <div class="select-wrapper">
-                  <select id="wallpaperColorSelect">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <div class="setting-title">Цвет фона</div>
+                                    <div class="setting-description">Авто — подстраивается под тему; Акцент — ближе к вашему акцентному цвету</div>
+                                </div>
+                                <div class="select-wrapper">
+                                    <select id="wallpaperColorSelect">
                     <option value="auto" selected>Авто</option>
                     <option value="accent">Акцент</option>
                     <option value="mono">Монохром</option>
                   </select>
-                </div>
-              </div>
+                                </div>
+                            </div>
 
-</div>
-              </div>
-<div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Открывать внешние ссылки в новой вкладке</div>
-                  <div class="setting-description">Удобно, когда не хочется терять страницу</div>
-                </div>
-                <label class="switch">
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Открывать внешние ссылки в новой вкладке</div>
+                            <div class="setting-description">Удобно, когда не хочется терять страницу</div>
+                        </div>
+                        <label class="switch">
                   <input type="checkbox" id="newTabToggle" checked>
                   <span class="slider"></span>
                 </label>
-              </div>
+                    </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Поиск при вводе</div>
-                  <div class="setting-description">Обновлять результаты по мере набора</div>
-                </div>
-                <label class="switch">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Поиск при вводе</div>
+                            <div class="setting-description">Обновлять результаты по мере набора</div>
+                        </div>
+                        <label class="switch">
                   <input type="checkbox" id="liveSearchToggle" checked>
                   <span class="slider"></span>
                 </label>
-              </div>
+                    </div>
 
-              <details class="settings-advanced">
-                <summary><i class="fas fa-gear"></i> Дополнительно</summary>
+                    <details class="settings-advanced">
+                        <summary><i class="fas fa-gear"></i> Дополнительно</summary>
 
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <div class="setting-title">Автосохранение</div>
-                    <div class="setting-description">Автоматически сохранять изменения настроек</div>
-                  </div>
-                  <label class="switch">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Автосохранение</div>
+                                <div class="setting-description">Автоматически сохранять изменения настроек</div>
+                            </div>
+                            <label class="switch">
                     <input type="checkbox" id="autoSaveToggle" checked>
                     <span class="slider"></span>
                   </label>
-                </div>
+                        </div>
 
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <div class="setting-title">Уведомления</div>
-                    <div class="setting-description">Показывать уведомления о действиях</div>
-                  </div>
-                  <label class="switch">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Уведомления</div>
+                                <div class="setting-description">Показывать уведомления о действиях</div>
+                            </div>
+                            <label class="switch">
                     <input type="checkbox" id="notificationsToggle" checked>
                     <span class="slider"></span>
                   </label>
-                </div>
+                        </div>
 
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <div class="setting-title">Цветовая схема</div>
-                    <div class="setting-description">Если захочешь поменять акцент</div>
-                  </div>
-                  <div class="select-wrapper">
-                    <select id="colorScheme">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Цветовая схема</div>
+                                <div class="setting-description">Если захочешь поменять акцент</div>
+                            </div>
+                            <div class="select-wrapper">
+                                <select id="colorScheme">
                       <option value="default">Синяя (по умолчанию)</option>
                       <option value="green">Зелёная</option>
                       <option value="purple">Фиолетовая</option>
                       <option value="orange">Оранжевая</option>
                     </select>
-                  </div>
-                </div>
+                            </div>
+                        </div>
 
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <div class="setting-title">Размер шрифта</div>
-                    <div class="setting-description">Комфорт для чтения</div>
-                  </div>
-                  <div class="select-wrapper">
-                    <select id="fontSize">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Размер шрифта</div>
+                                <div class="setting-description">Комфорт для чтения</div>
+                            </div>
+                            <div class="select-wrapper">
+                                <select id="fontSize">
                       <option value="small">Маленький</option>
                       <option value="medium" selected>Средний</option>
                       <option value="large">Большой</option>
                       <option value="xlarge">Очень большой</option>
                     </select>
-                  </div>
+                            </div>
+                        </div>
+                    </details>
                 </div>
-              </details>
-            </div>
 
-            <div class="settings-section surface">
-              <h2><i class="fas fa-database"></i> Данные</h2>
+                <div class="settings-section surface">
+                    <h2><i class="fas fa-database"></i> Данные</h2>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Использование хранилища</div>
-                  <div class="setting-description">Объём локального хранилища, который использует сайт</div>
-                  <div class="progress-bar">
-                    <div class="progress-fill" id="storageProgress" style="width:0%"></div>
-                  </div>
-                </div>
-              </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="settings-card">
+                                <h3>Использование хранилища</h3>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Экспорт данных</div>
-                  <div class="setting-description">Скачать резервную копию закладок и настроек</div>
-                </div>
-                <button class="btn btn-primary" id="exportDataBtn" type="button">
+                                <div class="storage-grid">
+                                    <div class="storage-pie-wrap">
+                                        <canvas id="storagePie" class="storage-pie" width="120" height="120" aria-label="Диаграмма использования хранилища"></canvas>
+                                    </div>
+
+                                    <div class="storage-right">
+                                        <div class="storage-bar" aria-hidden="true">
+                                            <div class="storage-bar-fill" id="storageBar"></div>
+                                        </div>
+
+                                        <div class="storage-meta">
+                                            <span id="storagePercent">0%</span>
+                                            <span id="storageSize">0 KB</span>
+                                        </div>
+
+                                        <div class="storage-details" id="storageDetails"></div>
+
+                                        <button class="btn btn-danger" id="clearStorageBtn" type="button">
+                                            <i class="fas fa-broom"></i> Очистить кэш
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Экспорт данных</div>
+                            <div class="setting-description">Скачать резервную копию закладок и настроек</div>
+                        </div>
+                        <button class="btn btn-primary" id="exportDataBtn" type="button">
                   <i class="fas fa-download"></i> Экспорт
                 </button>
-              </div>
+                    </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Импорт данных</div>
-                  <div class="setting-description">Восстановить данные из резервной копии</div>
-                </div>
-                <button class="btn btn-secondary" id="importDataBtn" type="button">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Импорт данных</div>
+                            <div class="setting-description">Восстановить данные из резервной копии</div>
+                        </div>
+                        <button class="btn btn-secondary" id="importDataBtn" type="button">
                   <i class="fas fa-upload"></i> Импорт
                 </button>
-                <input type="file" id="importFile" accept=".json" style="display:none;">
-              </div>
-            </div>
-
-            <div class="settings-section surface settings-danger">
-              <h2><i class="fas fa-exclamation-triangle"></i> Опасная зона</h2>
-
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Сброс закладок</div>
-                  <div class="setting-description">Удалить все сохранённые закладки</div>
+                        <input type="file" id="importFile" accept=".json" style="display:none;">
+                    </div>
                 </div>
-                <button class="btn btn-danger" id="resetBookmarksBtn" type="button">
+
+                <div class="settings-section surface settings-danger">
+                    <h2><i class="fas fa-exclamation-triangle"></i> Опасная зона</h2>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Сброс закладок</div>
+                            <div class="setting-description">Удалить все сохранённые закладки</div>
+                        </div>
+                        <button class="btn btn-danger" id="resetBookmarksBtn" type="button">
                   <i class="fas fa-trash"></i> Сбросить
                 </button>
-              </div>
+                    </div>
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <div class="setting-title">Сброс настроек</div>
-                  <div class="setting-description">Вернуть все настройки к значениям по умолчанию</div>
-                </div>
-                <button class="btn btn-danger" id="resetSettingsBtn" type="button">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Сброс настроек</div>
+                            <div class="setting-description">Вернуть все настройки к значениям по умолчанию</div>
+                        </div>
+                        <button class="btn btn-danger" id="resetSettingsBtn" type="button">
                   <i class="fas fa-undo"></i> Сбросить
                 </button>
-              </div>
-            </div>
+                    </div>
+                </div>
 
-            <div class="button-group">
-              <button class="btn btn-success" id="saveSettingsBtn" type="button">
+                <div class="button-group">
+                    <button class="btn btn-success" id="saveSettingsBtn" type="button">
                 <i class="fas fa-save"></i> Сохранить
               </button>
-              <button class="btn btn-secondary" id="resetToDefaultBtn" type="button">
+                    <button class="btn btn-secondary" id="resetToDefaultBtn" type="button">
                 <i class="fas fa-undo"></i> Сбросить к умолчанию
               </button>
-              <a href="index.html" class="btn btn-secondary">
-                <i class="fas fa-times"></i> Отмена
-              </a>
-            </div>
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Отмена
+                    </a>
+                </div>
 
-          </div>
+        </div>
 
-          <div class="modal" id="confirmModal">
+        <div class="modal" id="confirmModal">
             <div class="modal-content surface">
-              <h3 id="modalTitle">Подтверждение действия</h3>
-              <p id="modalMessage">Вы уверены, что хотите выполнить это действие?</p>
-              <div class="button-group">
-                <button class="btn btn-danger" id="confirmActionBtn" type="button">Подтвердить</button>
-                <button class="btn btn-secondary" id="cancelActionBtn" type="button">Отмена</button>
-              </div>
+                <h3 id="modalTitle">Подтверждение действия</h3>
+                <p id="modalMessage">Вы уверены, что хотите выполнить это действие?</p>
+                <div class="button-group">
+                    <button class="btn btn-danger" id="confirmActionBtn" type="button">Подтвердить</button>
+                    <button class="btn btn-secondary" id="cancelActionBtn" type="button">Отмена</button>
+                </div>
             </div>
-          </div>
-
         </div>
-      </main>
 
-      <footer>
-        <div class="container">
-          <div class="footer-content">
-            <div class="footer-logo">
-              <div class="logo-icon">💻🚀</div>
-              <span>Syntax_Syndicate</span>
-            </div>
-            <p>База знаний IT-сообщества | Размещено на GitHub Pages</p>
-          </div>
-        </div>
-      </footer>
-
-      <script src="settings-core.js"></script>
-      <script src="settings.js"></script>
-      <script src="ui.js"></script>
     </div>
-  </div>
+    </main>
 
-  <script src="layout.js"></script>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon">💻🚀</div>
+                    <span>Syntax_Syndicate</span>
+                </div>
+                <p>База знаний IT-сообщества | Размещено на GitHub Pages</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="settings-core.js"></script>
+    <script src="settings.js"></script>
+    <script src="ui.js"></script>
+    </div>
+    </div>
+
+    <script src="layout.js"></script>
 </body>
+
 </html>

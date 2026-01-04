@@ -66,17 +66,17 @@ class SettingsManager {
             // fallback: на всякий случай, если theme.js не подключился
             document.documentElement.dataset.theme = wantDark ? 'dark' : 'light';
         }
-        
+
         // Применяем цветовую схему
         document.body.classList.remove('color-scheme-green', 'color-scheme-purple', 'color-scheme-orange');
         if (this.settings.colorScheme !== 'default') {
             document.body.classList.add(`color-scheme-${this.settings.colorScheme}`);
         }
-        
+
         // Применяем размер шрифта
         const sizes = { 'small': '14px', 'medium': '16px', 'large': '18px', 'xlarge': '20px' };
         document.documentElement.style.fontSize = sizes[this.settings.fontSize] || '16px';
-        
+
         // Live wallpaper
         try {
             document.documentElement.dataset.wallpaper = this.settings.wallpaper || 'none';
@@ -106,25 +106,25 @@ class SettingsManager {
     updateSetting(key, value) {
         if (this.settings.hasOwnProperty(key)) {
             this.settings[key] = value;
-            
+
             if (this.settings.autoSave) {
                 this.saveSettings();
             } else {
                 this.applySettings();
             }
-            
+
             const event = new CustomEvent('settingsChanged', {
                 detail: { key, value }
             });
             document.dispatchEvent(event);
-            
+
             return true;
         }
         return false;
     }
 
     getSettings() {
-        return { ...this.settings };
+        return {...this.settings };
     }
 
     resetToDefault() {
@@ -195,3 +195,35 @@ document.addEventListener('DOMContentLoaded', function() {
         window.settingsManager.applySettings();
     }
 });
+
+function updateStorageUsage() {
+    const bar = document.getElementById('storageBar');
+    const percentEl = document.getElementById('storagePercent');
+    const sizeEl = document.getElementById('storageSize');
+    if (!bar || !percentEl || !sizeEl) return;
+
+    let totalBytes = 0;
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        totalBytes += key.length + value.length;
+    }
+
+    // UTF-16 → bytes
+    totalBytes *= 2;
+
+    const usedMB = totalBytes / (1024 * 1024);
+    const limitMB = 20; // безопасный лимит
+    const percent = Math.min(100, Math.round((usedMB / limitMB) * 100));
+
+    bar.style.width = percent + '%';
+    percentEl.textContent = percent + '%';
+    sizeEl.textContent = `${usedMB.toFixed(2)} MB из ${limitMB} MB`;
+}
+
+// обновляем при входе в настройки
+document.addEventListener('DOMContentLoaded', updateStorageUsage);
+
+// обновляем при любом изменении localStorage
+window.addEventListener('storage', updateStorageUsage);
