@@ -809,76 +809,144 @@
 (() => {
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
-
   if (!sidebar) return;
 
-  const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+  const mqMobile = window.matchMedia('(max-width: 980px)');
+  const isMobile = () => mqMobile.matches;
 
+  // ---------- helpers ----------
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  function setSidebarX(px, withTransition) {
+    if (withTransition) sidebar.style.transition = '';
+    else sidebar.style.transition = 'none';
+    sidebar.style.transform = `translate3d(${px}px, 0, 0)`;
+  }
+
+  function resetSidebarTransform() {
+    sidebar.style.transition = '';
+    sidebar.style.transform = '';
+  }
+
+  function sidebarWidth() {
+    // getBoundingClientRect is reliable even if transformed
+    return sidebar.getBoundingClientRect().width || 320;
+  }
+
+  // ---------- swipe hint (visual indicator) ----------
+  let hintEl = null;
+  function ensureHint() {
+    if (hintEl) return hintEl;
+    hintEl = document.createElement('div');
+    hintEl.className = 'swipe-hint';
+    hintEl.innerHTML = `<span class="swipe-hint__arrow">⇢</span><span class="swipe-hint__text">потяни → меню</span>`;
+    document.body.appendChild(hintEl);
+    return hintEl;
+  }
+
+  function updateHintVisibility() {
+    if (!isMobile()) {
+      if (hintEl) hintEl.classList.remove('show');
+      return;
+    }
+    ensureHint();
+    const isOpen = sidebar.classList.contains('open');
+    hintEl.classList.toggle('show', !isOpen);
+  }
+
+  // ---------- open/close ----------
   function openSidebar() {
     if (!isMobile()) return;
     sidebar.classList.add('open');
     document.body.classList.add('sidebar-open');
     if (overlay) overlay.classList.add('show');
+    updateHintVisibility();
   }
 
   function closeSidebar() {
     sidebar.classList.remove('open');
     document.body.classList.remove('sidebar-open');
     if (overlay) overlay.classList.remove('show');
+    updateHintVisibility();
   }
 
-  // На мобилке убираем "закрытие по клику на overlay" (оно ломает скролл/тапы)
-  if (overlay) {
-    overlay.style.pointerEvents = 'none';
-    overlay.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    }, true);
-  }
+  // Overlay is visual only (no taps, no ghost clicks)
+  if (overlay) overlay.style.pointerEvents = 'none';
 
-
-  // Закрывать при переходе по ссылке внутри меню — удобно
+  // Close on navigation inside menu (mobile)
   sidebar.addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (a && isMobile()) closeSidebar();
   });
 
-  // ===== Swipe logic =====
-  // Открыть: свайп вправо от левого края (edge zone)
-  // Закрыть: свайп влево по открытому меню
-  const EDGE_PX = 18;     // зона от края для открытия
-  const MIN_X = 60;       // минимальная длина горизонтального свайпа
-  const MAX_Y = 35;       // допустимое отклонение по Y, чтобы не путать со скроллом
+  // ---------- zone logic (phone vs tablet) ----------
+  function openZone() {
+    const w = window.innerWidth || 360;
+
+    // Phone: allow swipe from mid-screen wide zone
+    if (w <= 520) {
+      return { minX: w * 0.20, maxX: w * 0.90 };
+    }
+    // Tablet: a bit narrower, so you don't trigger it accidentally
+    if (w <= 1024) {
+      return { minX: w * 0.25, maxX: w * 0.80 };
+    }
+    // Desktop: disabled (also handled by isMobile())
+    return { minX: 99999, maxX: -1 };
+  }
+
+  // ---------- drag/swipe ----------
+  // thresholds
+  const MIN_X = 70;     // minimal horizontal swipe distance
+  const MAX_Y = 40;     // y drift allowed before we consider it "scroll"
+  const OPEN_RATIO = 0.45;  // how far you must drag (ratio of sidebar width) to open
+  const CLOSE_RATIO = 0.45; // how far you must drag to close
 
   let startX = 0;
   let startY = 0;
   let tracking = false;
+  let dragging = false;
   let mode = null; // 'open' | 'close'
+  let lastX = 0;
+
+  function beginDrag() {
+    dragging = true;
+    sidebar.style.willChange = 'transform';
+  }
+
+  function endDrag() {
+    dragging = false;
+    sidebar.style.willChange = '';
+    // restore transition for snap
+    sidebar.style.transition = '';
+  }
 
   function onTouchStart(e) {
     if (!isMobile()) return;
+    if (!e.touches || e.touches.length !== 1) return;
 
     const t = e.touches[0];
     startX = t.clientX;
     startY = t.clientY;
+    lastX = startX;
     tracking = false;
+    dragging = false;
     mode = null;
 
     const isOpen = sidebar.classList.contains('open');
 
-    // Если меню закрыто — начинаем трекинг только если касание с самого левого края
     if (!isOpen) {
-      if (startX <= EDGE_PX) {
+      const z = openZone();
+      if (startX >= z.minX && startX <= z.maxX) {
         tracking = true;
         mode = 'open';
       }
       return;
     }
 
-    // Если меню открыто — трекаем свайп для закрытия только если касание внутри меню
-    // или рядом слева от него (чтобы жест был естественным)
+    // If open: allow close gesture when touching inside sidebar area (or near its right edge)
     const rect = sidebar.getBoundingClientRect();
-    if (startX <= rect.right + 24) {
+    if (startX <= rect.right + 28) {
       tracking = true;
       mode = 'close';
     }
@@ -886,58 +954,117 @@
 
   function onTouchMove(e) {
     if (!tracking || !isMobile()) return;
+    if (!e.touches || e.touches.length !== 1) return;
 
     const t = e.touches[0];
     const dx = t.clientX - startX;
     const dy = t.clientY - startY;
 
-    // Если это вертикальная прокрутка — прекращаем трекинг, НЕ закрываем меню
-    if (Math.abs(dy) > MAX_Y && Math.abs(dy) > Math.abs(dx)) {
+    // vertical scroll wins
+    if (!dragging && Math.abs(dy) > MAX_Y && Math.abs(dy) > Math.abs(dx)) {
       tracking = false;
       mode = null;
       return;
     }
 
-    // Когда реально горизонтальный жест — предотвращаем скролл страницы
-    if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
-      e.preventDefault();
+    // once it is clearly horizontal, we start dragging
+    if (!dragging && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+      beginDrag();
     }
+
+    if (!dragging) return;
+
+    // prevent page scroll while dragging horizontally
+    e.preventDefault();
+
+    const w = sidebarWidth();
+
+    if (mode === 'open') {
+      // closed position is -w, open is 0; dx positive opens
+      const x = clamp(-w + dx, -w, 0);
+      setSidebarX(x, false);
+    } else if (mode === 'close') {
+      // open position is 0; dx negative closes
+      const x = clamp(dx, -w, 0);
+      setSidebarX(x, false);
+    }
+
+    lastX = t.clientX;
   }
 
   function onTouchEnd(e) {
     if (!tracking || !isMobile()) return;
 
-    const t = e.changedTouches[0];
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
+    const t = e.changedTouches && e.changedTouches[0];
+    const endX = t ? t.clientX : lastX;
+    const endY = t ? t.clientY : startY;
+
+    const dx = endX - startX;
+    const dy = endY - startY;
 
     tracking = false;
 
-    // если вертикально — ничего
-    if (Math.abs(dy) > MAX_Y && Math.abs(dy) > Math.abs(dx)) return;
+    // if it was mostly vertical, do nothing
+    if (Math.abs(dy) > MAX_Y && Math.abs(dy) > Math.abs(dx)) {
+      mode = null;
+      endDrag();
+      resetSidebarTransform();
+      return;
+    }
 
+    const w = sidebarWidth();
+
+    if (dragging) {
+      // decide based on final position ratio
+      // current X is encoded in transform; compute expected by dx (same as in move)
+      let x = 0;
+      if (mode === 'open') x = clamp(-w + dx, -w, 0);
+      if (mode === 'close') x = clamp(dx, -w, 0);
+
+      // snap with transition
+      endDrag();
+
+      if (mode === 'open') {
+        const openedEnough = (x > -w * (1 - OPEN_RATIO)) || (dx >= MIN_X);
+        resetSidebarTransform();
+        if (openedEnough) openSidebar();
+        else closeSidebar();
+      } else if (mode === 'close') {
+        const closedEnough = (x < -w * CLOSE_RATIO) || (dx <= -MIN_X);
+        resetSidebarTransform();
+        if (closedEnough) closeSidebar();
+        else openSidebar();
+      }
+
+      mode = null;
+      return;
+    }
+
+    // non-drag swipe fallback
     if (mode === 'open') {
-      // открываем только если свайп вправо
-      if (dx >= MIN_X) openSidebar();
+      if (dx >= MIN_X && Math.abs(dy) < MAX_Y) openSidebar();
     } else if (mode === 'close') {
-      // закрываем только если свайп влево
-      if (dx <= -MIN_X) closeSidebar();
+      if (dx <= -MIN_X && Math.abs(dy) < MAX_Y) closeSidebar();
     }
 
     mode = null;
   }
 
-  // Важно: ставим {passive:false} чтобы preventDefault работал
   document.addEventListener('touchstart', onTouchStart, { passive: true });
   document.addEventListener('touchmove', onTouchMove, { passive: false });
   document.addEventListener('touchend', onTouchEnd, { passive: true });
 
-  // Если изменили размер экрана (поворот/планшет) — не оставляем тело залоченным
+  // keep hint in sync
+  document.addEventListener('DOMContentLoaded', updateHintVisibility);
   window.addEventListener('resize', () => {
     if (!isMobile()) {
       document.body.classList.remove('sidebar-open');
       if (overlay) overlay.classList.remove('show');
       sidebar.classList.remove('open');
     }
+    updateHintVisibility();
   });
+
+  // initial
+  updateHintVisibility();
 })();

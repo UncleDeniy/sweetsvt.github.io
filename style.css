@@ -5154,3 +5154,51 @@ th) {
   html.aa-nav-open #aaSidebarMount,
   html.aa-nav-open #aaSidebarMount * { pointer-events: auto; }
 }
+
+/* ===== Swipe hint (mobile) ===== */
+@media (max-width: 980px) {
+  .swipe-hint {
+    position: fixed;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9997;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: rgba(255,255,255,0.85);
+    font-size: 12px;
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+
+  .swipe-hint.show {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .swipe-hint__arrow {
+    display: inline-block;
+    font-size: 14px;
+    opacity: 0.95;
+    animation: swipeHintNudge 1.4s ease-in-out infinite;
+  }
+
+  @keyframes swipeHintNudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); }
+  }
+
+  /* Tablets: move hint a bit inward */
+  @media (min-width: 600px) and (max-width: 980px) {
+    .swipe-hint { left: 16px; }
+  }
+}
