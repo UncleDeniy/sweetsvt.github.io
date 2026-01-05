@@ -1,436 +1,442 @@
 // script.js — поиск/фильтры/закладки/горячие клавиши (Search page)
 // Работает на GitHub Pages без бэкенда.
 
-(function () {
-  'use strict';
+(function() {
+        'use strict';
 
-  /* ---------------------------
-     Utilities
-  ---------------------------- */
-  const LS_BOOKMARKS = 'ud:bookmarks';      // legacy array of ids
-  const LS_LIBRARY   = 'ud:library';        // new map: { [id]: {status, folder, addedAt} }
-  const LS_TAGHIST   = 'tagHistory';
+        /* ---------------------------
+           Utilities
+        ---------------------------- */
+        const LS_BOOKMARKS = 'ud:bookmarks'; // legacy array of ids
+        const LS_LIBRARY = 'ud:library'; // new map: { [id]: {status, folder, addedAt} }
+        const LS_TAGHIST = 'tagHistory';
 
-  const normalizeText = (t) =>
-    (t || '')
-      .toString()
-      .toLowerCase()
-      .replace(/ё/g, 'е')
-      .replace(/[^\p{L}\p{N}]+/gu, ' ')
-      .trim();
+        const normalizeText = (t) =>
+            (t || '')
+            .toString()
+            .toLowerCase()
+            .replace(/ё/g, 'е')
+            .replace(/[^\p{L}\p{N}]+/gu, ' ')
+            .trim();
 
-  const uniq = (arr) => Array.from(new Set(arr));
-  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+        const uniq = (arr) => Array.from(new Set(arr));
+        const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
-  function debounce(fn, wait = 150) {
-    let t;
-    return (...args) => {
-      clearTimeout(t);
-      t = setTimeout(() => fn(...args), wait);
-    };
-  }
-
-  /* ---------------------------
-     Data loading
-  ---------------------------- */
-  function loadResourcesSafely() {
-    const out = [];
-
-    // Основные ресурсы
-    try {
-      if (window.itResources && Array.isArray(window.itResources)) out.push(...window.itResources);
-    } catch (e) {
-      console.warn('Не удалось загрузить itResources:', e);
-    }
-    try {
-      if (window.customizationResources && Array.isArray(window.customizationResources)) out.push(...window.customizationResources);
-    } catch (e) {
-      console.warn('Не удалось загрузить customizationResources:', e);
-    }
-
-    // Лекции → в общий список
-    try {
-      if (window.lections && Array.isArray(window.lections) && window.lections.length) {
-        const lectureResources = window.lections.map((l) => ({
-          id: `lecture-${l.id}`,
-          title: l.title || 'Лекция',
-          description: l.description || '',
-          link: `markdown-viewer.html?file=${encodeURIComponent(l.file || '')}`,
-          tags: Array.isArray(l.tags) ? l.tags : [],
-          type: 'lecture',
-          category: l.category || 'programming',
-          subcategory: l.subcategory || '',
-          dateAdded: l.dateAdded || new Date().toISOString(),
-          author: l.author || '',
-          version: l.version || '',
-          versions: l.versions || null
-        }));
-        out.push(...lectureResources);
-      }
-    } catch (e) {
-      console.warn('Не удалось загрузить lections:', e);
-    }
-
-    // Демо (если вдруг пусто)
-    if (out.length === 0 && typeof getDemoResources === 'function') {
-      console.log('Используются демо-ресурсы');
-      return getDemoResources();
-    }
-
-    // Нормализуем id
-    out.forEach((r, i) => {
-      if (r && (r.id === 0 || r.id)) r.id = String(r.id);
-      if (!r.id) r.id = `res-${i}`;
-    });
-
-    return out;
-  }
-
-  /* ---------------------------
-     Bookmarks / Library
-  ---------------------------- */
-  function readJSON(key, fallback) {
-    try {
-      const raw = localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : fallback;
-    } catch {
-      return fallback;
-    }
-  }
-  function writeJSON(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
-  }
-
-  // Back-compat: if old array exists, migrate into library map.
-  function migrateBookmarksIfNeeded() {
-    const lib = readJSON(LS_LIBRARY, null);
-    if (lib) return;
-
-    const old = readJSON(LS_BOOKMARKS, []);
-    const map = {};
-    if (Array.isArray(old)) {
-      old.forEach((id) => {
-        map[id] = { status: 'saved', folder: 'Избранное', addedAt: Date.now() };
-      });
-    }
-    writeJSON(LS_LIBRARY, map);
-  }
-
-  function getLibrary() {
-    migrateBookmarksIfNeeded();
-    return readJSON(LS_LIBRARY, {});
-  }
-
-  function setLibrary(map) {
-    writeJSON(LS_LIBRARY, map);
-    // also maintain legacy list
-    writeJSON(LS_BOOKMARKS, Object.keys(map));
-  }
-
-  function isBookmarked(id) {
-    const lib = getLibrary();
-    return !!lib[id];
-  }
-
-  function toggleBookmark(id) {
-    const lib = getLibrary();
-    if (lib[id]) {
-      delete lib[id];
-    } else {
-      lib[id] = { status: 'saved', folder: 'Избранное', addedAt: Date.now() };
-    }
-    setLibrary(lib);
-  }
-
-  function getBookmarkIds() {
-    return Object.keys(getLibrary());
-  }
-
-  function updateBookmarkCountUI() {
-    const el = document.getElementById('bookmarkCount');
-    if (el) el.textContent = getBookmarkIds().length;
-  }
-
-  /* ---------------------------
-     Tag history (optional personalization)
-  ---------------------------- */
-  function getTagHistory() {
-    const h = readJSON(LS_TAGHIST, {});
-    return (h && typeof h === 'object') ? h : {};
-  }
-  function bumpTag(tag) {
-    if (!tag) return;
-    const key = LS_TAGHIST;
-    const map = getTagHistory();
-    map[tag] = (map[tag] || 0) + 1;
-    writeJSON(key, map);
-  }
-
-  /* ---------------------------
-     Labels
-  ---------------------------- */
-  const TYPE_LABELS = {
-    course: 'Курс',
-    program: 'Программа',
-    book: 'Книга',
-    article: 'Статья',
-    video: 'Видео',
-    tool: 'Инструмент',
-    library: 'Библиотека',
-    script: 'Скрипт',
-    reference: 'Справочник',
-    cheatsheet: 'Шпаргалка',
-    lecture: 'Лекция'
-  };
-
-  const CATEGORY_LABELS = {
-    programming: 'Программирование',
-    devops: 'DevOps',
-    system: 'Системное администрирование',
-    security: 'Безопасность',
-    databases: 'Базы данных',
-    web: 'Веб',
-    career: 'Карьера',
-    tools: 'Инструменты',
-    other: 'Другое'
-  };
-
-  function getTypeLabel(t) { return TYPE_LABELS[t] || (t ? t : 'Материал'); }
-  function getCategoryLabel(c) { return CATEGORY_LABELS[c] || (c ? c : 'Категория'); }
-  function getSubcategoryLabel(s) { return s ? s : 'Подкатегория'; }
-
-  /* ---------------------------
-     Local index cache (IndexedDB)
-  ---------------------------- */
-  const DB_NAME = 'ud_search_db';
-  const DB_VER = 1;
-  const STORE = 'index';
-  const INDEX_KEY = 'index_v1';
-
-  function openDB() {
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, DB_VER);
-      req.onupgradeneeded = () => {
-        const db = req.result;
-        if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
-      };
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
-  }
-
-  async function idbGet(key) {
-    try {
-      const db = await openDB();
-      return await new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE, 'readonly');
-        const st = tx.objectStore(STORE);
-        const r = st.get(key);
-        r.onsuccess = () => resolve(r.result);
-        r.onerror = () => reject(r.error);
-      });
-    } catch { return null; }
-  }
-
-  async function idbSet(key, val) {
-    try {
-      const db = await openDB();
-      await new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE, 'readwrite');
-        const st = tx.objectStore(STORE);
-        const r = st.put(val, key);
-        r.onsuccess = () => resolve(true);
-        r.onerror = () => reject(r.error);
-      });
-    } catch { /* ignore */ }
-  }
-
-  function computeDataHash(resources) {
-    // Cheap, stable hash: length + sum of title lengths + last dateAdded
-    let sum = resources.length;
-    let last = '';
-    for (let i = 0; i < resources.length; i++) {
-      const r = resources[i];
-      sum += (r.title ? r.title.length : 0) + (r.description ? r.description.length : 0);
-      if (r.dateAdded && r.dateAdded > last) last = r.dateAdded;
-    }
-    return `${resources.length}:${sum}:${last}`;
-  }
-
-  /* ---------------------------
-     Smart search (local "Google-like")
-  ---------------------------- */
-  function buildDocs(resources) {
-    return resources.map((r) => {
-      const tags = Array.isArray(r.tags) ? r.tags : [];
-      const tagsText = tags.map(normalizeText).join(' ');
-      const title = r.title || '';
-      const description = r.description || '';
-      const link = r.link || '';
-      const author = r.author || '';
-      const hay = normalizeText([title, description, link, tagsText, author].join(' '));
-      return {
-        id: r.id,
-        title,
-        description,
-        link,
-        tags,
-        tagsText,
-        author,
-        type: r.type || '',
-        category: r.category || '',
-        subcategory: r.subcategory || '',
-        dateAdded: r.dateAdded || '',
-        lang: r.lang || r.language || '',
-        format: r.format || '',
-        size: r.size || '',
-        source: r.source || '',
-        version: r.version || '',
-        versions: r.versions || null,
-        _hay: hay
-      };
-    });
-  }
-
-  function scoreDoc(doc, tokens) {
-    // Weighted scoring (fast, no heavy fuzzy)
-    let score = 0;
-    const title = normalizeText(doc.title);
-    const desc = normalizeText(doc.description);
-    const link = normalizeText(doc.link);
-    const tags = normalizeText(doc.tagsText);
-    const auth = normalizeText(doc.author);
-
-    for (const t of tokens) {
-      if (!t) continue;
-
-      // Exact contains
-      const inTitle = title.includes(t);
-      const inDesc  = desc.includes(t);
-      const inLink  = link.includes(t);
-      const inTags  = tags.includes(t);
-      const inAuth  = auth.includes(t);
-
-      if (inTitle) score += 6;
-      if (inDesc)  score += 3;
-      if (inTags)  score += 2.5;
-      if (inLink)  score += 1.5;
-      if (inAuth)  score += 2;
-
-      // Prefix bonus
-      if (title.startsWith(t)) score += 2;
-      if (tags.startsWith(t)) score += 1;
-
-      // Simple fuzzy (subsequence) bonus for title
-      if (!inTitle && t.length >= 4) {
-        if (isSubsequence(t, title)) score += 1.25;
-      }
-    }
-
-    return score;
-  }
-
-  function isSubsequence(needle, hay) {
-    // very cheap fuzzy match
-    let i = 0, j = 0;
-    while (i < needle.length && j < hay.length) {
-      if (needle[i] === hay[j]) i++;
-      j++;
-    }
-    return i === needle.length;
-  }
-
-  function smartSearch(docs, query) {
-    const q = normalizeText(query);
-    if (!q) return docs.map(d => ({ doc: d, score: 0 }));
-
-    const tokens = q.split(/\s+/).filter(Boolean);
-    const out = [];
-    for (const d of docs) {
-      // fast pre-check
-      let ok = true;
-      for (const t of tokens) {
-        if (!d._hay.includes(t) && !(t.length >= 4 && isSubsequence(t, normalizeText(d.title)))) {
-          ok = false; break;
+        function debounce(fn, wait = 150) {
+            let t;
+            return (...args) => {
+                clearTimeout(t);
+                t = setTimeout(() => fn(...args), wait);
+            };
         }
-      }
-      if (!ok) continue;
-      const s = scoreDoc(d, tokens);
-      out.push({ doc: d, score: s });
-    }
-    out.sort((a, b) => b.score - a.score);
-    return out;
-  }
 
-  /* ---------------------------
-     Rendering
-  ---------------------------- */
-  function escapeHtml(s) {
-    return (s || '').toString()
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'",'&#39;');
-  }
+        /* ---------------------------
+           Data loading
+        ---------------------------- */
+        function loadResourcesSafely() {
+            const out = [];
 
-  function formatTagPills(tags, tagHistory) {
-    if (!Array.isArray(tags) || !tags.length) return '';
-    const sorted = [...tags].sort((a, b) => (tagHistory[b] || 0) - (tagHistory[a] || 0));
-    return sorted.slice(0, 10).map(t => `<button class="tag-pill" type="button" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</button>`).join('');
-  }
+            // Основные ресурсы
+            try {
+                if (window.itResources && Array.isArray(window.itResources)) out.push(...window.itResources);
+            } catch (e) {
+                console.warn('Не удалось загрузить itResources:', e);
+            }
+            try {
+                if (window.customizationResources && Array.isArray(window.customizationResources)) out.push(...window.customizationResources);
+            } catch (e) {
+                console.warn('Не удалось загрузить customizationResources:', e);
+            }
 
-  function compactMetaLine(r) {
-    const parts = [];
-    if (r.lang) parts.push(`${escapeHtml(r.lang)}`);
-    if (r.format) parts.push(`${escapeHtml(r.format)}`);
-    if (r.size) parts.push(`${escapeHtml(r.size)}`);
-    if (r.type) parts.push(`📦 ${escapeHtml(getTypeLabel(r.type))}`);
-    if (r.category) parts.push(`• ${escapeHtml(getCategoryLabel(r.category))}`);
-    if (r.subcategory) parts.push(`• ${escapeHtml(getSubcategoryLabel(r.subcategory))}`);
-    if (r.source) parts.push(`• ${escapeHtml(r.source)}`);
-    return parts.join(' · ');
-  }
+            // Лекции → в общий список
+            try {
+                if (window.lections && Array.isArray(window.lections) && window.lections.length) {
+                    const lectureResources = window.lections.map((l) => ({
+                        id: `lecture-${l.id}`,
+                        title: l.title || 'Лекция',
+                        description: l.description || '',
+                        link: `markdown-viewer.html?file=${encodeURIComponent(l.file || '')}`,
+                        tags: Array.isArray(l.tags) ? l.tags : [],
+                        type: 'lecture',
+                        category: l.category || 'programming',
+                        subcategory: l.subcategory || '',
+                        dateAdded: l.dateAdded || new Date().toISOString(),
+                        author: l.author || '',
+                        version: l.version || '',
+                        versions: l.versions || null
+                    }));
+                    out.push(...lectureResources);
+                }
+            } catch (e) {
+                console.warn('Не удалось загрузить lections:', e);
+            }
 
-  function toInternalUrl(resourceId) {
-    return `item.html?id=${encodeURIComponent(resourceId)}`;
-  }
+            // Демо (если вдруг пусто)
+            if (out.length === 0 && typeof getDemoResources === 'function') {
+                console.log('Используются демо-ресурсы');
+                return getDemoResources();
+            }
 
-  function renderResources(list, container, opts = {}) {
-    const { query = '' } = opts;
-    container.innerHTML = '';
+            // Нормализуем id
+            out.forEach((r, i) => {
+                if (r && (r.id === 0 || r.id)) r.id = String(r.id);
+                if (!r.id) r.id = `res-${i}`;
+            });
 
-    const foundEl = document.getElementById('foundCount');
-    if (foundEl) foundEl.textContent = String(list.length);
+            return out;
+        }
 
-    if (!list.length) {
-      container.innerHTML = `
+        /* ---------------------------
+           Bookmarks / Library
+        ---------------------------- */
+        function readJSON(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function writeJSON(key, value) {
+            try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+        }
+
+        // Back-compat: if old array exists, migrate into library map.
+        function migrateBookmarksIfNeeded() {
+            const lib = readJSON(LS_LIBRARY, null);
+            if (lib) return;
+
+            const old = readJSON(LS_BOOKMARKS, []);
+            const map = {};
+            if (Array.isArray(old)) {
+                old.forEach((id) => {
+                    map[id] = { status: 'saved', folder: 'Избранное', addedAt: Date.now() };
+                });
+            }
+            writeJSON(LS_LIBRARY, map);
+        }
+
+        function getLibrary() {
+            migrateBookmarksIfNeeded();
+            return readJSON(LS_LIBRARY, {});
+        }
+
+        function setLibrary(map) {
+            writeJSON(LS_LIBRARY, map);
+            // also maintain legacy list
+            writeJSON(LS_BOOKMARKS, Object.keys(map));
+        }
+
+        function isBookmarked(id) {
+            const lib = getLibrary();
+            return !!lib[id];
+        }
+
+        function toggleBookmark(id) {
+            const lib = getLibrary();
+            if (lib[id]) {
+                delete lib[id];
+            } else {
+                lib[id] = { status: 'saved', folder: 'Избранное', addedAt: Date.now() };
+            }
+            setLibrary(lib);
+        }
+
+        function getBookmarkIds() {
+            return Object.keys(getLibrary());
+        }
+
+        function updateBookmarkCountUI() {
+            const el = document.getElementById('bookmarkCount');
+            if (el) el.textContent = getBookmarkIds().length;
+        }
+
+        /* ---------------------------
+           Tag history (optional personalization)
+        ---------------------------- */
+        function getTagHistory() {
+            const h = readJSON(LS_TAGHIST, {});
+            return (h && typeof h === 'object') ? h : {};
+        }
+
+        function bumpTag(tag) {
+            if (!tag) return;
+            const key = LS_TAGHIST;
+            const map = getTagHistory();
+            map[tag] = (map[tag] || 0) + 1;
+            writeJSON(key, map);
+        }
+
+        /* ---------------------------
+           Labels
+        ---------------------------- */
+        const TYPE_LABELS = {
+            course: 'Курс',
+            program: 'Программа',
+            book: 'Книга',
+            article: 'Статья',
+            video: 'Видео',
+            tool: 'Инструмент',
+            library: 'Библиотека',
+            script: 'Скрипт',
+            reference: 'Справочник',
+            cheatsheet: 'Шпаргалка',
+            lecture: 'Лекция'
+        };
+
+        const CATEGORY_LABELS = {
+            programming: 'Программирование',
+            devops: 'DevOps',
+            system: 'Системное администрирование',
+            security: 'Безопасность',
+            databases: 'Базы данных',
+            web: 'Веб',
+            career: 'Карьера',
+            tools: 'Инструменты',
+            other: 'Другое'
+        };
+
+        function getTypeLabel(t) { return TYPE_LABELS[t] || (t ? t : 'Материал'); }
+
+        function getCategoryLabel(c) { return CATEGORY_LABELS[c] || (c ? c : 'Категория'); }
+
+        function getSubcategoryLabel(s) { return s ? s : 'Подкатегория'; }
+
+        /* ---------------------------
+           Local index cache (IndexedDB)
+        ---------------------------- */
+        const DB_NAME = 'ud_search_db';
+        const DB_VER = 1;
+        const STORE = 'index';
+        const INDEX_KEY = 'index_v1';
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(DB_NAME, DB_VER);
+                req.onupgradeneeded = () => {
+                    const db = req.result;
+                    if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function idbGet(key) {
+            try {
+                const db = await openDB();
+                return await new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE, 'readonly');
+                    const st = tx.objectStore(STORE);
+                    const r = st.get(key);
+                    r.onsuccess = () => resolve(r.result);
+                    r.onerror = () => reject(r.error);
+                });
+            } catch { return null; }
+        }
+
+        async function idbSet(key, val) {
+            try {
+                const db = await openDB();
+                await new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE, 'readwrite');
+                    const st = tx.objectStore(STORE);
+                    const r = st.put(val, key);
+                    r.onsuccess = () => resolve(true);
+                    r.onerror = () => reject(r.error);
+                });
+            } catch { /* ignore */ }
+        }
+
+        function computeDataHash(resources) {
+            // Cheap, stable hash: length + sum of title lengths + last dateAdded
+            let sum = resources.length;
+            let last = '';
+            for (let i = 0; i < resources.length; i++) {
+                const r = resources[i];
+                sum += (r.title ? r.title.length : 0) + (r.description ? r.description.length : 0);
+                if (r.dateAdded && r.dateAdded > last) last = r.dateAdded;
+            }
+            return `${resources.length}:${sum}:${last}`;
+        }
+
+        /* ---------------------------
+           Smart search (local "Google-like")
+        ---------------------------- */
+        function buildDocs(resources) {
+            return resources.map((r) => {
+                const tags = Array.isArray(r.tags) ? r.tags : [];
+                const tagsText = tags.map(normalizeText).join(' ');
+                const title = r.title || '';
+                const description = r.description || '';
+                const link = r.link || '';
+                const author = r.author || '';
+                const hay = normalizeText([title, description, link, tagsText, author].join(' '));
+                return {
+                    id: r.id,
+                    title,
+                    description,
+                    link,
+                    tags,
+                    tagsText,
+                    author,
+                    type: r.type || '',
+                    category: r.category || '',
+                    subcategory: r.subcategory || '',
+                    dateAdded: r.dateAdded || '',
+                    lang: r.lang || r.language || '',
+                    format: r.format || '',
+                    size: r.size || '',
+                    source: r.source || '',
+                    version: r.version || '',
+                    versions: r.versions || null,
+                    _hay: hay
+                };
+            });
+        }
+
+        function scoreDoc(doc, tokens) {
+            // Weighted scoring (fast, no heavy fuzzy)
+            let score = 0;
+            const title = normalizeText(doc.title);
+            const desc = normalizeText(doc.description);
+            const link = normalizeText(doc.link);
+            const tags = normalizeText(doc.tagsText);
+            const auth = normalizeText(doc.author);
+
+            for (const t of tokens) {
+                if (!t) continue;
+
+                // Exact contains
+                const inTitle = title.includes(t);
+                const inDesc = desc.includes(t);
+                const inLink = link.includes(t);
+                const inTags = tags.includes(t);
+                const inAuth = auth.includes(t);
+
+                if (inTitle) score += 6;
+                if (inDesc) score += 3;
+                if (inTags) score += 2.5;
+                if (inLink) score += 1.5;
+                if (inAuth) score += 2;
+
+                // Prefix bonus
+                if (title.startsWith(t)) score += 2;
+                if (tags.startsWith(t)) score += 1;
+
+                // Simple fuzzy (subsequence) bonus for title
+                if (!inTitle && t.length >= 4) {
+                    if (isSubsequence(t, title)) score += 1.25;
+                }
+            }
+
+            return score;
+        }
+
+        function isSubsequence(needle, hay) {
+            // very cheap fuzzy match
+            let i = 0,
+                j = 0;
+            while (i < needle.length && j < hay.length) {
+                if (needle[i] === hay[j]) i++;
+                j++;
+            }
+            return i === needle.length;
+        }
+
+        function smartSearch(docs, query) {
+            const q = normalizeText(query);
+            if (!q) return docs.map(d => ({ doc: d, score: 0 }));
+
+            const tokens = q.split(/\s+/).filter(Boolean);
+            const out = [];
+            for (const d of docs) {
+                // fast pre-check
+                let ok = true;
+                for (const t of tokens) {
+                    if (!d._hay.includes(t) && !(t.length >= 4 && isSubsequence(t, normalizeText(d.title)))) {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (!ok) continue;
+                const s = scoreDoc(d, tokens);
+                out.push({ doc: d, score: s });
+            }
+            out.sort((a, b) => b.score - a.score);
+            return out;
+        }
+
+        /* ---------------------------
+           Rendering
+        ---------------------------- */
+        function escapeHtml(s) {
+            return (s || '').toString()
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
+        }
+
+        function formatTagPills(tags, tagHistory) {
+            if (!Array.isArray(tags) || !tags.length) return '';
+            const sorted = [...tags].sort((a, b) => (tagHistory[b] || 0) - (tagHistory[a] || 0));
+            return sorted.slice(0, 10).map(t => `<button class="tag-pill" type="button" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</button>`).join('');
+        }
+
+        function compactMetaLine(r) {
+            const parts = [];
+            if (r.lang) parts.push(`${escapeHtml(r.lang)}`);
+            if (r.format) parts.push(`${escapeHtml(r.format)}`);
+            if (r.size) parts.push(`${escapeHtml(r.size)}`);
+            if (r.type) parts.push(`📦 ${escapeHtml(getTypeLabel(r.type))}`);
+            if (r.category) parts.push(`• ${escapeHtml(getCategoryLabel(r.category))}`);
+            if (r.subcategory) parts.push(`• ${escapeHtml(getSubcategoryLabel(r.subcategory))}`);
+            if (r.source) parts.push(`• ${escapeHtml(r.source)}`);
+            return parts.join(' · ');
+        }
+
+        function toInternalUrl(resourceId) {
+            return `item.html?id=${encodeURIComponent(resourceId)}`;
+        }
+
+        function renderResources(list, container, opts = {}) {
+            const { query = '' } = opts;
+            container.innerHTML = '';
+
+            const foundEl = document.getElementById('foundCount');
+            if (foundEl) foundEl.textContent = String(list.length);
+
+            if (!list.length) {
+                container.innerHTML = `
         <div class="no-results">
           <div class="no-results__icon">🔎</div>
           <h3>Ничего не найдено</h3>
           <p>Попробуйте: изменить запрос, убрать подкатегорию или нажать «Очистить».</p>
         </div>
       `;
-      return;
-    }
+                return;
+            }
 
-    const tagHistory = getTagHistory();
+            const tagHistory = getTagHistory();
 
-    for (const r of list) {
-      const card = document.createElement('article');
-      card.className = 'result-card';
+            for (const r of list) {
+                const card = document.createElement('article');
+                card.className = 'result-card';
 
-      const bm = isBookmarked(r.id);
-      const bmIcon = bm ? 'fas fa-bookmark' : 'far fa-bookmark';
+                const bm = isBookmarked(r.id);
+                const bmIcon = bm ? 'fas fa-bookmark' : 'far fa-bookmark';
 
-      const meta = compactMetaLine(r);
+                const meta = compactMetaLine(r);
 
-      const title = escapeHtml(r.title || 'Без названия');
-      const desc = escapeHtml(r.description || '');
-      const author = r.author ? `<span class="result-author">👤 ${escapeHtml(r.author)}</span>` : '';
-      const ver = r.version ? `<span class="badge badge--ver">v${escapeHtml(r.version)}</span>` : '';
+                const title = escapeHtml(r.title || 'Без названия');
+                const desc = escapeHtml(r.description || '');
+                const author = r.author ? `<span class="result-author">👤 ${escapeHtml(r.author)}</span>` : '';
+                const ver = r.version ? `<span class="badge badge--ver">v${escapeHtml(r.version)}</span>` : '';
 
-      card.innerHTML = `
+                card.innerHTML = `
         <div class="result-top">
           <div class="result-main">
             <a class="result-title" href="${toInternalUrl(r.id)}">${title}</a>
@@ -798,4 +804,140 @@
   }
 
   document.addEventListener('DOMContentLoaded', initSearchPage);
+})();
+
+(() => {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.querySelector('.sidebar-overlay');
+
+  if (!sidebar) return;
+
+  const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
+  function openSidebar() {
+    if (!isMobile()) return;
+    sidebar.classList.add('open');
+    document.body.classList.add('sidebar-open');
+    if (overlay) overlay.classList.add('show');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    document.body.classList.remove('sidebar-open');
+    if (overlay) overlay.classList.remove('show');
+  }
+
+  // На мобилке убираем "закрытие по клику на overlay" (оно ломает скролл/тапы)
+  if (overlay) {
+    overlay.style.pointerEvents = 'none';
+    overlay.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, true);
+  }
+
+
+  // Закрывать при переходе по ссылке внутри меню — удобно
+  sidebar.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (a && isMobile()) closeSidebar();
+  });
+
+  // ===== Swipe logic =====
+  // Открыть: свайп вправо от левого края (edge zone)
+  // Закрыть: свайп влево по открытому меню
+  const EDGE_PX = 18;     // зона от края для открытия
+  const MIN_X = 60;       // минимальная длина горизонтального свайпа
+  const MAX_Y = 35;       // допустимое отклонение по Y, чтобы не путать со скроллом
+
+  let startX = 0;
+  let startY = 0;
+  let tracking = false;
+  let mode = null; // 'open' | 'close'
+
+  function onTouchStart(e) {
+    if (!isMobile()) return;
+
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    tracking = false;
+    mode = null;
+
+    const isOpen = sidebar.classList.contains('open');
+
+    // Если меню закрыто — начинаем трекинг только если касание с самого левого края
+    if (!isOpen) {
+      if (startX <= EDGE_PX) {
+        tracking = true;
+        mode = 'open';
+      }
+      return;
+    }
+
+    // Если меню открыто — трекаем свайп для закрытия только если касание внутри меню
+    // или рядом слева от него (чтобы жест был естественным)
+    const rect = sidebar.getBoundingClientRect();
+    if (startX <= rect.right + 24) {
+      tracking = true;
+      mode = 'close';
+    }
+  }
+
+  function onTouchMove(e) {
+    if (!tracking || !isMobile()) return;
+
+    const t = e.touches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+
+    // Если это вертикальная прокрутка — прекращаем трекинг, НЕ закрываем меню
+    if (Math.abs(dy) > MAX_Y && Math.abs(dy) > Math.abs(dx)) {
+      tracking = false;
+      mode = null;
+      return;
+    }
+
+    // Когда реально горизонтальный жест — предотвращаем скролл страницы
+    if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+      e.preventDefault();
+    }
+  }
+
+  function onTouchEnd(e) {
+    if (!tracking || !isMobile()) return;
+
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+
+    tracking = false;
+
+    // если вертикально — ничего
+    if (Math.abs(dy) > MAX_Y && Math.abs(dy) > Math.abs(dx)) return;
+
+    if (mode === 'open') {
+      // открываем только если свайп вправо
+      if (dx >= MIN_X) openSidebar();
+    } else if (mode === 'close') {
+      // закрываем только если свайп влево
+      if (dx <= -MIN_X) closeSidebar();
+    }
+
+    mode = null;
+  }
+
+  // Важно: ставим {passive:false} чтобы preventDefault работал
+  document.addEventListener('touchstart', onTouchStart, { passive: true });
+  document.addEventListener('touchmove', onTouchMove, { passive: false });
+  document.addEventListener('touchend', onTouchEnd, { passive: true });
+
+  // Если изменили размер экрана (поворот/планшет) — не оставляем тело залоченным
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      document.body.classList.remove('sidebar-open');
+      if (overlay) overlay.classList.remove('show');
+      sidebar.classList.remove('open');
+    }
+  });
 })();

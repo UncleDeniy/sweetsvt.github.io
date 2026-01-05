@@ -87,9 +87,25 @@ window.lections = [{
         subcategory: "protocols",
         dateAdded: new Date().toISOString(),
         author: "UncleDeniy"
+    },
+    {
+        id: 11,
+        title: "Как расшарить localhost через Cloudflare Tunnel",
+        description: "Практическая лекция о том, как быстро и безопасно опубликовать локальный сервер в интернет через cloudflared. Разбор установки, запуска и сценариев использования. Альтернатива ngrok.",
+        file: "cloudflared-localhost.md",
+        category: "devops",
+        subcategory: "networking-tools",
+        dateAdded: new Date().toISOString(),
+        author: "UncleDeniy"
+    },
+    {
+        id: 12,
+        title: "Wireshark — полный курс анализа трафика (A–Z): SOC / Blue Team / Pentest / Kubernetes",
+        description: "Большая лекция-курс по Wireshark: теория TCP/IP, установка на Windows/macOS/Linux, фильтры и анализ PCAP, лабораторные работы (HTTP, MITM/ARP, DNS spoofing, TLS), CTF в стиле SOC-интервью, workflow SOC L1–L2 (alert → PCAP → решение → отчёт), а также продвинутый разбор Kubernetes security (east-west, mTLS/service mesh, API abuse, lateral movement) и блок Statistics/IO Graphs.",
+        file: "wireshark-full-course.md",
+        category: "cybersecurity",
+        subcategory: "networking",
+        dateAdded: new Date().toISOString(),
+        author: "UncleDeniy"
     }
-
-
-
-
 ];

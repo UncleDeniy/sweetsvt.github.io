@@ -171,9 +171,9 @@
                     filters.addEventListener('click', (e) => e.stopPropagation());
 
                     // Close only when tapping the overlay itself (not when interacting inside the drawer)
-                    overlay.addEventListener('click', (e) => {
-                        if (e.target === overlay) closeFilters();
-                    });
+                    if (overlay) {
+                        overlay.style.pointerEvents = 'none';
+                    }
 
                     // Prevent taps inside the drawer from bubbling to the overlay on some mobile browsers
                     filters.addEventListener('pointerdown', (e) => e.stopPropagation());

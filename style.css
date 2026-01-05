@@ -2538,13 +2538,21 @@ body::before {
         top: 14px;
         z-index: 60;
     }
+    /*
+      Mobile drawer layering + scroll fix:
+      Some mobile browsers create stacking-context quirks with transforms.
+      If the overlay ends up "above" the drawer, any tap is treated as an
+      overlay tap => drawer closes immediately and you can't scroll.
+      Make the drawer definitively above the overlay and enable smooth
+      momentum scrolling inside.
+    */
     #aaSidebarMount {
         position: fixed;
         inset: 0 auto 0 0;
         width: min(340px, 92vw);
         transform: translateX(-110%);
         transition: transform .2s ease;
-        z-index: 90;
+        z-index: 1001;
     }
     /* Keep the sidebar crisp on mobile.
        The overlay blurs the *background*, but the sidebar was slightly
@@ -2572,6 +2580,7 @@ body::before {
         opacity: 0;
         pointer-events: none;
         transition: opacity .2s ease;
+        z-index: 1000;
     }
     html.aa-nav-open .aa-overlay {
         opacity: 1;
@@ -2590,6 +2599,9 @@ body::before {
     border-right: 1px solid var(--aa-border);
     background: rgba(255, 255, 255, .38);
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
 }
 
 html[data-theme="dark"] .aa-sidebar {
@@ -5009,37 +5021,37 @@ th) {
     color: var(--aa-text-muted);
 }
 
-.storage-grid{
+.storage-grid {
     display: grid;
     grid-template-columns: 120px 1fr;
     gap: 14px;
     align-items: center;
 }
 
-@media (max-width: 520px){
-    .storage-grid{
+@media (max-width: 520px) {
+    .storage-grid {
         grid-template-columns: 1fr;
     }
-    .storage-pie-wrap{
+    .storage-pie-wrap {
         display: flex;
         justify-content: center;
     }
 }
 
-.storage-pie{
+.storage-pie {
     width: 120px;
     height: 120px;
     max-width: 100%;
     display: block;
 }
 
-.storage-details{
+.storage-details {
     margin-top: 6px;
     font-size: 13px;
     color: var(--aa-text);
 }
 
-.storage-details .row{
+.storage-details .row {
     display: flex;
     justify-content: space-between;
     gap: 10px;
@@ -5047,18 +5059,98 @@ th) {
     color: var(--aa-text-muted);
 }
 
-.storage-details .row strong{
+.storage-details .row strong {
     color: var(--aa-text);
     font-weight: 600;
 }
 
+
 /* Bar color states (>=70% warn, >=90% danger) */
-.storage-bar-fill.storage-ok{
+
+.storage-bar-fill.storage-ok {
     background: linear-gradient(90deg, #22c55e, #4ade80);
 }
-.storage-bar-fill.storage-warn{
+
+.storage-bar-fill.storage-warn {
     background: linear-gradient(90deg, #facc15, #fde047);
 }
-.storage-bar-fill.storage-danger{
+
+.storage-bar-fill.storage-danger {
     background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+
+/* ========== MOBILE: Sidebar by edge swipe (no overlay click close) ========== */
+
+@media (max-width: 768px) {
+    /* скрываем кнопку меню на мобилке */
+    .menu-toggle {
+        display: none !important;
+    }
+    /* Сайдбар: фиксирован + свой скролл */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100dvh;
+        width: min(86vw, 340px);
+        transform: translate3d(-105%, 0, 0);
+        transition: transform .22s ease;
+        z-index: 9999;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+    }
+    /* класс "open" показывает меню */
+    .sidebar.open {
+        transform: translate3d(0, 0, 0);
+    }
+    /* Оверлей — только визуал, НИКАКИХ кликов */
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        opacity: 0;
+        transition: opacity .18s ease;
+        background: rgba(0, 0, 0, .35);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 9998;
+        pointer-events: none;
+        /* ключ: не ловит тап */
+    }
+    .sidebar-overlay.show {
+        opacity: 1;
+    }
+    /* Блокируем скролл страницы, когда меню открыто */
+    body.sidebar-open {
+        overflow: hidden;
+        touch-action: none;
+    }
+}
+/* ===== Mobile menu behavior: edge-swipe drawer (no overlay taps) ===== */
+@media (max-width: 980px) {
+  /* Hide the hamburger button on mobile: drawer is controlled by edge-swipe */
+  #aaSidebarToggle { display: none !important; }
+
+  /* No darkening when the drawer is open on mobile */
+  .aa-overlay {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Some builds also toggle an `.is-open` class on the overlay */
+  .aa-overlay.is-open {
+    opacity: 0 !important;
+  }
+
+  /* Overlay is visual only; it must NOT receive taps (prevents "ghost close" after scroll) */
+  .aa-overlay { pointer-events: none !important; }
+  html.aa-nav-open .aa-overlay { pointer-events: none !important; }
+
+  /* While the drawer is open, disable interactions with page content behind it */
+  html.aa-nav-open .aa-content { pointer-events: none; }
+  html.aa-nav-open #aaSidebarMount,
+  html.aa-nav-open #aaSidebarMount * { pointer-events: auto; }
 }
