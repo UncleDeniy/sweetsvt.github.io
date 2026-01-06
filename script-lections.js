@@ -168,7 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="badge">📚 Лекция</span>
                     ${cat ? `<span class="badge">${escapeHtml(cat)}</span>` : ''}
                     ${sub ? `<span class="badge badge--warm">${escapeHtml(sub)}</span>` : ''}
-                    <button class="author-pill" type="button" data-author="${author}"><span class="author-pill__ava">👤</span><span class="author-pill__name">${author}</span></button>
+                    <span class="author-inline">
+                      <button class="author-pill" type="button" data-author="${author}"><span class="author-pill__ava">👤</span><span class="author-pill__name">${author}</span></button>
+                      <button class="author-follow" type="button" data-author="${author}" aria-pressed="false" title="Добавить автора в избранное">☆</button>
+                    </span>
                   </div>
                 </div>
               </div>

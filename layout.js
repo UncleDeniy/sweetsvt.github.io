@@ -341,7 +341,8 @@
 
             // --- Notifications + Author modal (works on all pages) ---
             const LS_FAV_AUTHORS = 'aa:favAuthors';
-            const LS_LAST_SEEN = 'aa:lastSeenByAuthor';
+            const LS_LAST_SEEN = 'aa:lastSeenByAuthor'; // legacy (lectures only)
+            const LS_SEEN_KEYS = 'aa:seenKeysByAuthor'; // new (any material types)
 
             function readJSON(key, fallback) {
                 try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
@@ -360,6 +361,34 @@
                 const clean = Array.from(new Set((arr || []).filter(Boolean)));
                 writeJSON(LS_FAV_AUTHORS, clean);
                 document.dispatchEvent(new CustomEvent('aa:favAuthorsChanged'));
+            }
+
+            function readSeenKeys() {
+                const v = readJSON(LS_SEEN_KEYS, {}) || {};
+                return (v && typeof v === 'object') ? v : {};
+            }
+
+            function writeSeenKeys(map) {
+                writeJSON(LS_SEEN_KEYS, map || {});
+            }
+
+            function markKeyRead(authorId, key) {
+                if (!authorId || !key) return;
+                const m = readSeenKeys();
+                const arr = Array.isArray(m[authorId]) ? m[authorId] : [];
+                if (arr.includes(key)) return;
+                arr.unshift(key);
+                m[authorId] = arr.slice(0, 200);
+                writeSeenKeys(m);
+            }
+
+            function markAllKeysReadForAuthor(authorId, keys) {
+                if (!authorId) return;
+                const m = readSeenKeys();
+                const cur = new Set(Array.isArray(m[authorId]) ? m[authorId] : []);
+                (keys || []).forEach(k => cur.add(k));
+                m[authorId] = Array.from(cur).slice(0, 200);
+                writeSeenKeys(m);
             }
 
             function ensureModal() {
@@ -406,7 +435,8 @@
           ${p.bio ? `<div class="aa-author__bio">${p.bio}</div>` : ''}
           <div class="aa-author__actions">
             <button class="aa-btn aa-btn--primary" type="button" id="aaFollowBtn">${isFav ? '★ В избранных' : '☆ В избранное'}</button>
-            <a class="aa-btn" href="search.html?q=${encodeURIComponent(p.name || '')}" title="Найти материалы автора">Материалы</a>
+            <a class="aa-btn" href="author.html?id=${encodeURIComponent(p.id)}" title="Страница автора">Профиль</a>
+            <a class="aa-btn" href="search.html?q=${encodeURIComponent(p.name || '')}" title="Найти материалы автора">Поиск</a>
           </div>
         </div>
       </div>
@@ -434,6 +464,35 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
     openAuthorModal(name.trim());
+}, true);
+
+// One-click follow/unfollow (⭐) inside cards
+function updateFollowButtons() {
+    const fav = getFavAuthors();
+    document.querySelectorAll('.author-follow').forEach((b) => {
+        const name = b.getAttribute('data-author') || '';
+        const id = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
+        const on = fav.includes(id);
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.setAttribute('title', on ? 'Автор в избранном' : 'Добавить автора в избранное');
+        b.textContent = on ? '★' : '☆';
+    });
+}
+
+document.addEventListener('click', (e) => {
+    const btn = e.target && e.target.closest ? e.target.closest('.author-follow') : null;
+    if (!btn) return;
+    const name = btn.getAttribute('data-author') || '';
+    if (!name.trim()) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const id = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
+    const cur = getFavAuthors();
+    const next = cur.includes(id) ? cur.filter(x => x !== id) : cur.concat([id]);
+    setFavAuthors(next);
+    updateFollowButtons();
 }, true);
 
 // --- Bell UI in topbar ---
@@ -482,33 +541,73 @@ function buildLectionHref(lection) {
     return href;
 }
 
+function buildResourceHref(res) {
+    return `item.html?id=${encodeURIComponent(res.id || '')}`;
+}
+
+function normalizeTypeLabel(type) {
+    try {
+        if (window.getTypeLabel) return window.getTypeLabel(type);
+    } catch {}
+    return type || 'Ресурс';
+}
+
 function computeNotifications() {
     const fav = getFavAuthors();
     const lections = Array.isArray(window.lections) ? window.lections : [];
-    const lastSeen = readJSON(LS_LAST_SEEN, {}) || {};
+    const it = Array.isArray(window.itResources) ? window.itResources : [];
+    const custom = Array.isArray(window.customizationResources) ? window.customizationResources : [];
+    const seenMap = readSeenKeys();
 
     const list = [];
+
+    // Lectures
     for (const l of lections) {
         const name = l.author || '';
-        const id = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
-        if (!fav.includes(id)) continue;
+        if (!name) continue;
+        const aid = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
+        if (!fav.includes(aid)) continue;
 
-        const seenId = Number(lastSeen[id] || 0);
-        const curId = Number(l.id || 0);
-        if (curId > seenId) {
-            list.push({
-                authorId: id,
-                authorName: name || 'Автор',
-                itemId: curId,
-                title: l.title || 'Материал',
-                href: buildLectionHref(l),
-                kind: 'Лекция',
-            });
-        }
+        const key = `lecture:${String(l.id ?? '')}`;
+        const seen = Array.isArray(seenMap[aid]) ? seenMap[aid] : [];
+        if (seen.includes(key)) continue;
+
+        list.push({
+            authorId: aid,
+            authorName: name || 'Автор',
+            key,
+            title: l.title || 'Материал',
+            href: buildLectionHref(l),
+            kind: 'Лекция',
+            sortKey: Number(l.id || 0),
+        });
+    }
+
+    // Resources (any type) — requires `author` field in resource objects
+    const resources = [...it, ...custom];
+    for (const r of resources) {
+        const name = r.author || '';
+        if (!name) continue;
+        const aid = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
+        if (!fav.includes(aid)) continue;
+
+        const key = `resource:${String(r.id ?? '')}`;
+        const seen = Array.isArray(seenMap[aid]) ? seenMap[aid] : [];
+        if (seen.includes(key)) continue;
+
+        list.push({
+            authorId: aid,
+            authorName: name || 'Автор',
+            key,
+            title: r.title || 'Материал',
+            href: buildResourceHref(r),
+            kind: normalizeTypeLabel(r.type) || 'Ресурс',
+            sortKey: Number(r.id || 0),
+        });
     }
 
     // newest first
-    list.sort((a, b) => b.itemId - a.itemId);
+    list.sort((a, b) => (b.sortKey || 0) - (a.sortKey || 0));
     return list;
 }
 
@@ -534,7 +633,7 @@ function renderNotifications() {
     }
 
     listEl.innerHTML = notes.map(n => `
-      <a class="aa-notify-item" href="${n.href}" data-author-id="${n.authorId}" data-item-id="${n.itemId}">
+      <a class="aa-notify-item" href="${n.href}" data-author-id="${n.authorId}" data-key="${encodeURIComponent(n.key)}">
         <span class="dot" aria-hidden="true"></span>
         <div>
           <div class="h">${n.title}</div>
@@ -544,30 +643,21 @@ function renderNotifications() {
     `).join('');
 }
 
-function markRead(authorId, itemId) {
-    const lastSeen = readJSON(LS_LAST_SEEN, {}) || {};
-    const cur = Number(lastSeen[authorId] || 0);
-    lastSeen[authorId] = Math.max(cur, Number(itemId || 0));
-    writeJSON(LS_LAST_SEEN, lastSeen);
+function markRead(authorId, key) {
+    markKeyRead(authorId, key);
 }
 
 function markAllRead() {
     const fav = getFavAuthors();
-    const lections = Array.isArray(window.lections) ? window.lections : [];
-    const lastSeen = readJSON(LS_LAST_SEEN, {}) || {};
-
-    const maxByAuthor = {};
-    for (const l of lections) {
-        const name = l.author || '';
-        const aid = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
-        if (!fav.includes(aid)) continue;
-        const id = Number(l.id || 0);
-        maxByAuthor[aid] = Math.max(Number(maxByAuthor[aid] || 0), id);
+    const notes = computeNotifications();
+    const byAuthor = {};
+    for (const n of notes) {
+        if (!byAuthor[n.authorId]) byAuthor[n.authorId] = [];
+        byAuthor[n.authorId].push(n.key);
     }
     for (const aid of fav) {
-        lastSeen[aid] = Math.max(Number(lastSeen[aid] || 0), Number(maxByAuthor[aid] || 0));
+        markAllKeysReadForAuthor(aid, byAuthor[aid] || []);
     }
-    writeJSON(LS_LAST_SEEN, lastSeen);
 }
 
 function wireBell() {
@@ -601,8 +691,8 @@ function wireBell() {
         const a = e.target && e.target.closest ? e.target.closest('.aa-notify-item') : null;
         if (!a) return;
         const aid = a.getAttribute('data-author-id');
-        const iid = a.getAttribute('data-item-id');
-        if (aid && iid) markRead(aid, iid);
+        const k = a.getAttribute('data-key');
+        if (aid && k) markKeyRead(aid, decodeURIComponent(k));
         // let navigation happen
         setTimeout(renderNotifications, 50);
     }, true);
@@ -611,9 +701,12 @@ function wireBell() {
 // Load data once and render bell
 (async () => {
     await ensureScript('authors.js', () => !!window.getAuthorProfile);
-    await ensureScript('lections.js', () => Array.isArray(window.lections) && window.lections.length);
+    await ensureScript('lections.js', () => Array.isArray(window.lections));
+    await ensureScript('data.js', () => Array.isArray(window.itResources) && Array.isArray(window.customizationResources));
     wireBell();
     renderNotifications();
+    updateFollowButtons();
+    document.addEventListener('aa:favAuthorsChanged', () => updateFollowButtons(), { passive: true });
     document.addEventListener('aa:favAuthorsChanged', () => renderNotifications(), { passive: true });
 })();
 

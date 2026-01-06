@@ -5907,7 +5907,6 @@ html[data-theme="light"] .aa-notify-panel {
     gap: 10px;
     padding: 10px 12px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: inherit;
@@ -5946,4 +5945,225 @@ html[data-theme="light"] .aa-notify-panel {
     width: 0;
     height: 0;
     display: none;
+}
+
+
+/* ---------- Author: follow button in cards ---------- */
+
+.author-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.author-follow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin-left: 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.author-follow.is-on {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+.author-follow:active {
+    transform: translateY(1px);
+}
+
+
+/* ---------- Author page ---------- */
+
+.author-page {
+    padding: 16px 0 24px;
+}
+
+.author-hero {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px;
+    border-radius: 20px;
+}
+
+.author-hero__ava {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    overflow: hidden;
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.author-hero__ava img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-hero__title {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.author-hero__role {
+    margin-top: 4px;
+    opacity: .85;
+}
+
+.author-hero__bio {
+    margin-top: 10px;
+    opacity: .9;
+    line-height: 1.35;
+}
+
+.author-hero__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.author-hero__links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    opacity: .95;
+}
+
+.author-hero__links a {
+    color: inherit;
+    opacity: .9;
+    text-decoration: none;
+}
+
+.author-hero__links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.author-filters {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 20px;
+}
+
+.author-filters__row {
+    display: grid;
+    grid-template-columns: 1.3fr .9fr .9fr .9fr;
+    gap: 10px;
+}
+
+.author-filters input,
+.author-filters select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.05);
+    color: inherit;
+    outline: none;
+}
+
+.author-filters input::placeholder {
+    opacity: .75;
+}
+
+.author-feed {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.author-item {
+    border-radius: 20px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+
+.author-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.author-item__top {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.author-item__badge {
+    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    font-size: .85rem;
+    opacity: .95;
+}
+
+.author-item__title {
+    margin: 0;
+    font-size: 1.02rem;
+    line-height: 1.2;
+}
+
+.author-item__desc {
+    margin-top: 8px;
+    opacity: .9;
+    line-height: 1.3;
+}
+
+.author-item__meta {
+    margin-top: 10px;
+    opacity: .8;
+    font-size: .9rem;
+}
+
+.author-item__actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width:980px) {
+    .author-feed {
+        grid-template-columns: 1fr;
+    }
+    .author-filters__row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width:520px) {
+    .author-hero {
+        flex-direction: column;
+    }
+    .author-hero__ava {
+        width: 72px;
+        height: 72px;
+    }
+    .author-filters__row {
+        grid-template-columns: 1fr;
+    }
 }

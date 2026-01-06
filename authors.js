@@ -98,4 +98,14 @@
     isFav,
     toggleFav,
   };
+
+  // Backward/compat helpers (used by layout.js and older code)
+  window.getAuthorId = window.getAuthorId || getAuthorId;
+  window.getAuthorProfile = window.getAuthorProfile || ((name) => getAuthor(name));
+
+  // Helpful extra
+  window.getAuthorById = window.getAuthorById || ((id) => {
+    const found = AUTHORS.find(a => a.id === id);
+    return found || getAuthor(id);
+  });
 })();

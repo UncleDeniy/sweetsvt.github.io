@@ -1,5 +1,5 @@
 /* sw.js — UncleDeniy PWA / оффлайн (GitHub Pages) */
-const CACHE_NAME = 'uncledeniY-v3';
+const CACHE_NAME = 'uncledeniY-v4';
 
 const CORE_ASSETS = [
   './',
@@ -10,6 +10,7 @@ const CORE_ASSETS = [
   './bookmarks.html',
   './lections.html',
   './settings.html',
+  './author.html',
   './markdown-viewer.html',
   './404.html',
 
@@ -19,6 +20,7 @@ const CORE_ASSETS = [
 
   './data.js',
   './lections.js',
+  './authors.js',
   './script.js',
   './item.js',
   './graph.js',
@@ -27,6 +29,7 @@ const CORE_ASSETS = [
   './settings-main.js',
   './settings.js',
   './markdown-viewer.js',
+  './author.js',
 
   './manifest.webmanifest',
   './icon.svg',

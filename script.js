@@ -433,7 +433,10 @@
 
                 const title = escapeHtml(r.title || 'Без названия');
                 const desc = escapeHtml(r.description || '');
-                const author = r.author ? `<button class="author-pill" type="button" data-author="${escapeHtml(r.author)}"><span class="author-pill__ava">👤</span><span class="author-pill__name">${escapeHtml(r.author)}</span></button>` : '';
+                const author = r.author ? `<span class="author-inline">
+                  <button class="author-pill" type="button" data-author="${escapeHtml(r.author)}"><span class="author-pill__ava">👤</span><span class="author-pill__name">${escapeHtml(r.author)}</span></button>
+                  <button class="author-follow" type="button" data-author="${escapeHtml(r.author)}" aria-pressed="false" title="Добавить автора в избранное">☆</button>
+                </span>` : '';
                 const ver = r.version ? `<span class="badge badge--ver">v${escapeHtml(r.version)}</span>` : '';
 
                 card.innerHTML = `
