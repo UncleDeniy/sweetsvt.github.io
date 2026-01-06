@@ -1,245 +1,621 @@
 // layout.js — единая боковая навигация + "Что нового" для всех страниц
 (() => {
-    const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+        const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
-    const navItems = [
-        { href: 'index.html', label: 'Главная', key: 'home' },
-        { href: 'search.html', label: 'Поиск', key: 'search' },
-        { href: 'lections.html', label: 'Лекции', key: 'lections' },
-        { href: 'graph.html', label: 'Граф', key: 'graph' },
-        { href: 'bookmarks.html', label: 'Закладки', key: 'bookmarks' },
-        { href: 'settings.html', label: 'Настройки', key: 'settings' },
-    ];
+        const navItems = [
+            { href: 'index.html', label: 'Главная', key: 'home' },
+            { href: 'search.html', label: 'Поиск', key: 'search' },
+            { href: 'lections.html', label: 'Лекции', key: 'lections' },
+            { href: 'graph.html', label: 'Граф', key: 'graph' },
+            { href: 'bookmarks.html', label: 'Закладки', key: 'bookmarks' },
+            { href: 'settings.html', label: 'Настройки', key: 'settings' },
+        ];
 
-    // Категории соответствуют option value в index.html (#categoryFilter)
-    // Полный список категорий (совпадает с <option value="..."> в index.html)
-    const categories = [
-        { key: 'programming', label: 'Программирование' },
-        { key: 'design', label: 'Дизайн' },
-        { key: 'devops', label: 'DevOps' },
-        { key: 'data-science', label: 'Data Science' },
-        { key: 'cybersecurity', label: 'Кибербезопасность' },
-        { key: 'career', label: 'Карьера' },
-        { key: 'profession', label: 'Профессии' },
-        { key: 'ai', label: 'Искусственный интеллект' },
-        { key: 'productivity', label: 'Продуктивность' },
-        { key: 'linux', label: 'Linux' },
-        { key: 'windows', label: 'Windows' },
-        { key: 'mobile', label: 'Мобильная разработка' },
-        { key: 'cloud', label: 'Облачные технологии' },
-        { key: 'other', label: 'Другое' },
-    ];
+        // Категории соответствуют option value в index.html (#categoryFilter)
+        // Полный список категорий (совпадает с <option value="..."> в index.html)
+        const categories = [
+            { key: 'programming', label: 'Программирование' },
+            { key: 'design', label: 'Дизайн' },
+            { key: 'devops', label: 'DevOps' },
+            { key: 'data-science', label: 'Data Science' },
+            { key: 'cybersecurity', label: 'Кибербезопасность' },
+            { key: 'career', label: 'Карьера' },
+            { key: 'profession', label: 'Профессии' },
+            { key: 'ai', label: 'Искусственный интеллект' },
+            { key: 'productivity', label: 'Продуктивность' },
+            { key: 'linux', label: 'Linux' },
+            { key: 'windows', label: 'Windows' },
+            { key: 'mobile', label: 'Мобильная разработка' },
+            { key: 'cloud', label: 'Облачные технологии' },
+            { key: 'other', label: 'Другое' },
+        ];
 
-    // Обновляй вручную при релизах
-    const whatsNew = [
-        { date: '2026-01-04', text: 'Умный поиск: ранжирование, быстрые фильтры и счётчик найденного.' },
-        { date: '2026-01-04', text: 'Новые компактные карточки + страница материала (Подробнее) + похожие материалы.' },
-        { date: '2026-01-04', text: 'Горячие клавиши: /, Enter, B, Esc, ?.' },
-        { date: '2026-01-04', text: 'Граф знаний по тегам + оффлайн-режим (PWA).' },
-    ];
+        // Обновляй вручную при релизах
+        const whatsNew = [
+            { date: '2026-01-04', text: 'Умный поиск: ранжирование, быстрые фильтры и счётчик найденного.' },
+            { date: '2026-01-04', text: 'Новые компактные карточки + страница материала (Подробнее) + похожие материалы.' },
+            { date: '2026-01-04', text: 'Горячие клавиши: /, Enter, B, Esc, ?.' },
+            { date: '2026-01-04', text: 'Граф знаний по тегам + оффлайн-режим (PWA).' },
+        ];
 
-    function icon(name) {
-        // маленькие inline-иконки (без внешних библиотек)
-        const icons = {
-            home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10v11h6v-7h6v7h6V10z"/></svg>',
-            search: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.7 10.7l4.3 4.3 1.4-1.4-4.3-4.3A6 6 0 0 0 10 4zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>',
-            lections: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14H6a2 2 0 0 0-2 2zm2-1h12V5H6v13zm14-12h2v14a2 2 0 0 1-2 2H8v-2h12z"/></svg>',
-            bookmarks: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v18l-7-3-7 3V4a1 1 0 0 1 1-1z"/></svg>',
-            settings: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.5-2.3.8a7.6 7.6 0 0 0-1.7-1L15 3h-4l-.1 2.8a7.6 7.6 0 0 0-1.7 1L7 6l-2 3.5L7 11a7.8 7.8 0 0 0 0 2l-2 1.5L7 18l2.2-.8a7.6 7.6 0 0 0 1.7 1L11 21h4l.1-2.8a7.6 7.6 0 0 0 1.7-1L19 18l2-3.5L19.4 13zM13 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
-            dot: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/></svg>',
-            tag: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10V4h-6L4 14l6 6 10-10zm-9.5-3A1.5 1.5 0 1 1 12 8.5 1.5 1.5 0 0 1 10.5 7z"/></svg>',
-        };
-        return icons[name] || icons.dot;
-    }
+        function icon(name) {
+            // маленькие inline-иконки (без внешних библиотек)
+            const icons = {
+                home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10v11h6v-7h6v7h6V10z"/></svg>',
+                search: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.7 10.7l4.3 4.3 1.4-1.4-4.3-4.3A6 6 0 0 0 10 4zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>',
+                lections: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14H6a2 2 0 0 0-2 2zm2-1h12V5H6v13zm14-12h2v14a2 2 0 0 1-2 2H8v-2h12z"/></svg>',
+                bookmarks: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v18l-7-3-7 3V4a1 1 0 0 1 1-1z"/></svg>',
+                settings: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.5-2.3.8a7.6 7.6 0 0 0-1.7-1L15 3h-4l-.1 2.8a7.6 7.6 0 0 0-1.7 1L7 6l-2 3.5L7 11a7.8 7.8 0 0 0 0 2l-2 1.5L7 18l2.2-.8a7.6 7.6 0 0 0 1.7 1L11 21h4l.1-2.8a7.6 7.6 0 0 0 1.7-1L19 18l2-3.5L19.4 13zM13 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
+                dot: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/></svg>',
+                tag: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10V4h-6L4 14l6 6 10-10zm-9.5-3A1.5 1.5 0 1 1 12 8.5 1.5 1.5 0 0 1 10.5 7z"/></svg>',
+            };
+            return icons[name] || icons.dot;
+        }
 
-    function makeSidebar() {
-        const aside = document.createElement('aside');
-        aside.className = 'aa-sidebar';
-        aside.id = 'aaSidebar';
+        function makeSidebar() {
+            const aside = document.createElement('aside');
+            aside.className = 'aa-sidebar';
+            aside.id = 'aaSidebar';
 
-        const brand = document.createElement('a');
-        brand.className = 'aa-brand';
-        brand.href = 'index.html';
-        brand.innerHTML = `
+            const brand = document.createElement('a');
+            brand.className = 'aa-brand';
+            brand.href = 'index.html';
+            brand.innerHTML = `
       <div class="aa-brand__mark" aria-hidden="true">📚</div>
       <div class="aa-brand__text">
         <div class="aa-brand__title">Syntax_Syndicate</div>
         <div class="aa-brand__sub">Полная датабаза</div>
       </div>
     `;
-        aside.appendChild(brand);
+            aside.appendChild(brand);
 
-        const nav = document.createElement('nav');
-        nav.className = 'aa-nav';
-        nav.setAttribute('aria-label', 'Навигация');
+            const nav = document.createElement('nav');
+            nav.className = 'aa-nav';
+            nav.setAttribute('aria-label', 'Навигация');
 
-        navItems.forEach((it) => {
-            const a = document.createElement('a');
-            a.href = it.href;
-            a.className = 'aa-nav__link';
-            a.innerHTML = `<span class="aa-ico" aria-hidden="true">${icon(it.key)}</span><span>${it.label}</span>`;
-            // active
-            const target = (it.href.split('#')[0] || '').toLowerCase();
-            if (page === target) a.classList.add('is-active');
-            nav.appendChild(a);
-        });
-        aside.appendChild(nav);
+            navItems.forEach((it) => {
+                const a = document.createElement('a');
+                a.href = it.href;
+                a.className = 'aa-nav__link';
+                a.innerHTML = `<span class="aa-ico" aria-hidden="true">${icon(it.key)}</span><span>${it.label}</span>`;
+                // active
+                const target = (it.href.split('#')[0] || '').toLowerCase();
+                if (page === target) a.classList.add('is-active');
+                nav.appendChild(a);
+            });
+            aside.appendChild(nav);
 
-        // Категории
-        const cat = document.createElement('section');
-        cat.className = 'aa-sidecard';
-        cat.innerHTML = `<h2 class="aa-sidecard__title">Категории</h2>`;
-        const ul = document.createElement('ul');
-        ul.className = 'aa-sidecard__list';
-        categories.forEach((c) => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = `search.html?cat=${encodeURIComponent(c.key)}`;
-            a.className = 'aa-chiplink';
-            a.innerHTML = `<span class="aa-ico" aria-hidden="true">${icon('tag')}</span><span>${c.label}</span>`;
-            li.appendChild(a);
-            ul.appendChild(li);
-        });
-        cat.appendChild(ul);
-        aside.appendChild(cat);
+            // Категории
+            const cat = document.createElement('section');
+            cat.className = 'aa-sidecard';
+            cat.innerHTML = `<h2 class="aa-sidecard__title">Категории</h2>`;
+            const ul = document.createElement('ul');
+            ul.className = 'aa-sidecard__list';
+            categories.forEach((c) => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `search.html?cat=${encodeURIComponent(c.key)}`;
+                a.className = 'aa-chiplink';
+                a.innerHTML = `<span class="aa-ico" aria-hidden="true">${icon('tag')}</span><span>${c.label}</span>`;
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+            cat.appendChild(ul);
+            aside.appendChild(cat);
 
-        // Что нового
-        const nw = document.createElement('section');
-        nw.className = 'aa-sidecard';
-        nw.innerHTML = `<h2 class="aa-sidecard__title">Новое</h2>`;
-        const ul2 = document.createElement('ul');
-        ul2.className = 'aa-sidecard__list';
-        whatsNew.slice(0, 6).forEach((n) => {
-            const li = document.createElement('li');
-            li.className = 'aa-sidecard__item';
-            li.innerHTML = `<span class="aa-ico" aria-hidden="true">${icon('dot')}</span>
+            // Что нового
+            const nw = document.createElement('section');
+            nw.className = 'aa-sidecard';
+            nw.innerHTML = `<h2 class="aa-sidecard__title">Новое</h2>`;
+            const ul2 = document.createElement('ul');
+            ul2.className = 'aa-sidecard__list';
+            whatsNew.slice(0, 6).forEach((n) => {
+                const li = document.createElement('li');
+                li.className = 'aa-sidecard__item';
+                li.innerHTML = `<span class="aa-ico" aria-hidden="true">${icon('dot')}</span>
         <div><div class="aa-muted">${n.date}</div><div>${n.text}</div></div>`;
-            ul2.appendChild(li);
-        });
-        nw.appendChild(ul2);
-        aside.appendChild(nw);
+                ul2.appendChild(li);
+            });
+            nw.appendChild(ul2);
+            aside.appendChild(nw);
 
-        // footer small
-        const foot = document.createElement('div');
-        foot.className = 'aa-sidebar__foot';
-        foot.innerHTML = `<div class="aa-muted">GitHub Pages • офлайн-кэш • PWA</div>`;
-        aside.appendChild(foot);
+            // footer small
+            const foot = document.createElement('div');
+            foot.className = 'aa-sidebar__foot';
+            foot.innerHTML = `<div class="aa-muted">GitHub Pages • офлайн-кэш • PWA</div>`;
+            aside.appendChild(foot);
 
-        return aside;
-    }
-
-    function mount() {
-        // Live wallpaper layer (controlled via settings-core.js -> html[data-wallpaper])
-        // Inject once for all pages so the background is visible everywhere.
-        if (!document.querySelector('.aa-wallpaper')) {
-            const w = document.createElement('div');
-            w.className = 'aa-wallpaper';
-            w.setAttribute('aria-hidden', 'true');
-            // put it at the very top so overlays/sidebars stay above
-            document.body.insertBefore(w, document.body.firstChild);
+            return aside;
         }
 
-        const mountEl = document.getElementById('aaSidebarMount');
-        const contentEl = document.querySelector('.aa-content');
-        if (!mountEl || !contentEl) return;
+        function mount() {
+            // Live wallpaper layer (controlled via settings-core.js -> html[data-wallpaper])
+            // Inject once for all pages so the background is visible everywhere.
+            if (!document.querySelector('.aa-wallpaper')) {
+                const w = document.createElement('div');
+                w.className = 'aa-wallpaper';
+                w.setAttribute('aria-hidden', 'true');
+                // put it at the very top so overlays/sidebars stay above
+                document.body.insertBefore(w, document.body.firstChild);
+            }
 
-        mountEl.appendChild(makeSidebar());
+            const mountEl = document.getElementById('aaSidebarMount');
+            const contentEl = document.querySelector('.aa-content');
+            if (!mountEl || !contentEl) return;
 
-        const btn = document.getElementById('aaSidebarToggle');
-        const overlay = document.getElementById('aaOverlay');
-        const sidebar = document.getElementById('aaSidebar');
+            mountEl.appendChild(makeSidebar());
 
-        // On mobile, a vertical scroll inside the drawer can end with the finger
-        // slightly outside of it (on the overlay). Some browsers then fire the
-        // overlay tap/click and the drawer closes "immediately".
-        // We detect drawer interactions and temporarily ignore overlay taps.
-        let drawerTouchActive = false;
-        let ignoreOverlayTap = false;
-        let startX = 0;
-        let startY = 0;
-        let lastX = 0;
-        let lastY = 0;
-        const SWIPE_CLOSE_PX = 90; // swipe-left to close (higher threshold to avoid accidental closes while scrolling)
-        const MOVE_TOLERANCE_PX = 12; // treat as scroll/drag (not a tap)
+            const btn = document.getElementById('aaSidebarToggle');
+            const overlay = document.getElementById('aaOverlay');
+            const sidebar = document.getElementById('aaSidebar');
 
-        const close = () => {
-            document.documentElement.classList.remove('aa-nav-open');
-        };
-        const open = () => {
-            document.documentElement.classList.add('aa-nav-open');
-        };
+            // On mobile, a vertical scroll inside the drawer can end with the finger
+            // slightly outside of it (on the overlay). Some browsers then fire the
+            // overlay tap/click and the drawer closes "immediately".
+            // We detect drawer interactions and temporarily ignore overlay taps.
+            let drawerTouchActive = false;
+            let ignoreOverlayTap = false;
+            let startX = 0;
+            let startY = 0;
+            let lastX = 0;
+            let lastY = 0;
+            const SWIPE_CLOSE_PX = 90; // swipe-left to close (higher threshold to avoid accidental closes while scrolling)
+            const MOVE_TOLERANCE_PX = 12; // treat as scroll/drag (not a tap)
 
-        if (btn) btn.addEventListener('click', (e) => {
-            // Defensive: don't let the same tap/click bubble into other handlers.
-            e.stopPropagation();
+            const close = () => {
+                document.documentElement.classList.remove('aa-nav-open');
+            };
+            const open = () => {
+                document.documentElement.classList.add('aa-nav-open');
+            };
 
-
-
-            document.documentElement.classList.contains('aa-nav-open') ? close() : open();
-        });
+            if (btn) btn.addEventListener('click', (e) => {
+                // Defensive: don't let the same tap/click bubble into other handlers.
+                e.stopPropagation();
 
 
-// Variant B (mobile): drawer is controlled by edge-swipe, not by tapping the overlay.
-const isMobile = () => window.matchMedia('(max-width: 980px)').matches;
 
-// Overlay is visual-only on mobile (prevents "ghost closes" after scroll).
-if (overlay) {
-    const applyOverlayPE = () => { overlay.style.pointerEvents = isMobile() ? 'none' : ''; };
-    applyOverlayPE();
-    window.addEventListener('resize', applyOverlayPE, { passive: true });
+                document.documentElement.classList.contains('aa-nav-open') ? close() : open();
+            });
+
+
+            // Variant B (mobile): drawer is controlled by swipe+drag (no overlay taps).
+            const isMobile = () => window.matchMedia('(max-width: 980px)').matches;
+
+            // Ensure author profiles are available for pills / modal / notifications
+            function ensureScript(src, globalCheck) {
+                return new Promise((resolve) => {
+                    try {
+                        if (!globalCheck || globalCheck()) return resolve();
+                        const existing = Array.from(document.scripts).find(s => (s.getAttribute('src') || '').includes(src));
+                        if (existing) {
+                            existing.addEventListener('load', () => resolve(), { passive: true });
+                            existing.addEventListener('error', () => resolve(), { passive: true });
+                            return;
+                        }
+                        const s = document.createElement('script');
+                        s.src = src;
+                        s.async = true;
+                        s.addEventListener('load', () => resolve(), { passive: true });
+                        s.addEventListener('error', () => resolve(), { passive: true });
+                        document.body.appendChild(s);
+                    } catch {
+                        resolve();
+                    }
+                });
+            }
+
+            // Overlay is visual-only on mobile (prevents "ghost closes" after scroll).
+            if (overlay) {
+                const applyOverlayPE = () => { overlay.style.pointerEvents = isMobile() ? 'none' : ''; };
+                applyOverlayPE();
+                window.addEventListener('resize', applyOverlayPE, { passive: true });
+            }
+
+            // --- Swipe hint (mobile) ---
+            if (!document.querySelector('.aa-swipe-hint')) {
+                const hint = document.createElement('div');
+                hint.className = 'aa-swipe-hint';
+                hint.setAttribute('aria-hidden', 'true');
+                document.body.appendChild(hint);
+            }
+
+            // --- Drag open from the middle (avoids system back-gesture on the edge) ---
+            let dragActive = false;
+            let dragStartX = 0;
+            let dragStartY = 0;
+            let dragMount = null;
+            let dragW = 0;
+            let dragHiddenX = 0; // negative px
+            let dragLastX = 0;
+            let dragLastY = 0;
+            let dragWasHorizontal = false;
+
+            function getOpenZone() {
+                const w = window.innerWidth || 360;
+                // Phone: wider zone; Tablet: narrower (less accidental)
+                if (w <= 520) return { min: Math.round(w * 0.18), max: Math.round(w * 0.92) };
+                return { min: Math.round(w * 0.28), max: Math.round(w * 0.85) };
+            }
+
+            function shouldIgnoreStartTarget(target) {
+                const el = target && (target.closest ? target.closest('input,textarea,select,button,[contenteditable="true"]') : null);
+                if (el) return true;
+                // Don't start swipe on horizontal scrollers
+                const sc = target && target.closest ? target.closest('[data-no-drawer-swipe],.aa-no-drawer-swipe') : null;
+                return !!sc;
+            }
+
+            function setMountTransform(x, immediate) {
+                if (!dragMount) return;
+                if (immediate) dragMount.style.transition = 'none';
+                dragMount.style.transform = `translate3d(${x}px,0,0)`;
+            }
+
+            function clearMountTransform() {
+                if (!dragMount) return;
+                dragMount.style.transition = '';
+                dragMount.style.transform = '';
+            }
+
+            document.addEventListener('touchstart', (e) => {
+                if (!isMobile()) return;
+                if (document.documentElement.classList.contains('aa-nav-open')) return;
+
+                const t = e.touches && e.touches[0];
+                if (!t) return;
+
+                if (shouldIgnoreStartTarget(e.target)) return;
+
+                const { min, max } = getOpenZone();
+                const x = t.clientX;
+                // Hard-block very left edge (system back gesture zone)
+                if (x < 26) return;
+                if (x < min || x > max) return;
+
+                dragMount = document.getElementById('aaSidebarMount');
+                if (!dragMount) return;
+
+                const rect = dragMount.getBoundingClientRect();
+                dragW = rect.width || 320;
+                dragHiddenX = -Math.round(dragW + 28); // fully hidden
+                dragStartX = dragLastX = x;
+                dragStartY = dragLastY = t.clientY;
+                dragActive = true;
+                dragWasHorizontal = false;
+
+                // start just slightly visible (gives feedback)
+                setMountTransform(dragHiddenX + 8, true);
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!dragActive || !isMobile()) return;
+                const t = e.touches && e.touches[0];
+                if (!t) return;
+
+                dragLastX = t.clientX;
+                dragLastY = t.clientY;
+
+                const dx = dragLastX - dragStartX;
+                const dy = dragLastY - dragStartY;
+
+                // If user scrolls vertically => cancel drag and restore.
+                if (!dragWasHorizontal && Math.abs(dy) > 22 && Math.abs(dy) > Math.abs(dx)) {
+                    dragActive = false;
+                    clearMountTransform();
+                    return;
+                }
+
+                // Horizontal intent
+                if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+                    dragWasHorizontal = true;
+                    e.preventDefault(); // keep page from jitter-scrolling
+                }
+
+                if (!dragWasHorizontal) return;
+
+                // translate from hidden to open as you drag right
+                const x = Math.min(0, Math.max(dragHiddenX, dragHiddenX + dx));
+                setMountTransform(x, true);
+            }, { passive: false });
+
+            document.addEventListener('touchend', () => {
+                if (!dragActive || !isMobile()) return;
+                dragActive = false;
+
+                if (!dragMount) return;
+
+                const dx = dragLastX - dragStartX;
+                const dy = dragLastY - dragStartY;
+
+                // Only open on a clear swipe-right / drag far enough.
+                const openEnough = (dragHiddenX + dx) > (-dragW * 0.45);
+                const clearSwipe = dx > 70 && Math.abs(dx) > Math.abs(dy) * 1.2;
+
+                clearMountTransform();
+
+                if (dragWasHorizontal && (openEnough || clearSwipe)) {
+                    open();
+                }
+            }, { passive: true });
+
+            // --- Notifications + Author modal (works on all pages) ---
+            const LS_FAV_AUTHORS = 'aa:favAuthors';
+            const LS_LAST_SEEN = 'aa:lastSeenByAuthor';
+
+            function readJSON(key, fallback) {
+                try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
+            }
+
+            function writeJSON(key, val) {
+                try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+            }
+
+            function getFavAuthors() {
+                const a = readJSON(LS_FAV_AUTHORS, []);
+                return Array.isArray(a) ? a : [];
+            }
+
+            function setFavAuthors(arr) {
+                const clean = Array.from(new Set((arr || []).filter(Boolean)));
+                writeJSON(LS_FAV_AUTHORS, clean);
+                document.dispatchEvent(new CustomEvent('aa:favAuthorsChanged'));
+            }
+
+            function ensureModal() {
+                if (document.querySelector('.aa-modal')) return;
+
+                const modal = document.createElement('div');
+                modal.className = 'aa-modal';
+                modal.innerHTML = `
+      <div class="aa-modal__backdrop" data-close="1"></div>
+      <div class="aa-modal__panel" role="dialog" aria-modal="true" aria-label="Автор">
+        <button class="aa-modal__close" type="button" aria-label="Закрыть" data-close="1">✕</button>
+        <div id="aaAuthorHost"></div>
+      </div>
+    `;
+                document.body.appendChild(modal);
+
+                const closeModal = () => modal.classList.remove('is-open');
+                modal.addEventListener('click', (e) => {
+                    if (e.target && e.target.getAttribute && e.target.getAttribute('data-close') === '1') closeModal();
+                });
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') closeModal();
+                });
+            }
+
+            function openAuthorModal(authorName) {
+                ensureModal();
+                const modal = document.querySelector('.aa-modal');
+                const host = document.getElementById('aaAuthorHost');
+                if (!modal || !host) return;
+
+                const getProfile = window.getAuthorProfile || ((name) => ({ id: (name || 'author').toLowerCase(), name: name || 'Автор', role: '', avatar: 'icon.svg', bio: '' }));
+                const p = getProfile(authorName);
+
+                const fav = getFavAuthors();
+                const isFav = fav.includes(p.id);
+
+                host.innerHTML = `
+      <div class="aa-author">
+        <div class="aa-author__ava"><img src="${p.avatar || 'icon.svg'}" alt=""></div>
+        <div>
+          <h3 class="aa-author__title">${(p.name || 'Автор')}</h3>
+          ${p.role ? `<div class="aa-author__role">${p.role}</div>` : ''}
+          ${p.bio ? `<div class="aa-author__bio">${p.bio}</div>` : ''}
+          <div class="aa-author__actions">
+            <button class="aa-btn aa-btn--primary" type="button" id="aaFollowBtn">${isFav ? '★ В избранных' : '☆ В избранное'}</button>
+            <a class="aa-btn" href="search.html?q=${encodeURIComponent(p.name || '')}" title="Найти материалы автора">Материалы</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const btn = document.getElementById('aaFollowBtn');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            const now = getFavAuthors();
+            const next = now.includes(p.id) ? now.filter(x => x !== p.id) : now.concat([p.id]);
+            setFavAuthors(next);
+            openAuthorModal(authorName); // rerender
+        }, { passive: true });
+    }
+
+    modal.classList.add('is-open');
 }
 
-// Edge-swipe to OPEN (swipe right from the very left edge).
-const EDGE_OPEN_PX = 18;
-const SWIPE_OPEN_PX = 70;
-const SWIPE_MAX_Y = 42;
+// Click handler for author pills anywhere
+document.addEventListener('click', (e) => {
+    const btn = e.target && e.target.closest ? e.target.closest('.author-pill') : null;
+    if (!btn) return;
+    const name = btn.getAttribute('data-author') || btn.textContent || '';
+    if (!name.trim()) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openAuthorModal(name.trim());
+}, true);
 
-let edgeTracking = false;
-let edgeStartX = 0;
-let edgeStartY = 0;
+// --- Bell UI in topbar ---
+function ensureBell() {
+    const topbar = document.querySelector('.aa-topbar');
+    if (!topbar) return null;
 
-document.addEventListener('touchstart', (e) => {
-    if (!isMobile()) return;
-    if (document.documentElement.classList.contains('aa-nav-open')) return;
-    const t = e.touches && e.touches[0];
-    if (!t) return;
-    edgeStartX = t.clientX;
-    edgeStartY = t.clientY;
-    edgeTracking = edgeStartX <= EDGE_OPEN_PX;
-}, { passive: true });
+    let actions = topbar.querySelector('.aa-topbar__actions');
+    if (!actions) {
+        actions = document.createElement('div');
+        actions.className = 'aa-topbar__actions';
+        topbar.appendChild(actions);
+    }
 
-document.addEventListener('touchmove', (e) => {
-    if (!edgeTracking || !isMobile()) return;
-    const t = e.touches && e.touches[0];
-    if (!t) return;
-    const dx = t.clientX - edgeStartX;
-    const dy = t.clientY - edgeStartY;
+    if (actions.querySelector('.aa-notify')) return actions.querySelector('.aa-notify');
 
-    // Vertical scroll => cancel tracking (don't block scroll).
-    if (Math.abs(dy) > SWIPE_MAX_Y && Math.abs(dy) > Math.abs(dx)) {
-        edgeTracking = false;
+    const wrap = document.createElement('div');
+    wrap.className = 'aa-notify';
+    wrap.innerHTML = `
+      <button class="aa-bell" type="button" id="aaBell" aria-label="Уведомления">
+        <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+          <path d="M12 22a2.5 2.5 0 0 0 2.45-2H9.55A2.5 2.5 0 0 0 12 22zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1l-2-2z" fill="currentColor"/>
+        </svg>
+        <span class="aa-bell__badge" id="aaBellBadge">0</span>
+      </button>
+      <div class="aa-notify__panel" id="aaNotifyPanel" role="menu" aria-label="Уведомления">
+        <div class="aa-notify-head">
+          <div class="t">Уведомления</div>
+          <div class="sp"></div>
+          <button type="button" id="aaNotifyMarkAll" title="Отметить всё как прочитанное">Прочитать</button>
+          <button type="button" id="aaNotifyClose" title="Закрыть">✕</button>
+        </div>
+        <div class="aa-notify-list" id="aaNotifyList"></div>
+      </div>
+    `;
+    actions.appendChild(wrap);
+    return wrap;
+}
+
+function buildLectionHref(lection) {
+    const href = `markdown-viewer.html?file=${encodeURIComponent(lection.file || '')}` +
+        `&title=${encodeURIComponent(lection.title || '')}` +
+        `&category=${encodeURIComponent(lection.category || '')}` +
+        `&subcategory=${encodeURIComponent(lection.subcategory || '')}` +
+        `&author=${encodeURIComponent(lection.author || '')}`;
+    return href;
+}
+
+function computeNotifications() {
+    const fav = getFavAuthors();
+    const lections = Array.isArray(window.lections) ? window.lections : [];
+    const lastSeen = readJSON(LS_LAST_SEEN, {}) || {};
+
+    const list = [];
+    for (const l of lections) {
+        const name = l.author || '';
+        const id = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
+        if (!fav.includes(id)) continue;
+
+        const seenId = Number(lastSeen[id] || 0);
+        const curId = Number(l.id || 0);
+        if (curId > seenId) {
+            list.push({
+                authorId: id,
+                authorName: name || 'Автор',
+                itemId: curId,
+                title: l.title || 'Материал',
+                href: buildLectionHref(l),
+                kind: 'Лекция',
+            });
+        }
+    }
+
+    // newest first
+    list.sort((a, b) => b.itemId - a.itemId);
+    return list;
+}
+
+function renderNotifications() {
+    const wrap = ensureBell();
+    if (!wrap) return;
+
+    const badge = document.getElementById('aaBellBadge');
+    const panel = document.getElementById('aaNotifyPanel');
+    const listEl = document.getElementById('aaNotifyList');
+    if (!badge || !panel || !listEl) return;
+
+    const notes = computeNotifications();
+    badge.textContent = String(notes.length);
+    badge.classList.toggle('is-on', notes.length > 0);
+
+    if (!notes.length) {
+        const fav = getFavAuthors();
+        listEl.innerHTML = fav.length
+          ? `<div class="aa-notify-empty">Пока нет новых материалов от избранных авторов.</div>`
+          : `<div class="aa-notify-empty">Добавь автора в избранное — и здесь появятся обновления.</div>`;
         return;
     }
 
-    // Horizontal gesture => prevent page scroll jitter.
-    if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) {
-        e.preventDefault();
-    }
-}, { passive: false });
+    listEl.innerHTML = notes.map(n => `
+      <a class="aa-notify-item" href="${n.href}" data-author-id="${n.authorId}" data-item-id="${n.itemId}">
+        <span class="dot" aria-hidden="true"></span>
+        <div>
+          <div class="h">${n.title}</div>
+          <div class="s">${n.kind} · ${n.authorName}</div>
+        </div>
+      </a>
+    `).join('');
+}
 
-document.addEventListener('touchend', (e) => {
-    if (!edgeTracking || !isMobile()) return;
-    edgeTracking = false;
-    const t = e.changedTouches && e.changedTouches[0];
-    if (!t) return;
-    const dx = t.clientX - edgeStartX;
-    const dy = t.clientY - edgeStartY;
+function markRead(authorId, itemId) {
+    const lastSeen = readJSON(LS_LAST_SEEN, {}) || {};
+    const cur = Number(lastSeen[authorId] || 0);
+    lastSeen[authorId] = Math.max(cur, Number(itemId || 0));
+    writeJSON(LS_LAST_SEEN, lastSeen);
+}
 
-    // Only open on a clear swipe-right.
-    if (dx > SWIPE_OPEN_PX && Math.abs(dx) > Math.abs(dy) * 1.2) {
-        open();
+function markAllRead() {
+    const fav = getFavAuthors();
+    const lections = Array.isArray(window.lections) ? window.lections : [];
+    const lastSeen = readJSON(LS_LAST_SEEN, {}) || {};
+
+    const maxByAuthor = {};
+    for (const l of lections) {
+        const name = l.author || '';
+        const aid = (window.getAuthorId ? window.getAuthorId(name) : (name || '').toLowerCase());
+        if (!fav.includes(aid)) continue;
+        const id = Number(l.id || 0);
+        maxByAuthor[aid] = Math.max(Number(maxByAuthor[aid] || 0), id);
     }
-}, { passive: true });
+    for (const aid of fav) {
+        lastSeen[aid] = Math.max(Number(lastSeen[aid] || 0), Number(maxByAuthor[aid] || 0));
+    }
+    writeJSON(LS_LAST_SEEN, lastSeen);
+}
+
+function wireBell() {
+    const wrap = ensureBell();
+    if (!wrap) return;
+
+    const btn = document.getElementById('aaBell');
+    const panel = document.getElementById('aaNotifyPanel');
+    const closeBtn = document.getElementById('aaNotifyClose');
+    const markAllBtn = document.getElementById('aaNotifyMarkAll');
+
+    const closePanel = () => { if (panel) panel.style.display = 'none'; };
+    const openPanel = () => { if (panel) panel.style.display = 'block'; renderNotifications(); };
+
+    if (btn && panel) {
+        btn.addEventListener('click', () => {
+            panel.style.display === 'block' ? closePanel() : openPanel();
+        }, { passive: true });
+    }
+    if (closeBtn) closeBtn.addEventListener('click', closePanel, { passive: true });
+    if (markAllBtn) markAllBtn.addEventListener('click', () => { markAllRead(); renderNotifications(); }, { passive: true });
+
+    document.addEventListener('click', (e) => {
+        if (!panel || panel.style.display !== 'block') return;
+        if (e.target.closest && (e.target.closest('#aaNotifyPanel') || e.target.closest('#aaBell'))) return;
+        closePanel();
+    });
+
+    // Mark read on click
+    document.addEventListener('click', (e) => {
+        const a = e.target && e.target.closest ? e.target.closest('.aa-notify-item') : null;
+        if (!a) return;
+        const aid = a.getAttribute('data-author-id');
+        const iid = a.getAttribute('data-item-id');
+        if (aid && iid) markRead(aid, iid);
+        // let navigation happen
+        setTimeout(renderNotifications, 50);
+    }, true);
+}
+
+// Load data once and render bell
+(async () => {
+    await ensureScript('authors.js', () => !!window.getAuthorProfile);
+    await ensureScript('lections.js', () => Array.isArray(window.lections) && window.lections.length);
+    wireBell();
+    renderNotifications();
+    document.addEventListener('aa:favAuthorsChanged', () => renderNotifications(), { passive: true });
+})();
 
 
 

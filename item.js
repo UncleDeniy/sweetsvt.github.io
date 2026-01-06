@@ -106,7 +106,7 @@
     const bmIcon = bm ? 'fas fa-bookmark' : 'far fa-bookmark';
 
     const metaParts = [];
-    if (r.author) metaParts.push(`👤 ${escapeHtml(r.author)}`);
+    if (r.author) metaParts.push(`<button class="author-pill" type="button" data-author="${escapeHtml(r.author)}"><span class="author-pill__ava">👤</span><span class="author-pill__name">${escapeHtml(r.author)}</span></button>`);
     if (r.type) metaParts.push(`📦 ${escapeHtml(getTypeLabel(r.type))}`);
     if (r.category) metaParts.push(`• ${escapeHtml(getCategoryLabel(r.category))}`);
     if (r.subcategory) metaParts.push(`• ${escapeHtml(r.subcategory)}`);
