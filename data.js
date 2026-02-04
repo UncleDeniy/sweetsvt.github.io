@@ -3603,6 +3603,18 @@ if (window.itResources.length === 0) {
             category: "devops",
             subcategory: "kubernetes",
             dateAdded: new Date().toISOString()
+        },
+
+        {
+            id: 1023,
+            title: "Основы функционирования компьютерных сетей",
+            description: "Видеолекция о базовых принципах работы компьютерных сетей: адресация, маршрутизация, беспроводные сети, Интернет и современные сетевые тренды. Подходит для формирования целостного понимания сетевых технологий. Лекция прочитана в рамках открытых лекций CS центра.",
+            link: "https://www.youtube.com/watch?v=BJSITWkSDQg",
+            tags: ["networks", "tcp/ip", "routing", "wireless", "internet"],
+            type: "lecture",
+            category: "system",
+            subcategory: "networks",
+            dateAdded: new Date().toISOString()
         }
 
     ];
