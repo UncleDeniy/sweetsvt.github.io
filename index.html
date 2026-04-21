@@ -48,43 +48,86 @@
       <div class="home-hint">Ищет по названию, описанию, ссылке и тегам — включая лекции.</div>
 <div class="home-keys">Подсказка: на странице поиска нажми <kbd>/</kbd> (фокус), <kbd>Enter</kbd> (открыть 1-й), <kbd>B</kbd> (закладка), <kbd>?</kbd> (помощь).</div>
     </section>
-      <section class="other-projects surface" aria-labelledby="otherProjectsTitle">
-  <div class="other-projects__head">
-    <h2 id="otherProjectsTitle">Другие проекты</h2>
-    <p>Ещё один мой проект, который может быть полезен.</p>
-  </div>
+      
+<section class="surface" style="margin-top: 24px;">
+  <h2 style="margin-bottom: 8px;">Мои другие проекты</h2>
+  <p class="aa-muted" style="margin-bottom: 18px;">
+    Полезные инструменты и ресурсы от меня
+  </p>
 
-  <article class="project-promo-card">
-    <div class="project-promo-card__icon" aria-hidden="true">
-      <i class="fas fa-terminal"></i>
-    </div>
+  <div style="
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  ">
+    
+    <a href="https://uncledeniy.github.io/syshelper/index.html"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="
+         flex: 1 1 320px;
+         text-decoration: none;
+         color: inherit;
+       ">
+       
+      <div class="surface" style="
+        padding: 18px;
+        border-radius: 14px;
+        transition: 0.2s ease;
+        border: 1px solid rgba(255,255,255,0.06);
+      "
+      onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.25)'"
+      onmouseout="this.style.transform=''; this.style.boxShadow=''"
+      >
 
-    <div class="project-promo-card__content">
-      <div class="project-promo-card__meta">Рекомендуемый проект</div>
-      <h3 class="project-promo-card__title">SysHelper</h3>
-      <p class="project-promo-card__desc">
-        Современный веб-ресурс с помощью по Linux, macOS, Windows и серверным системам:
-        практические решения, гайды, быстрый поиск и удобная навигация.
-      </p>
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 10px;
+        ">
+          <i class="fas fa-terminal" style="font-size: 1.4rem;"></i>
+          <strong>SysHelper</strong>
+        </div>
 
-      <ul class="project-promo-card__features">
-        <li>Гайды по Linux, Windows, macOS</li>
-        <li>Материалы по серверным системам</li>
-        <li>Тёмная и светлая тема</li>
-        <li>Адаптивный интерфейс</li>
-      </ul>
+        <p style="
+          margin: 0 0 12px;
+          color: var(--aa-text-muted);
+          line-height: 1.5;
+        ">
+          Помощь с Linux, Windows, macOS и серверными системами. 
+          Гайды, решения проблем и удобный поиск.
+        </p>
 
-      <div class="project-promo-card__actions">
-        <a class="btn-primary" href="https://uncledeniy.github.io/syshelper/index.html" target="_blank" rel="noopener noreferrer">
-          Открыть SysHelper
-        </a>
-        <a class="project-promo-card__link" href="https://github.com/UncleDeniy/SysHelper.github.io" target="_blank" rel="noopener noreferrer">
-          GitHub проекта
-        </a>
+        <div style="
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          font-size: 0.8rem;
+          opacity: 0.8;
+        ">
+          <span>Linux</span>
+          <span>•</span>
+          <span>Windows</span>
+          <span>•</span>
+          <span>macOS</span>
+          <span>•</span>
+          <span>Server</span>
+        </div>
+
+        <div style="margin-top: 14px;">
+          <span class="btn-primary" style="padding: 6px 12px; font-size: 0.85rem;">
+            Открыть проект
+          </span>
+        </div>
+
       </div>
-    </div>
-  </article>
+    </a>
+
+  </div>
 </section>
+
+      
   </div>
 </main>
 
