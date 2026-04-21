@@ -79,7 +79,7 @@
 - **Плюсы:** минимализм, лёгкий рабочий стол  
  
 
-![Bodhi Linux (пример в PDF)](https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Bodhi-2016-10-29.png/1200px-Bodhi-2016-10-29.png)
+![Bodhi Linux (пример в PDF)](https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Bodhi-2016-10-29.png/1280px-Bodhi-2016-10-29.png)
 
 ### 9. Trisquel Mini (LXDE)
 - **Минимум:** ~128 МБ ОЗУ (32-bit) / ~256 МБ (64-bit), ~3 ГБ диска  
